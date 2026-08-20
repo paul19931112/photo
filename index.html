@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>我們的回憶相簿</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIuaIkeWAkeeahOWbnuaGtuebuOewvyIsICJzaG9ydF9uYW1lIjogIuWbnuaGtuebuOewvyIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjRkRGNEU4IiwgInRoZW1lX2NvbG9yIjogIiNDOTdBM0MiLCAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FZQUFBQlMzR3dIQUFBS2YwbEVRVlI0bk8yZCtYZFYxUlhIOTMzci9ROHRLdXJTMWlwb0NGb0V0SXppV20yVldRWVpKQU5nQWdHc0pTRUoxVjl0dGN2bFVJdWlFSkJKb0JBU0lJRWdDaGdTeTZxelJLMURWVlRhditMMmg4ZUZSL0tHTzV4ejk5bm5mRDl2N2JVWVh0N2JlNS92OTU1ejdydjN4U1BEK2QrMkpUNTNEaUErUDZ2YTZYSG5VQXFqa3Z0djIyS0kzUUYrWHIzTEdOMnhKd0xSdXcyM0dWamUvT0pXaUI0TVpWaE4rbVpJOVEwdmJsMEU0WU95REt2Wm5ab3VVM21qaTFzZ2ZCQ2RZYlg2amFEMURYNkM4SUVDcnRGb0JDMHYvTk9XaHlGOG9KeHJhdmNvMTZ2eUYvenhOWWdmNk9QYTVXcE5rRkg1WWhBLzBJMXFqU2x4MDQrdkxvVHdRZXBjdStLTnhQcE4vQUkvUVB5QWtlc1NtaURSRC8rd0dlSUgvRnkzTXI0Sll2L2dCWWdmR01Ud21DYUk5VU1YTmkrQStJRnhERis1TjdLZUkvL0FoVmNnZm1BdXd4K05ab0pJVC80ZTRnY0N1RDZDQ1VJLzhmdVg1MFA4UUF6WDErMExwZTFzMkJlRStvR05oSExKZDV0dzlBZnl1S0crL0N4UTlnbmZiWm9IOFFPeDNGQy92NlRHUy83bnR4QS9zSUFiUzVpZzlCNEE4Z2VXVS9ScTBHLy9qcU0vc0lOU1dpNDZBL2crOUEvc3ArQU04SitYSG9MNmdWVVUwM1RCR1FBSGYrQUtRM2JIMy94dEx1UVByT1dtaGdOWGFWN3BMWkVBU09NcU4zejlJbzcrd0g1dVhuTmxGaGkwQjREK2dWdGNaUUJzZm9GclhONERmUFhDSE1nZk9FRysxcS9NQUpBL2NKRExCdkRoQU9BZ0dTS2lMNStmRGZVRHB3ZzBueVhDNWhlNHk2VWxFQndBM0NSbkFPZ2ZPRXB1Q2NTZEJRQk1lRjg4T3hQNkI4NlNoZnFCeStCcVVPQTBXV3dBZ010azhRa3djQm5NQU1CcHNBY0FUcE4xL2V0UGJsdmZHZnE1bi8xMWhzWk0xQksyTGtrMTZjQWJlR2E2Y3c2SUl2cGltQ1ljRlRVUm1WZVhicnp6amhoZ2hDS0JGR0tBVVRTNjZ1S3NLVTI4ODA4L2FMVUJSalFlVHUyOUJwNlpudHA3cFZWWG1qVnhZTFVCMGhSL2dHN0JjTlJFWks4UnZFLy9ZcDhCUmpieGlDU2Y4MCtyRnd4M1hUcHE0aWFUdXhiVW51QVdTVUF1RDd2cVVsMlRDWkh4L2R3ZFlUYkV5S1lqYWtjOElTT2JqbGhYbDZxYVRBbHJQZ2k3ZllNNUlza25hVjRtMW1WaVRuR3h3Z0NtRDBqYy9FeXV5K1Rjb3VCOS9OVHZmZTRra25CSDgxSHVGRUx6eVo4ZkNQMWNLWFZGcWNsRVJNOEFVa1FTRURaZlNYVkp5clVRb2pmQkVpbFhrMFJCM2RGOGxGMExDVGJCUGttTWloWjVRaUdpUzNtWHFrMHEvSnFJRXhrRGNvZ2NGUzFkb1lmRlJDcGF1cXlycTFoTnBnZHVpbWZDeHI1THJFbmNFbWhVcTl5alpENjVPdXlxYTNCTkVnSzNSSEppWSsrRjFZUWxFQ00yOWw1YVRhSTJ3WlVidTNYMWdZWEtqZDNXMVJYVUpDWHd0U2pNMk5oL1NUVmhEOENOamYwWFZKT1lTeUZHUDNHTU93VXQyRmlYcEpxd0JBSmFrS0lyTElHQUhvVG9DcWRCZ1JhazZDb3I5ckpLWURaQ2RDVm1Fd3lBRHJKQ2pBcUVJVVZYbUFHQTArQTBLTkNDRkYzaE5DalFneEJkWVFrRW5DYmorejVKaUhOUFR1UHVsUlpzck92Y2s5UFk5UkkyTUFNQXA4RnBVR1pzN0wra21rVGRFL3pQSis3VDFRY1djdlhZVlZkUWs1VEFFZ2c0RFpaQWpOalllMmsxaVpzQjN2MlRIY3VGd1hYWVVKZkVHbkExS0JjMjlsMWdUUm4rYlVqMDZOODRWVXN6MHFKLzQxVHI2aXBXaytraDZtdFI4cU8vVmFaWStsdW5scTVOS2dab0lrNWtmSkw3a0VpNW12cGFwM0NuR0ptKzFpbnNXb2o3RUxjSnprZWFXTUxtSzZrdVNia1dRdXdTS0lpK0Zoa0QwTmN5eGJxNm90WmtZbmk5elpORXJDWHVmZW9VZHdvZ0FtZGJKbk9uRUFveE04RFo1c202ZWdBVWM3WjVNcnRld29hbzA2QzlNSUh4OURaUFp0ZEpsQkMzQ1lZSnpFWGkyR1RZZjAxZmpPamRNSW03YjJBUXZSc21zZXNpVG9oYUF1WEhPekNCVVhEcklXN2dwbmlRbUhlYTVCNk1SSDhTZktacEluZi9uT2RNMDBSMkhTUjVpRGtOV2l6T05NSUVYSnhwbk1nKy9rbEQzRm1nUXNBRTZXTkx6MFV2Z2ZJZnB4c25jUGZTR1U0M1RtQWZiMVVQOFV1Zy9EaTlIaWJRemVuMUU5akhXV1dJUFExYUxFN0JCTm80dFg0QysvaXFEcEVmaEpXTFUzLzhqZHFSQjdtZUdqQzJ5ajhJNDI2c0xtQUNkZGpjeTR3Qkp0UVdiejl1NzhDbENmYzQ2Z3hyWjRBQW1DQVp0dmRQMUZjanhvMjNINzlYWGNjY0l0YzMvdkhUR2ZobU9GQ1F0LzdneGtIRCtpVlFnQ3NEcWdLWGV1Vzl1VzY4VTNQQWZjLzFjYWRnTkNjZnU0YzdoVlJ4WmdZSWNHMkFvK0JpYjZ5NkZDSnNuRnpuM2tDWDQrUzZlOWpIaFNPOEUydkhPYlVFeW1mYTgvM2NLUmpCbSt2R2M2ZkFobk5Mb0h4Y0h2Z0ExM3ZnL0duUUUydkgwLzB2dURzVHVENytUczhBQVNmV3Vua1VkTFh1Zkx5ZWhyR09Id091Y1ArTDczS25rQm9uMW96alRzRUlyTHNmSUVuME9DS0tualhqMkh0dFNqaDVHclJVOURUWWJZS2VobkhzUFRZcHNqNzVTWHNLaEhDOFlTeDNDc2FCVFhBQmJCU0tqVFdwQUV1Z0luRjh0VDJDT2I1NkxIcy9UUTJ2ZTlVWVAxRjNMZWUzTDUzalRpRVJ4MWJmeloyQzBXQUdLQlBIVnNrVjBMRlZkN1Azei9UQUhpQUVrazBBU3VOMTFXRUpGSmJmYlpLekhPcXVoMm5ENE1ROXdhcWl1MzVNM0Q2blNpNVAvbjVKQ0h3U0hERzZERGRCVi8wWTloNUpDbXlDWTBSWG5aa202S29idzk0YmFZRWxVTXpvcXZzMW1VUXVILzYrU0F2dnlNcTcvRmdkQjBSRTlNQXIvK0pPZ1k0K2FwWVpKWUhUb01LQitKUGhIVjV4SjJhQWhEeTQrVDJXOXoyeThpNlc5N1VKekFBSzRCQWl4SzhHR0VBUkVLUk12TTdsV0FLcFpQcXIrcGREaDFmQWJLckFhVkRGY1hqRm5SR0hJQnE1MStldjA1YndPbXBIK3hISEFJUmd4bXZ2SzMvTnp1VjZ6ZVVpMkFOb1FyVllJWDQ5ZUIwMWxaZ0JOREpqeXdlSlg2T3pkclNDVEVBaGNER2M1dWhJS042TzJ0SHNOZGdjV0FLbFFGd1RKRFVQS0kvWFhqM0s1MDdDRldadC9URDBjdy9WVkdyTEExd0JNNENCUVB6cGdmc0JVb3hEMVpYaFJzV0FYRjBKNzJCVmhSOXVWSUFxWnJkOVZQVC8ycXRIcFpnSndBekFFTzFWaFVYZVhqV0tQVGZYQW5zQUpnYWJvSmdwZ0Y0OElxSUR5N0FNNG1MT3RvL29JTVRQd3R6dEgzdFpJaUxuZjA4T0l3ZVhWWENuNERSWm90eHlDQUFYdVRRRE1HY0JBQk01QThBQndGRzg0QS83bDl3T0Z3Qm5tTGZ6VTQ4SXAwR0I0MlNEUCtCM2hRRVg4Zkwvc20veFNMZ0FXTS84WGVjdjZ4NUxJT0EwMmZ5LzRQTXc0QnJlNEgvWXUyZ0ViQUNzWmNIdWdhczBueDM4Qk13Q3dDV0c3QUVXN2hrWU1pc0FZQU9GdEQxa0JzaUJhUUM0UWRHai9aNkZ0OEVGd0JvZWZ1T3pnbHJIYVZEZ05DWFgrN3NYM0lwWkFJaG4wZDdQaStvY013QndtckpuZkhiUHh5d0E1TEpvWC9HalAxRUlBeEFSN1lJSmdFQVdseEUvVVVnREVCSHRtdjhybUFDSVlmRytMMEpwdThqbkFBV0EvSUdGUlByVWQrYzh6QUxBZkpic0QzZjBKNHBvQUNLaW5RL2RBaE1BWTFueWozOUgwblNzNjM1MndBVEFRSlpHRkQ5UlRBTVFFZTJZQ3hNQWMxaDZJTHI0aVJJWWdJaG94OXhmd2dTQW5hVUh2b3l0NDhTWFByOE9Fd0JHSGtrZ2ZpSUZCaUFpZW4wT1RBRFM1NUdEeWNSUHBNZ0FBZHRoQkpBQ3l4UUlQMEQ1M1YvYlovOENKZ0RhV05iK2xWTE5LcjhhVkhXQ0FBVG8wSlpXc1c2Ymhka0FKS2Zxa0w2RGFpcEg2MjJ6Ym9ZUlFHU3FEbjJ0WForcExsZmFZQVFRZ3VvVWhCL0FzbDV2bXdramdLRlVkNlFuL0FEMkRXdmJ6SnRnQm9lcDd2aUdWWVBzQnNobjZ3eVl3UVZxT25sRm40OHhpUlFEcHBDTlNXSXZ4UDhCYWxQUXR0OFk3Um9BQUFBQVNVVk9SSzVDWUlJPSIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBWUFBQUQwZU5UNkFBQVpVa2xFUVZSNG5PM2Q1N2NsVlprSDRLcGU5MytZTWMvb2pNNmcwbUJFRkcyU0Fja21GSlJ1SkVvVUFadWdmaGxCUUIyem1BaUNHTkNtYVVJVEpFZDFna1F6WTNibXIrajUwRnk0M1gzRE9YV3Fhb2YzZWRZNmE3bDAyYjF2MWE3OWU4KzdkOTF1RzRyMWY1Y2ZzU1gxR0lEWS9tN3RWVzNxTWRDTkc1ZXgvNzNzY0FFUEZPM3YxMzFIem1US2pjbUVzQWVpVUJUa3dVMUlRTmdEYkV0Uk1ENFhmQ1JDSDJBeWlvRnh1TWdERWZnQS9WQVFETU5GN1pIUUJ4aVdZcUEvTHVTTS9uYXAwQWRJNFZsSEtRWm00ZUoxSlBnQjhxQVE2TVpGbThMZkxuMmYwQWZJMkxPT3VscXVUY2lGbW9EZ0J5aUxRbUJsTHRBeUJEOUEyUlFDUzNOaEZpSDRBZXFpRU5pUkM3TEEzNzRsK0FGcTlxd1BLZ1RtdVJCTjAveFY4QU9FOG15RlFPd0NRUEFEeEJhNUVBajVnd3QrQUJhS1dBaXNTajJBc1FsL0FMWVhNUnZDVkR4Ly9kWjd3OTFjQUtiMzdBOStOMFEyVnY5RC92V2JnaCtBNlQzNzZMb0xnYXEzQUlRL0FGM1ZuaUZWVmpkL3FmeW1BVEN1NTFUWURhaXVBeUQ4QWVoYmpkbFNWUUZRNHcwQ0lBKzFaVXdWTFkzYWJnb0FlYXRoUzZENEgrQXYzeEQrQUl6dk9jZVVYUVFVdlFVZy9BRklwZlFNS3JKNitjczNEaXY2b2dOUWwrY2M4NzNpOHJTNEFmOVorQU9Rb2VjV1ZnUVV0UVVnL0FISVZXa1pWVXdCVU5xRkJTQ2VrcktxaUFLZ3BBc0tRR3lsWkZiMit4Vi8vbm9aRnhJQUZucnVzWG1mQ2NpNkF5RDhBU2hWN2htV1pYV1MrMFVEZ0duazJBM0lia0IvRXY0QVZPaDVtUlVCV1EzbVQxOS9qL0FIb0ZyUE8vYjcyZVJ1Tm1jQWhEOEF0Y3NwNitaU0QrQnAyVndTQUtoZkZoMkFQMzB0bjRvSUFJYVVTK1lsTHdCeXVSQUFNSlljc2kvcFlZUS9abkFCQUNDVjV4K1g3bEJnc2c2QThBY2d1cFJabUtRQUVQNEFzRldxVEJ5OTlmREhTNFEvQUd6ditjZVB1eDB3NmwvMngwdmVMZndCWUFuUFAvNEhvK1Z5OHJjQUFJRHhqVllBK1BZUEFNc2JNeXRIYVRYOFFmZ0R3TVJlTU1KV3dPQWRBT0VQQU5NWkl6dUgvN2NBeEQ4QVpHZlFEc0FmdnVyYlB3QjBNWFNHRGxZQUNIOEFtTTJRV1RySUlZTS9mUFZkd2g4QWV2S0NFNjdwUGEvOUhnQUFDS2ozaXVMM3Z2MERRTy8rb2VjdVFLOGRBT0VQQU1Qb08yUDdmUTFRL0FOQUVYcnJBUHorSzc3OUE4Q1Erc3hhaHdBQklLQmVDZ0RmL2dGZ0hIMWw3c3dGZ1BBSGdISDFrYjB6SHdMYzR1UWZBQlJucG5jSy8rZkw3NVQrQUpESVA1NzR3ODQ1N2hBZ0FBVFV1UUR3N1I4QTBwb2xpM1VBQUNDZ1RnV0FiLzhBa0lldW1hd0RBQUFCVFgxNjhNa3YrZllQQUxsNTRVblR2UkdnQXdBQUFVMVZMVHo1cFhmNDlnOEFtWHJoU1QrYU9OZDFBQUFnb0lrTEFOLytBU0J2MDJTMURnQUFCRFRSWHNHVFgvVHRId0JLOGNLVFZ6NExNTkcvQmlqOUFhQXV0Z0FBSUtBVkM0RGZhZjhEUUZFbXlXNGRBQUFJYU5sREFyLzc0cUcrL1FOQW9WNTA4b1lsYzE0SEFBQUNXdll0Z0MyKy93TkFsWmJzQVB6MkM5ci9BRkN5NWJMY0ZnQUFCS1FBQUlDQUZpMEF0UDhCb0E1TFpib09BQUFFdFBoYkFMNy9BMERWRmkwQXRxZ0FBS0JxTzJ3Qi9PYnpoMGgvQUtqSVl0bnVEQUFBQktRQUFJQ0F0aWtBdFA4Qm9FN2JaL3kyaHdERlB3Q0VZQXNBQUFMYXBnT2dBUUFBTWVnQUFFQkE3ZngvK1BYbkR0WUFBSURLdmZpMGpXM1Q2QUFBUUVqUG5BSHcvUjhBd3RBQkFJQ0FGQUFBRUZEYk5FM3pxMzkzQUJBQW9uakpoemUyT2dBQUVKQUNBQUFDZXVvdEFEc0FBQkRKMWdKQS9nTkFLTFlBQUNBZ0JRQUFCRFRYTkhZQUFDQ2E5cGVmUFVqK0EwQXd0Z0FBSUtBNS9YOEFpRWNIQUFBQ21uTUVFQURpMFFFQWdJRG1mUDhIZ0hoMEFBQWdJRzhCQUVCQU9nQUFFSkFDQUFBQ1VnQUFRRURlQWdDQWdQd2lJQUFJeUZzQUFCRFFYT29Cd0N6KzlZeE5NLzhadi9qMGdUMk1oQkxOT24vTUhVcldQbkh4QVhvQVpLK1BvSitXeGIwT0tlWk8wNWcvNUU4QlFKWlNMZHJMc2FDWEljZTUwelRtRC9sUkFKQ0ZYQmZ0NVZqUTgxSGEvREYzeUVIN3VBS0FSSFlxYk5GZXpoTVc5TkhWTW4vTUhWSlJBREM2V2hidXhWak1oMWZyL0RGM0dGdjcrRVVLQU1heDA1bDFMdHlMZWVKaWkzbWZJczJkcGpGL0dFZjcrRVg3S3dBWTFFNW5YcDk2Q01rOGNmRUJxWWRRdE1oenAybk1INGFsQUdBdzBSZnZoU3prMHpGM3RtWCtNQVFGQUwyemVDL05RcjR5ODJkeDVnNTlVd0RRR3d2MzVDem1PekovSm1QdTBKZjJNUVVBTTNxcGhidXp4eTNtNWs5SDVnNnphaCs3VUFGQWR5ODl5K0k5cThjdmlydVFteit6aVR4M21KMENnTTRzM3YySnRwQ2JPLzJLTm4vb2h3S0FxVm04aHhOaElUZC9oaEZoN3RDdlZha0hRRmtzM3NPcS9mclcvdk9sNU5veXJmYXhDOSt1QThCRVhucldEYW1IRU1iakYrMmZlZ2k5TW5mR1ZkdjhZUmdLQUZaazhVNm5ob1hjL0VtamhybkRzTnBIUDZVQVlHa3YrNmpGTzdYSExpeDNJVGQvMGlwNTdqQThad0JZa3NVN0Q2WGVoMUxIWFJQM2dPVW9BRmlVaFNNdnBkMlAwc1piTS9lQ3BTZ0EySUVGSTArbDNKZFN4aG1KZThKaUZBQnN3MEtSdDl6dlQrN2ppOHk5WVhzS0FKNW1nU2hEcnZjcDEzSHhEUGVJaGRwSEwvQVdBRTN6c3ZVV2h0STg5cWw4VG5pYlAyWEphZTZRVHZ2SUJmc3BBSUo3K2ZvYlV3K0JqaDc5MU50VEQ4SDhLVlFPYzRlMGJBRUFuUW4vY3JsM0tBQ0Nzd2lVemYwRHVsSUFCQ1k4NnBEcVBwby81WE1QWTFNQUJPWEJyOHZZOTlQOHFZZDdHWmNDQUppS3dLaVBleHJUWE9NZGdIQmVmcmFIdlVZdlgzOWo4K2dGVG5iVGtTd0lwMzM0Zks4QlJyS3o4Sy9lSXdNV0FlWlAzWWFjTytTbmZmajh0eWtBZ3RqNTdKdFNENEdSUEhMQmZyMy9tZVpQREVQTUhmTGtEQUFBQktRQUNNSzN0MWo2dnQvbVR4enVkUndLQUFBSXFIMzRrODRBMUc3bmMxVDBVVDF5L3V6N3VlWlBUSDNNSGZJMkovMmhYck0rMzZ1RmYxZzduM05UODdBaW9HcTJBQ3BuQVkvTi9RZVdvZ0FBRnFWNHdCeW9td0tnWWg1ZW1zWThBQlkzNS9jL1FnU2VjN295ZDJxMXF0blNORDcxZlZhZnM3bUJlYXZQMld6KzBNbTBjOGVubkk4dEFBQUlhRlVHUlloUHo1L1Y1L3IyeG81V243dlovS0dUU2VlT1Qxa2ZIUUFBQ0VnQlVKbGRmSHRqR1N2TkQvT0hwWmdiOVZFQUFFQkFjODJXMUVNQVJ1V1pweXR6cHlvNkFCWFo1VHd0T2xhMjFEd3hmMWlKT1ZJWHZ3Z0lRdkxjMDVXNVV3di9HaUFFNUxtbkszT25IcllBQUNBZ0JVQWxkajN2NXRSRG9DRGJ6eGZ6aDBtWksvVlFBQUJBUUY0RGhLZzgrM1JsN2xSQkJ3QUFBbElBVkdEWGo5bVRZM3J6ODhiOFlWcm1UQjI4QmdpQmVmN3B5dHdwbjE4RUJLRjUvdW5LM0NtZExRQUFDTWhiQUJDWjU1K3V6SjNpNlFBQVFFQUtnTUs5NHVPM3BCNENCVE4vNk1yY0taOENBQUFDOGhvZ0FKM0lqN0xwQUFCQVFONENBS0FiK1ZFMHZ3Z0lnSTdrUjhsc0FRQkFRQW9BQUFqSVd3QUFkQ0kveXFZREFBQUJlUXNBZ0c3a1I5RjBBQUFnSUFVQUFBU2tBQUNBZ1B3aUlBQTZraDhsOHhvZ0FKM0lqN0xaQWdDQWdGWTFXNXJHcDl6UHp6Nng3eUszRlNaai90RFZ6ejZ4Yi9MMXoyZTJqdzRBQUFTa0FBQ0FnQlFBQUJDUUFnQUFBcHJiMG14SlBRWWdFYzgvWFprNzVmTVdRQVdmbjM1OG54M3ZMS3pncHgvZngveWhrL201NDFQMnh4WUFBQVNrQUFDQWdCUUFBQkNRQXFBUzluR1p4dmJ6eGZ4aFV1WktQUlFBQUJEUTNKWXRxWWNBak0xelQxZm1UajEwQUFBZ29GWEpYMFQwNmUzems0L3R2ZjM5aFIxc25TZm1EOU5iYXU3NGxQblJBUUNBZ0JRQUFCQ1FBcUF5MnJnc1o2WDVZZjZ3RkhPalBuUE5sdFJEQUViamVhY3JjNmM2cTlJZlEvRHArL1BRZVNwMWR2VFFlWHViUDNReTZkenhLZXRqQ3dBQUFsSUFWTXEzT0JhYWRqNllQOHd6RitxbEFBQ0FnT2EyN2dSUW80Zk8yNnZaN2QvdVNEME1FbnZvdkwxU0Q0R2l5WWhhNlFBQWkxSTRZQTdVeld1QWxYdm8zTDJhM1Q2cEN4RFZRK2Rhd0ptQmZLamFuUHNMOVpyMStYN3czTDJhMXlrZ1EzcFE4Vmc5V3dBQmVKQmo2dXUrbXoveHVPY3hLQUFBSUNBRlFCQXErbGo2dnQvbVR4enVkUndLQUFBSXFIM2c3RDJkQXd6a2RlYzcwRlc3Qjg4WjdodWMrVk8zSWVjTytXbnZQM3VOQWlDWTNjKy9NL1VRR01nRDUrdzUrTjloL3RScGpMbERYbXdCQk9SQnI1UDdDa3hEQVFCTVJhRlJIL2MwSmdWQVVCNzR1b3g5UDgyZmVyaVhjU2tBQXZQZzF5SFZmVFIveXVjZXh1YmZBZ2p1Z2JQM2JIYS93S0d1VWoxd3RnV2NHVmovUTlNQkFEcFRnSlRMdmFPOWI3M1hBR21hMStzQ0ZPZitqQlp3ODZjc09jMGQwdEVCb0drYUMwSnBjcnRmdVkySHBibFh6R3Z2Vy84bUhZQ0N2ZjZDdTFJUEFRanEvclBYcEI0Q005QUJLSndIRUVqQjJsTytWYzJXcHZFcCszUC8ralU3M0ZpQW9keS9mazN5ZGM5bjlvOE9RQ1VVQWNBWXJEWDFVQUJVeElNSkRNa2FVNWRWR1hRaGZIcjgzT2NCQlFadzMvbzF5ZGMzbjM0L09nQUFFSkFDb0VLNkFFQ2ZyQ2wxVWdCVXlnTUw5TUZhVXEvMjNyUGV1Q1gxSUJqT0d5NjhPL1VRZ0VMZDk5RTNwUjRDQTlJQnFKd0hHT2pDMmxFL0JVQUFIbVJnR3RhTUdOcDdiQUdFc1lmdEFHQUY5d3IvTUhRQUF2RmdBOHV4UnNTaUFBakdBdzRzeHRvUVQzdlBtYllBSXRyakl0c0J3RmIzbmlYOEk5SUJDTW9ERHhEYjNOYmZDQXhBUlBlZTljYlVReUFSSFlEQVBQZ1FtelVndHZidU0vZlFBZ2p1alJmZGszb0l3TWp1RWY3aDZRQmdJWUJnUFBNMFRkTzBkNStoQThCV2I3eFlKd0JxZDgrWndwK3RkQUI0bW9VQjZ1WVpaeUVGQU51d1FFQ2RQTnRzVHdIQURpd1VVQmZQTkl0UkFMQW9Dd2JVd2JQTVV0cTd6bmlEUTRBczZVMFgzNXQ2Q0VCSGQ1KzVSK29oa0xFNXZ3aVE1ZHg5eGg3Tm16NnRDSUFpV2Q5WmhpMEFWblQzR2I1RlFHazh0NnhFQVFCUUdlSFBKQlFBVE1TQ0FtWHdyRElwQlFBVHM3QkEzanlqVEtPOTh5UGVBbUE2YXh3S2hPemNKZnlaVW52bjZRb0FwcmZtTTRvQXlNVmRIeEgrVE04V0FKMVljQ0FQbmtXNmF1ODgvZlU2QUhTMjVqUDNwUjRDaEhYWFI5NlFlZ2dVVEFlQW1WaUFJQTNQSHJOU0FEQXpDeEZBZVJRQTlFSVJBT1B4dk5HSDlnNW5BT2pSbnM0RXdLRHVGUDcweEQ4R0JGQ0lPMDhYL3ZUSEZnQzlza0RCTUR4YjlFMEJRTzhzVk5Bdnp4UkRVQUF3Q0FzVzlNT3p4RkRhT3o2OHUxTUFER2JQejk2ZmVnaFFyRHRQZjMzcUlWQXhIUUFHWlFHRGJqdzdESzI5L1RRZEFJYTMxNy9yQk1Dazd2aXc4R2Q0T2dDTXdvSUdrL0dzTUJZRkFLT3hzQUhrUXdIQXFCUUJzRFRQQjJOU0FEQTZpeHpzeUhQQjJCUUFBSWtKZjFKb2J6L1ZXd0Nrc2RmbnZCa0FkNXdtL0Vtai9mR3ByMU1Ba016ZW4zc2c5UkFnbWR0UDJ6MzFFQWpNRmdCSldRQ0p5dHduTlFVQXlWa0lpY2FjSndjS0FMSmdRU1FLYzUxY0tBRElob1dSMnBuajVHU3VjUVNRak54KzZ1N04zcDkzTUpCS1dXL0ppQTRBMmJuOVZOK1NxSTk1VFc3YTIwN3hHaUI1MmtjbmdFcjhXUGlUb2ZhMlUzWlRBSkN0ZlQ3L1lPb2h3RXgrZk9yclVnOEJGbVVMZ0t4WlBDbVorVXZPRkFBQUF4RCs1RTRCUVBZc3BKVEduS1VFN1cwbk93TkFHZmI1Z3ZNQTVPL0hwd2gveXFBRFFERXNyT1RPSEtVazdhMDZBQlJtWDUwQU1uU2I4S2N3T2dBVXgwSkxic3hKU3FRQW9FZ1dYSURadExlZS9GcGJBQlJyM3k4OGxIb0lCSGZiS2J1bEhnSjAwdDU2a2dLQXN1MzdSVVVBYWR4MnN2Q25YTFlBS0o1Rm1CVE1PMHJYM3FJRFFDWGVyQlBBU0c0Vi9sUkFCd0JnQ3NLZldpZ0FxSWFGbWFHWlk5UkVBVUJWTE5BTXhkeWlOdTB0SnpvRFFIM2UvQ1huQWVqUHJTY0pmK3FqQTBDVkxOajB4VnlpVnUwdEo3NUdCNEJxdmZsTFAwazlCQXAyNjBtdlRUMEVHTXljOUtkbXQ1ejAydVl0aWdBNnNqNVNNMXNBVk84VzMrTG93THloZGdvQVFyQ1lNdzN6aFFqYW16L2tEQUJ4dk9YTHRnTlkzaTBuQ245aTBBRWdGSXM3eXpFL2lFUUJBTkFJZitKUkFCQ09oWjd0bVJORTFHNTJCb0NnM3VvOEFFM1QzQ3o4Q2FyZC9LRlhLd0FJNjYxZi9tbnFJWkRRelNlK0p2VVFJQmxiQUlRbUFPSnk3NGx1enErNklycWJQL1NhNXExZjBRa0l4OXBIY0RvQTBHd3RBb2pEL1FZRkFEeE5LTVRnUHNOV0NnQllRRGpVemYyRlo3UTNuZUF0QU5qZTI1d0pxTTVtNFEvYjBBR0FSUWlMdXJpZnNDTnZBUUJWMjN5QzhJZkZ0RGNkL3lvbEFDemhiVi85V2VvaE1JUE5KN3c2OVJBZ1c3WUFZQmtDcEZ6dUhTeFBBUUFyRUNUbGNjOWdaUW9BbUlCQUtZZDdCWk9aY3dBQUpuUFRDYTl1OW5NbUlIdldOSmhNZStOeERnSENOUGE3UkJHUXE1dU85KzBmSm1VTEFLWWtaUExrdnNCMEZBRFFnYkRKaS9zQjAxTUFRRWRDSncvdUEzVFQzbmpjSzUwQmdCbnNkOGwvcEI1Q1dEY2QvNnJVUTRCaXRUY29BR0JtYjFjRWpPNUc0UTh6OFc4QkFNVzU4VGpoRDdOeUJnQjZJSkRHNDFwRFB4UUEwQlBCTkR6WEdQcWpBSUFlQ1NpZ0ZBb0E2SmtpWUJpdUsvUkxBUUFERUZiOWNqMmhmKzMxeDc3Q2V3QXdrUDIvOXArcGgxQzhHNDU3WmVvaFFKWGE2NDlSQU1DUTl2KzZJcUNyRzQ0Vi9qQVVXd0F3TUNIV2plc0d3MUlBd0FpRTJYUmNMeGllQWdCR0l0UW00enJCT0JRQVFEYUVQNHhIQVFBakVuQkxjMjFnWE8ybW83MEZBR003NEJ2ZURGam8rbU9FUDR4TkJ3QVNFSGhBYXUybW8zZlZBWUJFRHZqR2Y2VWVRbkxYSC9PSzFFT0FrSFFBSUtIbzRSZjk1NGVVRkFDUVdOUVFqUHB6UXk0VUFKQ0JhR0VZN2VlRkhMV2JQdWdNQU9UaWdHL1dmeWJnK3FPRlArU2d2VTRCQUZrNXNPSWlZSlB3aDJ6WUFvRE0xQnFTdGY1Y1VDb0ZBREE0NFEvNVVRQkFobW9LekpwK0ZxakpYTk00QWdBNTJuVDByczJCMy96djFNUG9nVFVHY3RSZWQ5UXVuazdJMklIZktyY0kyUFRCWFZNUEFWaUNMUURJWEtraFd1cTRJWXAyb3c0QUZPR2dnam9CMXdsL3lKNE9BQlNpbEZBdFpad1FuUUlBQ3BKN3VPWStQdUFaQ2dBb1RLNGhtK3U0Z01VcEFLQkF1WVZ0YnVNQlZ0WnVYT2NRSUpUcW9FdlRId3k4N2lqaER5VnFONjViclFDQWdoMTA2YytUL2QzWEhiVkxzcjhibU0yYzlBZTYyQ2o4b1dqT0FFRGhCREhRaFFJQUtqQjJFYURvZ1BJcEFLQVNZNFd5OEljNnROZXVkUWdRYW5Md1pUOGY3TS9ldUc2WHdmNXNZRnc2QUZDWm9VSmErRU5kMmcwNkFGQ2xRM3JzQkZ3ci9LRTZPZ0JRcWI1Q1cvaERuZG9OYTNmV0FZQ0tIWExadzUzL3Y5ZXVXOTNqU0lDYzZBQkE1YnFHdVBDSHVyVWJqdFFCZ0FnT3VYenlUc0MxYTRVLzFHN1ZvVmM4MHFZZUJBQXdua092ZUtTMUJRQkJUUHF0M3JkL2lHR3VhWnJHSGdERXNHSHQ2dWJRWmJZQ05naC9DRU1IQUlKWkt1U0ZQOFNpQUlDQXRnOTc0US94ekRWTll3OEFBdHB3NU9ybTBDc2VialljS2Z3aG9xMEZnQW9BUXRwdzVNNnBod0FrWWdzQUFBSmExVFJOODQ1dlArcDNBUUJBQVBPWlB6Zi9YOWdFQUlBNGJBRUFRRUFLQUFBSTZPa3RBSHNBQUJESDB4MkFkMTdwSUNBQTFHeGgxczl0K3o5cEF3QkFCTTRBQUVCQTIzUUFmUDhIZ0JoMEFBQWdvQjBPL2wxenhNczBBZ0NnTXUrNjZyRnRNbDhIQUFBQ1VnQUFRRUE3RkFEYnR3Z0FnTEl0bHUwNkFBQVEwTnhpLytVV0x3UUNRTlVXTFFEa1B3RFViZEV0Z0hkLzUzSG5BQUNnQWt0bHVqTUFBQkNRQWdBQUFscXlBTEFOQUFCbFd5N0xkUUFBSUtERjN3SjR5aFp2QXdCQWxaYnRBTHpuYXRzQUFGQ2lsVEo4MlE3QVZ0b0FBRkNiRmM4QXZPZnFKM1FCQUtBZ2syUzNRNEFBRUpBQ0FBQUNtcmk5LzczMzdlUXdBQUJrN3JBSnQrNG5PQVQ0RlBFUEFOV1llQXZnc084NkRBZ0FPWnNtcTUwQkFJQ0FwaW9BZEFFQUlFL1RadlRrWndDZTVqQUFBSlJ1NmkyQXc3NzdDMTBBQU1oSWwyenUwQUh3andRQlFPazZIUUo4Ny9kMEFRQWdCMTB6MlZzQUFCQlE1d0pBRndBQTBwb2xpM1VBQUNDZ21Rb0FYUUFBU0dQV0RPNzBGc0EydkJFQUFNWHA1UnY4MWUvNUYyVUFBSXprZmQvLzVjejUzY3NaZ0Q0R0FnQ3NySy9NZFFnUUFBTHFyUURRQlFDQVlmV1p0VG9BQUJCUTc5L2FyMzYzQTRFQTBMZjMvYURmVG52dkhZQytCd2dBMFEyUnJiUC9Ib0JGYUFFQVFONEdPUU53dUM0QUFQUmlxRXdkTktpLzgrNlhhQVlBUUVlSC8rQlhnK1gwb0c4QkREbHdBS2paMEJucU5VQUFDR2lVYitqZmVaZXRBQUNZMU9IWEROOUJINlVETU1ZUEFnQTFHQ3N6UnczbXEzUUNBR0JKUjR6NGhka1pBQUFJYU5RQ1lNektCZ0JLTW5aR0pnbmtxOTcxWWxzQkFQQ1VJNjc1OWVoNW5Pd2IrVlh2VkFRQXdCRS9IRC84bXliaEdZQlVQekFBNUNKbEZpWTlCS2dJQUNDcTFCbVlSUUJmYVRzQWdFRGVuOEVYNEN4ZUE4emhRZ0RBR0hMSnZDd0tBQUJnWEZsVUlmT3VmSWV0QUFEcTlmNGY1Zkh0djJreTZ3RGtkR0VBb0UrNVpWeFdnNWwzNVR2K1dTY0FnR3E4LzBlL3lTNXZzeHZRUXQ5V0NBQlFzQTlrR1B6enN0b0MyRjdPRnc0QWxwTjdobVZkQURSTi9oY1FBTFpYUW5abFA4QjUzejdVZGdBQStmdkFodnpEdjJrSzZBRE1LK1dDQWhCWFNWbFZUQUhRTkdWZFdBQmlLUzJqaWlvQW1xYThDd3hBL1VyTXB1SUd2TkFWemdVQWtOQ1JCUWIvdkdJSFB1K0tRLzlKRVFEQTZJN2M4TnVpTTdTNExZRHRsWDREQUNoUERkbFQvQSt3MEJXSDZBWUFNSndqcnkwLytPY1Yzd0ZZcUtZYkEwQmVhc3VZcWdxQXBxbnZCZ0dRWG8zWlV0MFB0SkF0QVFCbVVXUHd6NnYyQjV0M3VTSUFnQTdXVmh6K1RST2dBSmluRUFCZ0VyVUgvN3dRUCtSQ2x4K3NFQUJnUjJzM3hnaitlYUYrMkhtWEgvd2lSUUFBVDF1NzhYZmg4akRjRDd5UVFnQWd0b2pCUHkvc0Q3NlFRZ0FnbHNqQlB5LzhCVmhJSVFCUU44SC9EQmRpRVpjcEJBQ3Fzazd3NzhBRldjWmxCeWtFQUVxMjdqckJ2eFFYWmdJS0FZQ3lDUDZWdVVCVFVBZ0E1RTN3VDg2RjZrZ3hBSkFIb2QrTml6YWp5dzU2b1VJQUlJRjExejBwdzJiZzR2VklNUUF3TEtIZkh4ZHlJSmNlcUJnQTZNTlJtNFQrRUZ6VWtTZ0lBQ1lqOE1maElpZWdHQURZbHRBZm53dWVDVVVCRUlXd3o0T2JrREZGQVZBNllaOHZONlpnQ2dRZ05RRmZydjhIVGlUMHlHRmNzaDRBQUFBQVNVVk9SSzVDWUlJPSIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn1dfQ==">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="theme-color" content="#C97A3C">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="回憶相簿">
+<meta name="application-name" content="回憶相簿">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{
+    --amber:#E9A05C;
+    --amber-dark:#C97A3C;
+    --terracotta:#9E4E22;
+    --cream:#FDF4E8;
+    --cream-warm:#FAE7C9;
+    --text:#43301E;
+    --text-soft:#8A6A4C;
+    --text-faint:#AF9370;
+    --viewer-bg:#1E1509;
+    --shadow: 0 14px 30px -20px rgba(67,48,30,.5);
+    --grad: linear-gradient(135deg,var(--amber),var(--amber-dark));
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background:#EFE6D6;
+    min-height:100%;
+    display:flex;
+    justify-content:center;
+    color:var(--text);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{
+    width:100%;
+    max-width:460px;
+    min-height:100vh;
+    background:var(--cream);
+    position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.2);
+    display:flex;
+    flex-direction:column;
+  }
+  .screen{
+    display:none;
+    flex-direction:column;
+    padding:22px 24px 32px;
+    min-height:100vh;
+    animation: fadeIn .35s ease;
+  }
+  .screen.active{display:flex;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  h1.title{text-align:center; font-size:26px; font-weight:700; margin:6px 0 4px; color:var(--terracotta); letter-spacing:.01em;}
+  p.subtitle{text-align:center; font-size:14.5px; color:var(--text-soft); margin:0 0 20px; line-height:1.8;}
+  .label-mono{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; color:var(--text-faint);}
+
+  .btn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; text-align:center; padding:17px 16px; border-radius:29px; border:none;
+    font-size:17px; font-weight:600; cursor:pointer;
+    background:var(--grad); color:#fff;
+    box-shadow:0 12px 26px -10px rgba(201,122,60,.7); transition:transform .12s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn.secondary{background:#fff; color:var(--amber-dark); box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.28);}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+  .g-badge{
+    width:24px;height:24px;border-radius:50%;background:#fff;color:var(--amber-dark);
+    font:700 13px/24px inherit; text-align:center; flex:none;
+  }
+
+  input[type="date"]{
+    width:100%; padding:16px 18px; border-radius:16px;
+    background:var(--cream); box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.22);
+    font-size:19px; font-weight:600; color:var(--text); outline:none; border:none; margin-bottom:0;
+  }
+
+  .logo-badge{
+    width:92px;height:92px;border-radius:30px;background:var(--grad);
+    box-shadow:0 18px 34px -14px rgba(201,122,60,.75);
+    display:flex; align-items:center; justify-content:center; margin:0 auto;
+  }
+  .logo-heart{width:38px;height:38px;position:relative;transform:rotate(45deg) translate(-3px,3px);}
+  .logo-heart div{position:absolute;background:#fff;}
+  .logo-heart .sq{inset:0;border-radius:0 0 4px 0;}
+  .logo-heart .c1{left:-50%;top:0;width:100%;height:100%;border-radius:50%;}
+  .logo-heart .c2{left:0;top:-50%;width:100%;height:100%;border-radius:50%;}
+
+  .not-https-warning{
+    background:#fff3cd; color:#8a6414; border-radius:14px; padding:14px 16px;
+    font-size:13px; line-height:1.7; margin-bottom:16px;
+  }
+  .error-card{
+    display:flex; gap:10px; align-items:flex-start; background:#fff; border-radius:18px;
+    padding:14px 16px; box-shadow:inset 0 0 0 1px rgba(158,78,34,.16); margin-top:16px;
+  }
+  .error-card .x{
+    width:20px;height:20px;flex:none;border-radius:50%;background:var(--terracotta);color:#fff;
+    font:700 13px/20px inherit; text-align:center;
+  }
+  .error-card p{font-size:13px; line-height:1.7; color:var(--terracotta); margin:0;}
+  .btn-spinner{width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;animation:spin 1s linear infinite;}
+
+  .center-col{flex:1; display:flex; flex-direction:column; justify-content:center;}
+
+  /* loading */
+  .big-spinner{
+    width:56px;height:56px;border-radius:50%;margin:0 auto 24px;
+    border:4px solid rgba(201,122,60,.18); border-top-color:var(--amber-dark);
+    animation:spin .9s linear infinite;
+  }
+  .center-msg{text-align:center; font-size:15px; font-weight:500; color:var(--text-soft);}
+
+  /* home */
+  .home-topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+  .home-topbar .hi{font-size:15px; font-weight:600; color:var(--text-soft);}
+  .home-topbar .dots{display:flex; gap:6px;}
+  .home-topbar .dots span{width:9px;height:9px;border-radius:50%;background:var(--amber);}
+  .home-topbar .dots span:last-child{background:rgba(233,160,92,.35);}
+
+  .anniv-card{
+    border-radius:34px; padding:44px 28px 34px;
+    background:linear-gradient(155deg,var(--amber) 0%,var(--amber-dark) 55%,var(--terracotta) 100%);
+    box-shadow:0 26px 46px -22px rgba(158,78,34,.85);
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    margin-bottom:16px;
+  }
+  .anniv-card::before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.09);right:-70px;top:-80px;}
+  .anniv-card::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);left:-60px;bottom:-70px;}
+  .anniv-card .lbl{font-size:14px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.85); position:relative;}
+  .anniv-card .days-row{display:flex;align-items:baseline;gap:8px;color:#fff; position:relative;}
+  .anniv-card .days-row .n{font-size:76px;font-weight:800;line-height:1;letter-spacing:-.03em;}
+  .anniv-card .days-row .u{font-size:20px;font-weight:600;}
+  .anniv-card .pill{margin-top:4px;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.18);font-size:13px;font-weight:500;color:#fff; position:relative;}
+
+  .home-actions{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
+
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px;}
+  .stat-card{background:#fff; border-radius:20px; padding:16px 18px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow);}
+  .stat-card .k{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.1em; color:var(--text-faint);}
+  .stat-card .v{font-size:22px; font-weight:700; color:var(--text);}
+
+  .footer-link{text-align:center; font-size:13px; color:var(--text-faint); margin-top:auto; padding-top:22px; text-decoration:underline; cursor:pointer;}
+
+  /* gallery */
+  .gallery-header{
+    display:flex; align-items:center; justify-content:space-between; margin:-4px -4px 14px;
+  }
+  .icon-btn{
+    width:38px;height:38px; border-radius:12px; border:none; background:#fff;
+    box-shadow:inset 0 0 0 1px rgba(67,48,30,.1); font-size:17px; color:var(--amber-dark);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .gallery-header .gtitle{font-size:18px; font-weight:700; color:var(--terracotta);}
+  .month-label{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; color:var(--text-faint); padding:4px 4px 12px;}
+  .photo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:22px;}
+  .photo-thumb{
+    position:relative; aspect-ratio:1/1; border-radius:10px; overflow:hidden;
+    background:repeating-linear-gradient(135deg,rgba(201,122,60,.16) 0 6px,rgba(201,122,60,.05) 6px 12px);
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  }
+  .photo-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .photo-empty{
+    text-align:center; padding:60px 20px 40px; color:var(--text-soft); font-size:15px; line-height:1.9;
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+  }
+  .photo-empty .icon-box{
+    width:110px;height:110px;border-radius:36px;background:#fff;
+    box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.18);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .photo-empty .icon-box .sq{
+    width:44px;height:44px;border-radius:14px;
+    background:repeating-linear-gradient(135deg,rgba(201,122,60,.22) 0 5px,rgba(201,122,60,.07) 5px 10px);
+  }
+
+  .upload-fab{
+    position:fixed; bottom:26px; right:calc(50% - 206px);
+    width:64px; height:64px; border-radius:50%;
+    background:var(--grad); color:#fff;
+    font-size:30px; font-weight:300; border:none; box-shadow:0 16px 30px -10px rgba(201,122,60,.85);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:30;
+  }
+  @media (max-width:520px){ .upload-fab{ right:22px; } }
+  #file-input{display:none;}
+
+  .upload-progress{
+    position:fixed; left:16px; right:16px; bottom:26px;
+    max-width:428px; margin:0 auto;
+    background:var(--text); border-radius:20px; padding:16px 18px;
+    box-shadow:0 18px 34px -16px rgba(67,48,30,.7); z-index:40; display:none;
+  }
+  .upload-progress.active{display:block;}
+  .upload-progress .row{display:flex; align-items:center; justify-content:space-between; color:#fff; margin-bottom:12px;}
+  .upload-progress .row span:first-child{font-size:14px; font-weight:600;}
+  .upload-progress .row span:last-child{font:600 12px/1 ui-monospace,monospace; color:rgba(255,255,255,.6);}
+  .upload-progress .bar-bg{height:6px; border-radius:3px; background:rgba(255,255,255,.2); overflow:hidden;}
+  .upload-progress .bar-fill{height:100%; border-radius:3px; background:linear-gradient(90deg,var(--amber),#F6D19B); transition:width .2s ease;}
+
+  /* viewer modal */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,10,15,0.92);
+    display:none; align-items:center; justify-content:center; z-index:50; flex-direction:column;
+  }
+  .modal-overlay.active{display:flex;}
+  #viewer-overlay{background:var(--viewer-bg);}
+  .viewer-topbar{position:absolute; top:16px; right:16px;}
+  .viewer-close{
+    width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-weight:300; border:none; cursor:pointer;
+  }
+  .viewer-img-wrap{flex:1; width:100%; display:flex; align-items:center; justify-content:center; padding:0 20px;}
+  .viewer-img{max-width:100%; max-height:70vh; border-radius:18px; object-fit:contain;}
+  .viewer-bottom{width:100%; padding:20px 26px 34px; display:flex; flex-direction:column; gap:14px;}
+  .viewer-caption{text-align:center; font-size:13px; color:rgba(255,255,255,.5);}
+  .btn-delete-outline{
+    height:52px; border-radius:26px; background:rgba(255,255,255,.1);
+    box-shadow:inset 0 0 0 1.5px rgba(233,160,92,.5); display:flex; align-items:center; justify-content:center;
+    gap:8px; color:#EDAC69; font-size:16px; font-weight:600; border:none; cursor:pointer; width:100%;
+  }
+
+  /* confirm delete modal */
+  #confirm-overlay{background:rgba(30,21,9,.72); padding:0 34px;}
+  .confirm-box{
+    background:var(--cream); border-radius:26px; padding:26px 22px 20px;
+    display:flex; flex-direction:column; gap:18px; width:100%;
+    box-shadow:0 24px 50px -18px rgba(0,0,0,.7);
+  }
+  .confirm-box .ctitle{font-size:19px; font-weight:700; color:var(--terracotta); text-align:center;}
+  .confirm-box .csub{font-size:13px; line-height:1.7; color:var(--text-soft); text-align:center;}
+  .confirm-box .cbtn-danger{
+    height:50px; border-radius:25px; background:linear-gradient(135deg,var(--amber-dark),var(--terracotta));
+    color:#fff; font-size:16px; font-weight:600; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .confirm-box .cbtn-cancel{
+    height:50px; border-radius:25px; background:#fff; box-shadow:inset 0 0 0 1.5px rgba(67,48,30,.14);
+    color:var(--text-soft); font-size:16px; font-weight:600; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+
+  /* edit anniversary bottom sheet */
+  #edit-anniv-overlay{
+    background:rgba(67,48,30,.4); align-items:flex-end; padding:0;
+  }
+  .sheet-box{
+    background:var(--cream); border-radius:32px 32px 0 0; padding:14px 24px 36px;
+    display:flex; flex-direction:column; gap:20px; width:100%;
+    box-shadow:0 -18px 44px -18px rgba(67,48,30,.6);
+  }
+  .sheet-handle{width:44px;height:5px;border-radius:3px;background:rgba(67,48,30,.16);align-self:center;}
+  .sheet-box h3{margin:0; font-size:22px; font-weight:700; color:var(--terracotta);}
+  .sheet-actions{display:flex; gap:12px;}
+  .sheet-actions .btn-cancel{
+    flex:1; height:54px; border-radius:27px; background:#fff; box-shadow:inset 0 0 0 1.5px rgba(67,48,30,.14);
+    color:var(--text-soft); font-size:16px; font-weight:600; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .sheet-actions .btn-save{
+    flex:1.4; height:54px; border-radius:27px; background:var(--grad);
+    box-shadow:0 12px 24px -10px rgba(201,122,60,.7);
+    color:#fff; font-size:16px; font-weight:600; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- LOGIN -->
+  <div class="screen active" id="screen-login">
+    <div class="center-col">
+      <div class="logo-badge">
+        <div class="logo-heart"><div class="sq"></div><div class="c1"></div><div class="c2"></div></div>
+      </div>
+      <div style="height:32px;"></div>
+      <h1 class="title">我們的回憶相簿</h1>
+      <p class="subtitle">照片直接存進你的 Google 雲端硬碟，兩人共用一個資料夾，隨時上傳、隨時看。</p>
+      <div id="https-warning" class="not-https-warning" style="display:none;">
+        ⚠️ 這個 App 需要透過網址（https）開啟才能登入 Google，直接打開本機檔案無法使用喔，請先用瀏覽器開啟你架設好的網址。
+      </div>
+      <div style="height:24px;"></div>
+      <button class="btn" id="btn-google-signin"><span class="g-badge">G</span>使用 Google 帳號登入</button>
+      <p class="center-msg" id="login-status" style="margin-top:16px; font-size:13px;"></p>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="screen" id="screen-loading">
+    <div class="center-col">
+      <div class="big-spinner"></div>
+      <p class="center-msg" id="loading-text">正在準備你們的回憶空間...</p>
+    </div>
+  </div>
+
+  <!-- SET ANNIVERSARY (first run) -->
+  <div class="screen" id="screen-set-anniv">
+    <div class="center-col">
+      <h1 class="title" style="text-align:left;">設定紀念日</h1>
+      <p class="subtitle" style="text-align:left;">第一次使用，先設定你們在一起的日子吧～</p>
+      <div style="height:22px;"></div>
+      <div style="background:#fff; border-radius:24px; padding:22px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:14px; margin-bottom:22px;">
+        <div class="label-mono">START DATE</div>
+        <input type="date" id="anniv-date-input">
+      </div>
+      <button class="btn" id="btn-save-anniv">儲存</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen" id="screen-home">
+    <div class="home-topbar">
+      <div class="hi">Hi，我們</div>
+      <div class="dots"><span></span><span></span></div>
+    </div>
+    <div class="anniv-card">
+      <div class="lbl">在一起</div>
+      <div class="days-row"><span class="n" id="home-days">--</span><span class="u">天</span></div>
+      <div class="pill" id="home-date-sub">--</div>
+    </div>
+    <div class="home-actions">
+      <button class="btn" id="btn-goto-gallery">查看相簿</button>
+      <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="k">PHOTOS</span>
+        <span class="v" id="stat-photo-count">--</span>
+      </div>
+      <div class="stat-card">
+        <span class="k" id="stat-milestone-label">距離下個里程碑</span>
+        <span class="v" id="stat-milestone-value">--</span>
+      </div>
+    </div>
+    <div class="footer-link" id="btn-logout">登出</div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="screen" id="screen-gallery">
+    <div class="gallery-header">
+      <button class="icon-btn" id="btn-gallery-back">‹</button>
+      <div class="gtitle">回憶相簿</div>
+      <button class="icon-btn" id="btn-gallery-refresh">⟳</button>
+    </div>
+    <div id="photo-grid-container"></div>
+    <input type="file" id="file-input" accept="image/*" multiple>
+  </div>
+  <button class="upload-fab" id="btn-upload" style="display:none;">＋</button>
+  <div class="upload-progress" id="upload-progress">
+    <div class="row"><span id="upload-progress-text">上傳中...</span><span id="upload-progress-pct">0%</span></div>
+    <div class="bar-bg"><div class="bar-fill" id="upload-progress-bar" style="width:0%;"></div></div>
+  </div>
+
+</div>
+
+<!-- photo viewer modal -->
+<div class="modal-overlay" id="viewer-overlay">
+  <div class="viewer-topbar"><button class="viewer-close" id="btn-viewer-close">✕</button></div>
+  <div class="viewer-img-wrap"><img class="viewer-img" id="viewer-img" src=""></div>
+  <div class="viewer-bottom">
+    <div class="viewer-caption" id="viewer-caption"></div>
+    <button class="btn-delete-outline" id="btn-viewer-delete">🗑️ 刪除這張</button>
+  </div>
+</div>
+
+<!-- delete confirm modal -->
+<div class="modal-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div>
+      <div class="ctitle">確定要刪除這張照片？</div>
+      <div class="csub" style="margin-top:8px;">照片會從你們的共用資料夾移除，無法復原。</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="cbtn-danger" id="btn-confirm-delete">刪除</button>
+      <button class="cbtn-cancel" id="btn-cancel-delete">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- edit anniversary bottom sheet -->
+<div class="modal-overlay" id="edit-anniv-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3>編輯紀念日</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div class="label-mono">START DATE</div>
+      <input type="date" id="edit-anniv-input">
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-edit-anniv-cancel">取消</button>
+      <button class="btn-save" id="btn-edit-anniv-save">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============== CONFIG（把你的 Client ID 貼在這裡） ============== */
+  const GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID_HERE.apps.googleusercontent.com";
+  const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive";
+  const FOLDER_NAME = "💕 我們的回憶";
+  const SETTINGS_FILENAME = "settings.json";
+  const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
+  /* =================================================================== */
+
+  let accessToken = null;
+  let tokenClient = null;
+  let folderId = null;
+  let settingsFileId = null;
+  let settings = { anniversary: null };
+  let currentViewingFile = null;
+
+  /* ---------------- SCREEN NAV ---------------- */
+  function show(id){
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    window.scrollTo(0,0);
+  }
+
+  /* ---------------- BOOT ---------------- */
+  window.addEventListener("DOMContentLoaded", ()=>{
+    if(location.protocol === "file:"){
+      document.getElementById("https-warning").style.display = "block";
+    }
+    document.getElementById("btn-google-signin").addEventListener("click", onSignInClick);
+    document.getElementById("btn-save-anniv").addEventListener("click", onSaveFirstAnniversary);
+    document.getElementById("btn-goto-gallery").addEventListener("click", openGallery);
+    document.getElementById("btn-edit-anniv").addEventListener("click", openEditAnniv);
+    document.getElementById("btn-logout").addEventListener("click", onLogout);
+    document.getElementById("btn-gallery-back").addEventListener("click", ()=>{ show("screen-home"); toggleFab(false); });
+    document.getElementById("btn-gallery-refresh").addEventListener("click", loadGallery);
+    document.getElementById("btn-upload").addEventListener("click", ()=> document.getElementById("file-input").click());
+    document.getElementById("file-input").addEventListener("change", onFilesSelected);
+    document.getElementById("btn-viewer-close").addEventListener("click", closeViewer);
+    document.getElementById("btn-viewer-delete").addEventListener("click", ()=>{
+      document.getElementById("confirm-overlay").classList.add("active");
+    });
+    document.getElementById("btn-cancel-delete").addEventListener("click", ()=>{
+      document.getElementById("confirm-overlay").classList.remove("active");
+    });
+    document.getElementById("btn-confirm-delete").addEventListener("click", onDeletePhoto);
+    document.getElementById("btn-edit-anniv-save").addEventListener("click", onSaveEditAnniv);
+    document.getElementById("btn-edit-anniv-cancel").addEventListener("click", ()=>{
+      document.getElementById("edit-anniv-overlay").classList.remove("active");
+    });
+
+    if(window.google && google.accounts && google.accounts.oauth2){
+      initGis();
+    } else {
+      window.addEventListener("load", ()=>{ if(window.google) initGis(); });
+    }
+  });
+
+  function initGis(){
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: (resp)=>{
+        if(resp.error){
+          showLoginError("登入失敗：" + resp.error + "（若顯示 unverified app，請點『進階』→『前往(不安全)』繼續）");
+          return;
+        }
+        accessToken = resp.access_token;
+        afterSignIn();
+      }
+    });
+  }
+
+  function showLoginError(msg){
+    const status = document.getElementById("login-status");
+    status.innerHTML = "";
+    const card = document.createElement("div");
+    card.className = "error-card";
+    card.innerHTML = '<span class="x">!</span><p>'+msg+'</p>';
+    status.appendChild(card);
+  }
+
+  function onSignInClick(){
+    if(GOOGLE_CLIENT_ID.indexOf("YOUR_CLIENT_ID_HERE") !== -1){
+      alert("還沒有設定 Google Client ID 喔，請照教學把 Client ID 貼到程式碼裡的 CONFIG 區塊。");
+      return;
+    }
+    if(!tokenClient){
+      alert("Google 登入元件還在載入，請稍等幾秒再試一次。");
+      return;
+    }
+    const btn = document.getElementById("btn-google-signin");
+    btn.innerHTML = '<span class="btn-spinner"></span>登入中...';
+    document.getElementById("login-status").innerHTML = "";
+    tokenClient.requestAccessToken({ prompt: "" });
+  }
+
+  function resetSigninButton(){
+    document.getElementById("btn-google-signin").innerHTML = '<span class="g-badge">G</span>使用 Google 帳號登入';
+  }
+
+  function onLogout(){
+    accessToken = null;
+    folderId = null;
+    settingsFileId = null;
+    settings = { anniversary: null };
+    resetSigninButton();
+    document.getElementById("login-status").innerHTML = "";
+    show("screen-login");
+  }
+
+  /* ---------------- AFTER SIGN IN ---------------- */
+  async function afterSignIn(){
+    show("screen-loading");
+    document.getElementById("loading-text").textContent = "正在準備你們的回憶空間...";
+    try{
+      folderId = await findOrCreateFolder();
+      settingsFileId = await findSettingsFile(folderId);
+      if(settingsFileId){
+        settings = await readSettingsFile(settingsFileId);
+      } else {
+        settings = { anniversary: null };
+      }
+      if(!settings.anniversary){
+        show("screen-set-anniv");
+      } else {
+        show("screen-home");
+        renderHome();
+      }
+    }catch(err){
+      console.error(err);
+      resetSigninButton();
+      showLoginError("連線 Google 雲端硬碟時發生問題，請確認 Client ID 設定正確，或稍後再試一次。錯誤訊息："+err.message);
+      show("screen-login");
+    }
+  }
+
+  /* ---------------- DRIVE HELPERS ---------------- */
+  async function driveFetch(path, options){
+    options = options || {};
+    const headers = Object.assign({ "Authorization": "Bearer "+accessToken }, options.headers||{});
+    const res = await fetch("https://www.googleapis.com/drive/v3/"+path, Object.assign({}, options, {headers}));
+    if(!res.ok){
+      const t = await res.text();
+      throw new Error("Drive API "+res.status+": "+t.slice(0,200));
+    }
+    return res;
+  }
+
+  async function findOrCreateFolder(){
+    const q = encodeURIComponent("name='"+FOLDER_NAME+"' and mimeType='application/vnd.google-apps.folder' and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    if(data.files && data.files.length>0) return data.files[0].id;
+    const createRes = await driveFetch("files", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({name:FOLDER_NAME, mimeType:"application/vnd.google-apps.folder"})
+    });
+    const created = await createRes.json();
+    return created.id;
+  }
+
+  async function findSettingsFile(fid){
+    const q = encodeURIComponent("name='"+SETTINGS_FILENAME+"' and '"+fid+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function readSettingsFile(fid){
+    const res = await driveFetch("files/"+fid+"?alt=media");
+    try{ return await res.json(); }catch(e){ return {anniversary:null}; }
+  }
+
+  async function saveSettingsFile(newSettings){
+    const content = JSON.stringify(newSettings);
+    if(settingsFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+settingsFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      settingsFileId = await createFileMultipart(SETTINGS_FILENAME, "application/json", content, folderId);
+    }
+    settings = newSettings;
+  }
+
+  async function createFileMultipart(filename, mimeType, bodyContent, parentId){
+    const metadata = { name: filename, parents:[parentId] };
+    const boundary = "-------driveboundary" + Date.now() + Math.random().toString(16).slice(2);
+    const delimiter = "\r\n--"+boundary+"\r\n";
+    const closeDelim = "\r\n--"+boundary+"--";
+    const metaPart = delimiter + "Content-Type: application/json; charset=UTF-8\r\n\r\n" + JSON.stringify(metadata);
+    const mediaHeader = delimiter + "Content-Type: "+mimeType+"\r\n\r\n";
+
+    let bodyBlob;
+    if(bodyContent instanceof Blob){
+      bodyBlob = new Blob([metaPart, mediaHeader, bodyContent, closeDelim]);
+    } else {
+      bodyBlob = new Blob([metaPart, mediaHeader, bodyContent, closeDelim], {type:"text/plain"});
+    }
+
+    const res = await fetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", {
+      method:"POST",
+      headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"multipart/related; boundary="+boundary },
+      body: bodyBlob
+    });
+    if(!res.ok){
+      const t = await res.text();
+      throw new Error("上傳失敗 "+res.status+": "+t.slice(0,200));
+    }
+    const data = await res.json();
+    return data.id;
+  }
+
+  async function listPhotos(){
+    const q = encodeURIComponent("'"+folderId+"' in parents and mimeType contains 'image/' and trashed=false");
+    const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,thumbnailLink,createdTime)&pageSize=300&spaces=drive");
+    const data = await res.json();
+    return data.files || [];
+  }
+
+  /* ---------------- FIRST-RUN ANNIVERSARY ---------------- */
+  async function onSaveFirstAnniversary(){
+    const val = document.getElementById("anniv-date-input").value;
+    if(!val){ alert("請選擇日期喔～"); return; }
+    show("screen-loading");
+    document.getElementById("loading-text").textContent = "儲存中...";
+    try{
+      await saveSettingsFile({ anniversary: val });
+      show("screen-home");
+      renderHome();
+    }catch(err){
+      alert("儲存失敗，請再試一次。\n"+err.message);
+      show("screen-set-anniv");
+    }
+  }
+
+  function openEditAnniv(){
+    document.getElementById("edit-anniv-input").value = settings.anniversary || "";
+    document.getElementById("edit-anniv-overlay").classList.add("active");
+  }
+  async function onSaveEditAnniv(){
+    const val = document.getElementById("edit-anniv-input").value;
+    if(!val){ alert("請選擇日期喔～"); return; }
+    document.getElementById("edit-anniv-overlay").classList.remove("active");
+    show("screen-loading");
+    document.getElementById("loading-text").textContent = "更新中...";
+    try{
+      await saveSettingsFile(Object.assign({}, settings, {anniversary: val}));
+      show("screen-home");
+      renderHome();
+    }catch(err){
+      alert("更新失敗，請再試一次。\n"+err.message);
+      show("screen-home");
+    }
+  }
+
+  /* ---------------- HOME ---------------- */
+  function getNextMilestone(days){
+    for(const m of MILESTONES){
+      if(m > days) return m;
+    }
+    return Math.ceil((days+1)/1000)*1000;
+  }
+
+  function renderHome(){
+    const annivDate = new Date(settings.anniversary+"T00:00:00");
+    const today = new Date();
+    const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const annivMid = new Date(annivDate.getFullYear(), annivDate.getMonth(), annivDate.getDate());
+    const diffDays = Math.round((todayMid - annivMid) / 86400000) + 1;
+    const shownDays = diffDays>=0 ? diffDays : Math.abs(diffDays);
+    document.getElementById("home-days").textContent = shownDays;
+    const y = annivDate.getFullYear(), m = annivDate.getMonth()+1, d = annivDate.getDate();
+    document.getElementById("home-date-sub").textContent = diffDays>=0
+      ? ("從 "+y+"/"+m+"/"+d+" 開始")
+      : ("距離 "+y+"/"+m+"/"+d+" 還有 "+Math.abs(diffDays)+" 天");
+
+    if(diffDays >= 0){
+      const next = getNextMilestone(diffDays);
+      document.getElementById("stat-milestone-label").textContent = "距離 "+next+" 天";
+      document.getElementById("stat-milestone-value").textContent = "還有 "+(next-diffDays)+" 天";
+    } else {
+      document.getElementById("stat-milestone-label").textContent = "紀念日倒數";
+      document.getElementById("stat-milestone-value").textContent = Math.abs(diffDays)+" 天";
+    }
+
+    document.getElementById("stat-photo-count").textContent = "...";
+    listPhotos().then(files=>{
+      document.getElementById("stat-photo-count").textContent = files.length;
+    }).catch(()=>{
+      document.getElementById("stat-photo-count").textContent = "--";
+    });
+  }
+
+  /* ---------------- GALLERY ---------------- */
+  function toggleFab(visible){
+    document.getElementById("btn-upload").style.display = visible ? "flex" : "none";
+  }
+
+  function openGallery(){
+    show("screen-gallery");
+    toggleFab(true);
+    loadGallery();
+  }
+
+  function monthLabel(dateStr){
+    const dt = new Date(dateStr);
+    return dt.getFullYear()+" 年 "+(dt.getMonth()+1)+" 月";
+  }
+
+  async function loadGallery(){
+    const container = document.getElementById("photo-grid-container");
+    container.innerHTML = '<div class="photo-empty"><div class="center-msg">載入中...</div></div>';
+    try{
+      const files = await listPhotos();
+      container.innerHTML = "";
+      if(files.length === 0){
+        container.innerHTML =
+          '<div class="photo-empty">'+
+            '<div class="icon-box"><div class="sq"></div></div>'+
+            '<div>還沒有照片～<br>點右下角 ＋ 上傳第一張吧！</div>'+
+          '</div>';
+        return;
+      }
+
+      const groups = [];
+      let currentKey = null, currentGroup = null;
+      files.forEach(f=>{
+        const key = f.createdTime ? f.createdTime.slice(0,7) : "unknown";
+        if(key !== currentKey){
+          currentKey = key;
+          currentGroup = { key, label: f.createdTime ? monthLabel(f.createdTime) : "", files: [] };
+          groups.push(currentGroup);
+        }
+        currentGroup.files.push(f);
+      });
+
+      groups.forEach(g=>{
+        const labelEl = document.createElement("div");
+        labelEl.className = "month-label";
+        labelEl.textContent = g.label + " · " + g.files.length + " 張";
+        container.appendChild(labelEl);
+
+        const grid = document.createElement("div");
+        grid.className = "photo-grid";
+        g.files.forEach(f=>{
+          const div = document.createElement("div");
+          div.className = "photo-thumb";
+          const img = document.createElement("img");
+          img.loading = "lazy";
+          img.src = f.thumbnailLink || "";
+          img.alt = f.name || "";
+          img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
+          div.appendChild(img);
+          div.addEventListener("click", ()=> openViewer(f));
+          grid.appendChild(div);
+        });
+        container.appendChild(grid);
+      });
+    }catch(err){
+      container.innerHTML = '<div class="photo-empty"><div>載入失敗，下拉重新整理再試一次。</div></div>';
+      console.error(err);
+    }
+  }
+
+  async function loadFullImageAsThumb(fileId, imgEl){
+    try{
+      const res = await driveFetch("files/"+fileId+"?alt=media");
+      const blob = await res.blob();
+      imgEl.src = URL.createObjectURL(blob);
+    }catch(e){ /* leave broken, non-fatal */ }
+  }
+
+  async function onFilesSelected(e){
+    const files = Array.from(e.target.files || []);
+    if(files.length === 0) return;
+    const progress = document.getElementById("upload-progress");
+    const textEl = document.getElementById("upload-progress-text");
+    const pctEl = document.getElementById("upload-progress-pct");
+    const barEl = document.getElementById("upload-progress-bar");
+    progress.classList.add("active");
+    for(let i=0;i<files.length;i++){
+      const pct = Math.round(((i)/files.length)*100);
+      textEl.textContent = "上傳中 "+(i+1)+" / "+files.length+" ...";
+      pctEl.textContent = pct+"%";
+      barEl.style.width = pct+"%";
+      try{
+        await createFileMultipart(files[i].name || ("photo_"+Date.now()+".jpg"), files[i].type || "image/jpeg", files[i], folderId);
+      }catch(err){
+        console.error(err);
+        alert("有一張照片上傳失敗："+files[i].name);
+      }
+    }
+    barEl.style.width = "100%";
+    pctEl.textContent = "100%";
+    setTimeout(()=>{ progress.classList.remove("active"); }, 400);
+    e.target.value = "";
+    loadGallery();
+  }
+
+  /* ---------------- VIEWER ---------------- */
+  function openViewer(file){
+    currentViewingFile = file;
+    document.getElementById("viewer-img").src = file.thumbnailLink || "";
+    const dateStr = file.createdTime ? file.createdTime.slice(0,10).replace(/-/g,"/") : "";
+    document.getElementById("viewer-caption").textContent = [dateStr, file.name].filter(Boolean).join(" · ");
+    document.getElementById("viewer-overlay").classList.add("active");
+    driveFetch("files/"+file.id+"?alt=media").then(res=>res.blob()).then(blob=>{
+      document.getElementById("viewer-img").src = URL.createObjectURL(blob);
+    }).catch(()=>{});
+  }
+  function closeViewer(){
+    document.getElementById("viewer-overlay").classList.remove("active");
+    currentViewingFile = null;
+  }
+  async function onDeletePhoto(){
+    document.getElementById("confirm-overlay").classList.remove("active");
+    if(!currentViewingFile) return;
+    try{
+      await driveFetch("files/"+currentViewingFile.id, {method:"DELETE"});
+      closeViewer();
+      loadGallery();
+    }catch(err){
+      alert("刪除失敗，請再試一次。");
+    }
+  }
+
+})();
+</script>
+</body>
+</html>
