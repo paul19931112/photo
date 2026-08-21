@@ -314,7 +314,8 @@
     display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-weight:300; border:none; cursor:pointer;
   }
   .viewer-img-wrap{flex:1; width:100%; display:flex; align-items:center; justify-content:center; padding:0 20px;}
-  .viewer-img{max-width:100%; max-height:56vh; border-radius:18px; object-fit:contain;}
+  .viewer-img{max-width:100%; max-height:56vh; border-radius:18px; object-fit:contain; transition:filter .3s ease;}
+  .viewer-img.img-blur{filter:blur(10px);}
   .viewer-bottom{width:100%; padding:14px 22px 30px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;}
   .viewer-caption-row{display:flex; align-items:center; justify-content:center; gap:10px;}
   .viewer-caption{text-align:center; font-size:13px; color:rgba(255,255,255,.5); cursor:pointer; flex:1;}
@@ -886,6 +887,8 @@
     commentsData = {};
     settings = { anniversary: null };
     currentUserEmail = "";
+    imageCache.forEach(url=>{ try{ URL.revokeObjectURL(url); }catch(e){} });
+    imageCache.clear();
     try{ localStorage.removeItem(AUTO_LOGIN_KEY); }catch(e){}
     resetSigninButton();
     document.getElementById("login-status").innerHTML = "";
@@ -938,6 +941,31 @@
       throw new Error("Drive API "+res.status+": "+t.slice(0,200));
     }
     return res;
+  }
+
+  /* ---------------- FULL-IMAGE CACHE (avoid re-downloading + smooth thumbnail->full swap) ---------------- */
+  const imageCache = new Map(); // fileId -> objectURL
+
+  function loadImageIntoEl(imgEl, file, isStillRelevant){
+    if(imageCache.has(file.id)){
+      imgEl.src = imageCache.get(file.id);
+      imgEl.classList.remove("img-blur");
+      return;
+    }
+    imgEl.src = file.thumbnailLink || "";
+    imgEl.classList.add("img-blur");
+    driveFetch("files/"+file.id+"?alt=media").then(res=>res.blob()).then(blob=>{
+      const url = URL.createObjectURL(blob);
+      imageCache.set(file.id, url);
+      if(!isStillRelevant || isStillRelevant()){
+        imgEl.src = url;
+        requestAnimationFrame(()=>{ imgEl.classList.remove("img-blur"); });
+      }
+    }).catch(()=>{
+      if(!isStillRelevant || isStillRelevant()){
+        imgEl.classList.remove("img-blur");
+      }
+    });
   }
 
   async function findFolder(){
@@ -1581,10 +1609,11 @@
   function showSlideshowSlide(){
     const f = slideshowFiles[slideshowIndex];
     if(!f) return;
-    document.getElementById("slideshow-img").src = f.thumbnailLink || "";
-    driveFetch("files/"+f.id+"?alt=media").then(res=>res.blob()).then(blob=>{
-      document.getElementById("slideshow-img").src = URL.createObjectURL(blob);
-    }).catch(()=>{});
+    const imgEl = document.getElementById("slideshow-img");
+    loadImageIntoEl(imgEl, f, ()=>{
+      const cur = slideshowFiles[slideshowIndex];
+      return cur && cur.id === f.id;
+    });
     const cap = (f.appProperties && f.appProperties.caption) || f.name || "";
     document.getElementById("slideshow-caption").textContent = (slideshowIndex+1)+" / "+slideshowFiles.length + (cap ? (" · "+cap) : "");
     restartSlideshowProgress();
@@ -1803,14 +1832,12 @@
 
   function openViewer(file){
     currentViewingFile = file;
-    document.getElementById("viewer-img").src = file.thumbnailLink || "";
+    const imgEl = document.getElementById("viewer-img");
     renderViewerCaptionText();
     document.getElementById("caption-edit-row").classList.remove("active");
     updateViewerLikeIcon();
     document.getElementById("viewer-overlay").classList.add("active");
-    driveFetch("files/"+file.id+"?alt=media").then(res=>res.blob()).then(blob=>{
-      document.getElementById("viewer-img").src = URL.createObjectURL(blob);
-    }).catch(()=>{});
+    loadImageIntoEl(imgEl, file, ()=> currentViewingFile && currentViewingFile.id === file.id);
     loadPhotoComments(file.id);
   }
   function closeViewer(){
