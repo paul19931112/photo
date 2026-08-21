@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="回憶相簿">
 <meta name="application-name" content="回憶相簿">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root{
     --amber:#E9A05C;
@@ -358,6 +359,19 @@
     font-size:13.5px; font-weight:700; cursor:pointer;
   }
 
+  /* slideshow modal */
+  #slideshow-overlay{background:var(--viewer-bg);}
+  .slideshow-bottom{width:100%; padding:14px 22px 30px; display:flex; flex-direction:column; gap:14px; align-items:center;}
+  .slideshow-caption{font-size:13px; color:rgba(255,255,255,.6); text-align:center;}
+  .slideshow-controls{display:flex; align-items:center; gap:20px;}
+  .slideshow-controls button{
+    width:46px;height:46px;border-radius:50%; background:rgba(255,255,255,.12); border:none; color:#fff;
+    font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  #btn-slideshow-playpause{width:56px;height:56px; background:var(--grad); font-size:22px;}
+  .slideshow-progress{width:100%; max-width:220px; height:4px; border-radius:2px; background:rgba(255,255,255,.15); overflow:hidden;}
+  .slideshow-progress-fill{height:100%; background:var(--amber); width:0%;}
+
   /* confirm delete modal */
   #confirm-overlay{background:rgba(30,21,9,.72); padding:0 34px;}
   .confirm-box{
@@ -500,6 +514,8 @@
       <div class="gtitle">回憶相簿</div>
       <div class="header-actions">
         <button class="icon-btn" id="btn-gallery-search">🔍</button>
+        <button class="icon-btn" id="btn-gallery-slideshow">▶️</button>
+        <button class="icon-btn" id="btn-gallery-download">⬇️</button>
         <button class="icon-btn" id="btn-gallery-select">☑️</button>
         <button class="icon-btn" id="btn-gallery-refresh">⟳</button>
       </div>
@@ -515,6 +531,10 @@
   <div class="upload-progress" id="upload-progress">
     <div class="row"><span id="upload-progress-text">上傳中...</span><span id="upload-progress-pct">0%</span></div>
     <div class="bar-bg"><div class="bar-fill" id="upload-progress-bar" style="width:0%;"></div></div>
+  </div>
+  <div class="upload-progress" id="download-progress">
+    <div class="row"><span id="download-progress-text">打包中...</span><span id="download-progress-pct">0%</span></div>
+    <div class="bar-bg"><div class="bar-fill" id="download-progress-bar" style="width:0%;"></div></div>
   </div>
   <div class="batch-bar" id="batch-bar">
     <div class="batch-count" id="batch-count">已選 0 張</div>
@@ -549,6 +569,21 @@
       </div>
     </div>
     <button class="btn-delete-outline" id="btn-viewer-delete">🗑️ 刪除這張</button>
+  </div>
+</div>
+
+<!-- slideshow modal -->
+<div class="modal-overlay" id="slideshow-overlay">
+  <div class="viewer-topbar"><button class="viewer-close" id="btn-slideshow-close">✕</button></div>
+  <div class="viewer-img-wrap"><img class="viewer-img" id="slideshow-img" src=""></div>
+  <div class="slideshow-bottom">
+    <div class="slideshow-caption" id="slideshow-caption"></div>
+    <div class="slideshow-controls">
+      <button id="btn-slideshow-prev">‹</button>
+      <button id="btn-slideshow-playpause">⏸</button>
+      <button id="btn-slideshow-next">›</button>
+    </div>
+    <div class="slideshow-progress"><div class="slideshow-progress-fill" id="slideshow-progress-fill"></div></div>
   </div>
 </div>
 
@@ -633,6 +668,12 @@
   let selectedIds = new Set();
   let categoryPickerMode = "upload"; // "upload" | "batch"
   let batchDeleteMode = false;
+  let slideshowFiles = [];
+  let slideshowIndex = 0;
+  let slideshowPlaying = true;
+  let slideshowProgressStart = 0;
+  let slideshowProgressRAF = null;
+  const SLIDESHOW_INTERVAL = 3500;
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -670,6 +711,12 @@
     document.getElementById("btn-batch-cancel").addEventListener("click", exitSelectMode);
     document.getElementById("btn-batch-delete").addEventListener("click", onBatchDeleteClick);
     document.getElementById("btn-batch-recat").addEventListener("click", onBatchRecatClick);
+    document.getElementById("btn-gallery-slideshow").addEventListener("click", openSlideshow);
+    document.getElementById("btn-slideshow-close").addEventListener("click", closeSlideshow);
+    document.getElementById("btn-slideshow-prev").addEventListener("click", prevSlide);
+    document.getElementById("btn-slideshow-next").addEventListener("click", nextSlide);
+    document.getElementById("btn-slideshow-playpause").addEventListener("click", toggleSlideshowPlay);
+    document.getElementById("btn-gallery-download").addEventListener("click", onDownloadAllClick);
     document.getElementById("btn-upload").addEventListener("click", ()=> document.getElementById("file-input").click());
     document.getElementById("file-input").addEventListener("change", onFilesSelected);
     document.getElementById("btn-viewer-close").addEventListener("click", closeViewer);
@@ -1408,9 +1455,7 @@
     });
   }
 
-  function renderGalleryGrid(){
-    const container = document.getElementById("photo-grid-container");
-    container.innerHTML = "";
+  function getFilteredGalleryFiles(){
     let files = galleryFiles;
     if(currentCategoryFilter !== "__all__"){
       files = files.filter(f => (f.appProperties && f.appProperties.category) === currentCategoryFilter);
@@ -1425,6 +1470,13 @@
                name.indexOf(gallerySearchQuery) !== -1 || dateStr.indexOf(gallerySearchQuery) !== -1;
       });
     }
+    return files;
+  }
+
+  function renderGalleryGrid(){
+    const container = document.getElementById("photo-grid-container");
+    container.innerHTML = "";
+    let files = getFilteredGalleryFiles();
     if(files.length === 0){
       const emptyMsg = gallerySearchQuery ? "找不到符合的照片～" : (currentCategoryFilter === "__all__" ? "還沒有照片～<br>點右下角 ＋ 上傳第一張吧！" : "這個分類還沒有照片喔～");
       container.innerHTML =
@@ -1509,6 +1561,136 @@
       const blob = await res.blob();
       imgEl.src = URL.createObjectURL(blob);
     }catch(e){ /* leave broken, non-fatal */ }
+  }
+
+  /* ---------------- SLIDESHOW ---------------- */
+  function openSlideshow(){
+    slideshowFiles = getFilteredGalleryFiles();
+    if(slideshowFiles.length === 0){ alert("目前沒有照片可以播放喔～"); return; }
+    slideshowIndex = 0;
+    slideshowPlaying = true;
+    document.getElementById("btn-slideshow-playpause").textContent = "⏸";
+    document.getElementById("slideshow-overlay").classList.add("active");
+    showSlideshowSlide();
+  }
+  function closeSlideshow(){
+    document.getElementById("slideshow-overlay").classList.remove("active");
+    slideshowPlaying = false;
+    if(slideshowProgressRAF){ cancelAnimationFrame(slideshowProgressRAF); slideshowProgressRAF = null; }
+  }
+  function showSlideshowSlide(){
+    const f = slideshowFiles[slideshowIndex];
+    if(!f) return;
+    document.getElementById("slideshow-img").src = f.thumbnailLink || "";
+    driveFetch("files/"+f.id+"?alt=media").then(res=>res.blob()).then(blob=>{
+      document.getElementById("slideshow-img").src = URL.createObjectURL(blob);
+    }).catch(()=>{});
+    const cap = (f.appProperties && f.appProperties.caption) || f.name || "";
+    document.getElementById("slideshow-caption").textContent = (slideshowIndex+1)+" / "+slideshowFiles.length + (cap ? (" · "+cap) : "");
+    restartSlideshowProgress();
+  }
+  function nextSlide(){
+    if(slideshowFiles.length === 0) return;
+    slideshowIndex = (slideshowIndex + 1) % slideshowFiles.length;
+    showSlideshowSlide();
+  }
+  function prevSlide(){
+    if(slideshowFiles.length === 0) return;
+    slideshowIndex = (slideshowIndex - 1 + slideshowFiles.length) % slideshowFiles.length;
+    showSlideshowSlide();
+  }
+  function restartSlideshowProgress(){
+    document.getElementById("slideshow-progress-fill").style.width = "0%";
+    if(slideshowProgressRAF){ cancelAnimationFrame(slideshowProgressRAF); slideshowProgressRAF = null; }
+    if(!slideshowPlaying) return;
+    slideshowProgressStart = Date.now();
+    slideshowProgressRAF = requestAnimationFrame(tickSlideshowProgress);
+  }
+  function tickSlideshowProgress(){
+    const elapsed = Date.now() - slideshowProgressStart;
+    const pct = Math.min(100, (elapsed / SLIDESHOW_INTERVAL) * 100);
+    document.getElementById("slideshow-progress-fill").style.width = pct + "%";
+    if(elapsed >= SLIDESHOW_INTERVAL){
+      nextSlide();
+      return;
+    }
+    slideshowProgressRAF = requestAnimationFrame(tickSlideshowProgress);
+  }
+  function toggleSlideshowPlay(){
+    slideshowPlaying = !slideshowPlaying;
+    document.getElementById("btn-slideshow-playpause").textContent = slideshowPlaying ? "⏸" : "▶";
+    if(slideshowPlaying){
+      const curPct = parseFloat(document.getElementById("slideshow-progress-fill").style.width || "0");
+      slideshowProgressStart = Date.now() - (curPct/100 * SLIDESHOW_INTERVAL);
+      slideshowProgressRAF = requestAnimationFrame(tickSlideshowProgress);
+    } else if(slideshowProgressRAF){
+      cancelAnimationFrame(slideshowProgressRAF);
+      slideshowProgressRAF = null;
+    }
+  }
+
+  /* ---------------- DOWNLOAD ALL AS ZIP ---------------- */
+  async function onDownloadAllClick(){
+    if(typeof JSZip === "undefined"){
+      alert("打包工具載入失敗，請檢查網路連線後重新整理再試一次。");
+      return;
+    }
+    const files = (galleryFiles && galleryFiles.length) ? galleryFiles : await listPhotos();
+    if(!files || files.length === 0){ alert("目前沒有照片可以下載喔～"); return; }
+    const ok = confirm("要把全部 "+files.length+" 張照片打包成 zip 下載嗎？照片多的話可能要等一下。");
+    if(!ok) return;
+
+    const progress = document.getElementById("download-progress");
+    const textEl = document.getElementById("download-progress-text");
+    const pctEl = document.getElementById("download-progress-pct");
+    const barEl = document.getElementById("download-progress-bar");
+    progress.classList.add("active");
+
+    const zip = new JSZip();
+    const usedNames = {};
+    for(let i=0;i<files.length;i++){
+      const f = files[i];
+      const pct = Math.round((i/files.length)*100);
+      textEl.textContent = "下載中 "+(i+1)+" / "+files.length+" ...";
+      pctEl.textContent = pct+"%";
+      barEl.style.width = pct+"%";
+      try{
+        const res = await driveFetch("files/"+f.id+"?alt=media");
+        const blob = await res.blob();
+        let name = f.name || ("photo_"+i+".jpg");
+        if(usedNames[name] != null){
+          usedNames[name]++;
+          const dot = name.lastIndexOf(".");
+          name = dot > 0 ? (name.slice(0,dot)+"_"+usedNames[name]+name.slice(dot)) : (name+"_"+usedNames[name]);
+        } else {
+          usedNames[name] = 0;
+        }
+        zip.file(name, blob);
+      }catch(err){
+        console.error("下載失敗", f.name, err);
+      }
+    }
+
+    textEl.textContent = "打包壓縮中...";
+    pctEl.textContent = "";
+    try{
+      const content = await zip.generateAsync({type:"blob"}, (meta)=>{
+        barEl.style.width = Math.round(meta.percent) + "%";
+      });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement("a");
+      const stamp = new Date().toISOString().slice(0,10);
+      a.href = url;
+      a.download = "我們的回憶相簿_備份_"+stamp+".zip";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url), 30000);
+    }catch(err){
+      console.error(err);
+      alert("打包失敗，請再試一次。");
+    }
+    setTimeout(()=>{ progress.classList.remove("active"); }, 400);
   }
 
   function onFilesSelected(e){
