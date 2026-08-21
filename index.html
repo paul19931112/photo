@@ -172,6 +172,8 @@
   .anniv-card .pill{margin-top:4px;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.18);font-size:13px;font-weight:500;color:#fff; position:relative;}
 
   .home-actions{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
+  .home-actions-row{display:flex; gap:10px;}
+  .home-actions-row .btn{flex:1; padding:13px 6px; font-size:13px; border-radius:20px;}
 
   .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
   .stat-card{background:#fff; border-radius:20px; padding:16px 18px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow);}
@@ -194,6 +196,50 @@
   }
 
   .footer-link{text-align:center; font-size:13px; color:var(--text-faint); margin-top:auto; padding-top:10px; text-decoration:underline; cursor:pointer;}
+
+  /* wishlist */
+  .wishlist-list{display:flex; flex-direction:column; gap:10px; margin-top:4px;}
+  .wishlist-item{
+    background:#fff; border-radius:18px; padding:14px 16px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:12px;
+  }
+  .wishlist-check{
+    flex:none; width:26px; height:26px; border-radius:50%; border:none; cursor:pointer;
+    background:#fff; box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.35);
+    display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;
+  }
+  .wishlist-check.done{background:var(--grad); box-shadow:none;}
+  .wishlist-body{flex:1; min-width:0;}
+  .wishlist-text{font-size:15px; font-weight:600; color:var(--text); word-break:break-word; line-height:1.5;}
+  .wishlist-text.done{color:var(--text-faint); text-decoration:line-through;}
+  .wishlist-meta{font-size:11px; color:var(--text-faint); margin-top:2px;}
+  .wishlist-del{flex:none; width:26px; height:26px; border-radius:50%; border:none; background:transparent; color:var(--text-faint); font-size:15px; cursor:pointer;}
+  .wishlist-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
+
+  /* mood diary */
+  .mood-compose{background:#fff; border-radius:20px; padding:16px; box-shadow:var(--shadow); margin-bottom:16px; display:flex; flex-direction:column; gap:12px;}
+  .mood-emoji-row{display:flex; gap:8px; overflow-x:auto; padding:2px; -webkit-overflow-scrolling:touch;}
+  .mood-emoji-row::-webkit-scrollbar{display:none;}
+  .mood-emoji-chip{
+    flex:none; width:42px; height:42px; border-radius:50%; background:var(--cream);
+    display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer;
+    box-shadow:inset 0 0 0 1.5px transparent; transition:transform .1s ease;
+  }
+  .mood-emoji-chip.selected{box-shadow:inset 0 0 0 2px var(--amber-dark); background:var(--cream-warm); transform:scale(1.08);}
+  .mood-compose-input-row{display:flex; gap:8px;}
+  .mood-compose-input-row input{margin-bottom:0; padding:12px 16px; font-size:14px; font-weight:500;}
+  .mood-compose-input-row button{
+    flex:none; padding:0 18px; border-radius:16px; border:none; background:var(--grad); color:#fff;
+    font-size:14px; font-weight:700; cursor:pointer;
+  }
+  .mood-day-group{margin-bottom:18px;}
+  .mood-day-label{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; color:var(--text-faint); padding:4px 4px 10px;}
+  .mood-entry{background:#fff; border-radius:16px; padding:12px 14px; box-shadow:var(--shadow); display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;}
+  .mood-entry-emoji{font-size:22px; flex:none;}
+  .mood-entry-body{flex:1; min-width:0;}
+  .mood-entry-text{font-size:14px; color:var(--text); line-height:1.6; word-break:break-word;}
+  .mood-entry-meta{font-size:11px; color:var(--text-faint); margin-top:2px;}
+  .mood-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
 
   /* gallery */
   .gallery-header{
@@ -247,6 +293,16 @@
     font-size:13px; cursor:pointer; padding:0; line-height:1;
   }
   .like-btn.liked{background:rgba(30,21,9,.55);}
+  @keyframes heartPop{
+    0%{ transform:translate(-50%,-50%) scale(.3); opacity:0; }
+    15%{ transform:translate(-50%,-50%) scale(1.25); opacity:1; }
+    30%{ transform:translate(-50%,-55%) scale(1); opacity:1; }
+    100%{ transform:translate(-50%,-140px) scale(.75); opacity:0; }
+  }
+  .heart-burst{
+    position:fixed; pointer-events:none; z-index:999;
+    animation: heartPop .9s ease-out forwards;
+  }
   .photo-empty{
     text-align:center; padding:60px 20px 40px; color:var(--text-soft); font-size:15px; line-height:1.9;
     display:flex; flex-direction:column; align-items:center; gap:22px;
@@ -488,7 +544,11 @@
     </div>
     <div class="home-actions">
       <button class="btn" id="btn-goto-gallery">查看相簿</button>
-      <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
+      <div class="home-actions-row">
+        <button class="btn secondary" id="btn-goto-wishlist">願望清單</button>
+        <button class="btn secondary" id="btn-goto-mood">心情日記</button>
+        <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
+      </div>
     </div>
     <div class="stat-grid">
       <div class="stat-card">
@@ -511,6 +571,38 @@
     </div>
 
     <div class="footer-link" id="btn-logout">登出</div>
+  </div>
+
+  <!-- WISHLIST -->
+  <div class="screen" id="screen-wishlist">
+    <div class="gallery-header">
+      <button class="icon-btn" id="btn-wishlist-back">‹</button>
+      <div class="gtitle">願望清單</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-wishlist-refresh">⟳</button>
+      </div>
+    </div>
+    <div id="wishlist-container"></div>
+  </div>
+  <button class="upload-fab" id="btn-wishlist-add" style="display:none;">＋</button>
+
+  <!-- MOOD DIARY -->
+  <div class="screen" id="screen-mood">
+    <div class="gallery-header">
+      <button class="icon-btn" id="btn-mood-back">‹</button>
+      <div class="gtitle">心情日記</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-mood-refresh">⟳</button>
+      </div>
+    </div>
+    <div class="mood-compose">
+      <div class="mood-emoji-row" id="mood-emoji-row"></div>
+      <div class="mood-compose-input-row">
+        <input type="text" id="mood-text-input" placeholder="想說的話(非必填)..." maxlength="60">
+        <button id="btn-mood-send">記錄</button>
+      </div>
+    </div>
+    <div id="mood-list-container"></div>
   </div>
 
   <!-- GALLERY -->
@@ -643,6 +735,21 @@
   </div>
 </div>
 
+<!-- add wishlist item sheet -->
+<div class="modal-overlay" id="wishlist-add-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3>新增一個願望</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <input type="text" id="wishlist-add-input" placeholder="想一起做的事..." maxlength="60">
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-wishlist-add-cancel">取消</button>
+      <button class="btn-save" id="btn-wishlist-add-save">新增</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -656,6 +763,9 @@
   const COVER_FILENAME = "cover.jpg";
   const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
   const COMMENTS_FILENAME = "comments.json";
+  const WISHLIST_FILENAME = "wishlist.json";
+  const MOODS_FILENAME = "moods.json";
+  const MOOD_EMOJIS = ["😊","😍","🥰","😴","😢","😡","😐","🥳","😰","🤒"];
   const AUTO_LOGIN_KEY = "album_has_signed_in_before";
   /* =================================================================== */
 
@@ -683,6 +793,11 @@
   let slideshowProgressStart = 0;
   let slideshowProgressRAF = null;
   const SLIDESHOW_INTERVAL = 3500;
+  let wishlistFileId = null;
+  let wishlistData = [];
+  let moodsFileId = null;
+  let moodsData = [];
+  let selectedMoodEmoji = "";
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -707,6 +822,27 @@
     document.getElementById("btn-invite-submit").addEventListener("click", onInviteSubmit);
     document.getElementById("btn-invite-skip").addEventListener("click", onInviteSkip);
     document.getElementById("btn-goto-gallery").addEventListener("click", openGallery);
+    document.getElementById("btn-goto-wishlist").addEventListener("click", openWishlist);
+    document.getElementById("btn-wishlist-back").addEventListener("click", ()=>{
+      document.getElementById("btn-wishlist-add").style.display = "none";
+      show("screen-home");
+    });
+    document.getElementById("btn-wishlist-refresh").addEventListener("click", loadWishlist);
+    document.getElementById("btn-wishlist-add").addEventListener("click", openWishlistAdd);
+    document.getElementById("btn-wishlist-add-cancel").addEventListener("click", ()=>{
+      document.getElementById("wishlist-add-overlay").classList.remove("active");
+    });
+    document.getElementById("btn-wishlist-add-save").addEventListener("click", onWishlistAddSave);
+    document.getElementById("wishlist-add-input").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") onWishlistAddSave();
+    });
+    document.getElementById("btn-goto-mood").addEventListener("click", openMoodDiary);
+    document.getElementById("btn-mood-back").addEventListener("click", ()=> show("screen-home"));
+    document.getElementById("btn-mood-refresh").addEventListener("click", loadMoods);
+    document.getElementById("btn-mood-send").addEventListener("click", onMoodSend);
+    document.getElementById("mood-text-input").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") onMoodSend();
+    });
     document.getElementById("btn-edit-anniv").addEventListener("click", openEditAnniv);
     document.getElementById("btn-logout").addEventListener("click", onLogout);
     document.getElementById("btn-gallery-back").addEventListener("click", ()=>{ show("screen-home"); toggleFab(false); });
@@ -893,6 +1029,11 @@
     messagesFileId = null;
     commentsFileId = null;
     commentsData = {};
+    wishlistFileId = null;
+    wishlistData = [];
+    moodsFileId = null;
+    moodsData = [];
+    selectedMoodEmoji = "";
     settings = { anniversary: null };
     currentUserEmail = "";
     imageCache.forEach(url=>{ try{ URL.revokeObjectURL(url); }catch(e){} });
@@ -1096,6 +1237,23 @@
 
   function isVideo(file){
     return !!(file.mimeType && file.mimeType.indexOf("video/") === 0);
+  }
+
+  function spawnHeartBurst(x, y){
+    const count = 5;
+    for(let i=0;i<count;i++){
+      const el = document.createElement("div");
+      el.className = "heart-burst";
+      el.textContent = "❤️";
+      const dx = (Math.random()-0.5) * 60;
+      const delay = Math.random()*120;
+      el.style.left = (x + dx) + "px";
+      el.style.top = y + "px";
+      el.style.animationDelay = delay + "ms";
+      el.style.fontSize = (16 + Math.random()*14) + "px";
+      document.body.appendChild(el);
+      setTimeout(()=>{ el.remove(); }, 1000 + delay);
+    }
   }
 
   async function toggleLike(file){
@@ -1355,6 +1513,308 @@
     }
   }
 
+  /* ---------------- WISHLIST ---------------- */
+  async function findWishlistFile(){
+    const q = encodeURIComponent("name='"+WISHLIST_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function saveWishlist(){
+    const content = JSON.stringify(wishlistData);
+    if(wishlistFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+wishlistFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      wishlistFileId = await createFileMultipart(WISHLIST_FILENAME, "application/json", content, folderId);
+    }
+  }
+
+  function openWishlist(){
+    show("screen-wishlist");
+    document.getElementById("btn-wishlist-add").style.display = "flex";
+    loadWishlist();
+  }
+
+  async function loadWishlist(){
+    const container = document.getElementById("wishlist-container");
+    container.innerHTML = '<div class="wishlist-empty">載入中...</div>';
+    try{
+      wishlistFileId = await findWishlistFile();
+      if(wishlistFileId){
+        const res = await driveFetch("files/"+wishlistFileId+"?alt=media");
+        try{ wishlistData = await res.json(); }catch(e){ wishlistData = []; }
+      } else {
+        wishlistData = [];
+      }
+      renderWishlist();
+    }catch(err){
+      container.innerHTML = '<div class="wishlist-empty">載入失敗，點右上角 ⟳ 重新整理再試一次。</div>';
+    }
+  }
+
+  function renderWishlist(){
+    const container = document.getElementById("wishlist-container");
+    if(!wishlistData || wishlistData.length === 0){
+      container.innerHTML = '<div class="wishlist-empty">還沒有願望～<br>點右下角 ＋ 新增第一個吧！</div>';
+      return;
+    }
+    const sorted = wishlistData.slice().sort((a,b)=>{
+      if(!!a.done !== !!b.done) return a.done ? 1 : -1;
+      return (b.createdAt||"").localeCompare(a.createdAt||"");
+    });
+    const list = document.createElement("div");
+    list.className = "wishlist-list";
+    sorted.forEach(item=>{
+      const row = document.createElement("div");
+      row.className = "wishlist-item";
+
+      const check = document.createElement("button");
+      check.className = "wishlist-check" + (item.done ? " done" : "");
+      check.textContent = item.done ? "✓" : "";
+      check.addEventListener("click", ()=> toggleWishlistDone(item.id));
+      row.appendChild(check);
+
+      const body = document.createElement("div");
+      body.className = "wishlist-body";
+      const text = document.createElement("div");
+      text.className = "wishlist-text" + (item.done ? " done" : "");
+      text.textContent = item.text || "";
+      body.appendChild(text);
+      if(item.author){
+        const meta = document.createElement("div");
+        meta.className = "wishlist-meta";
+        meta.textContent = (item.author.split("@")[0] || "") + " 新增";
+        body.appendChild(meta);
+      }
+      row.appendChild(body);
+
+      const del = document.createElement("button");
+      del.className = "wishlist-del";
+      del.textContent = "✕";
+      del.addEventListener("click", ()=> deleteWishlistItem(item.id));
+      row.appendChild(del);
+
+      list.appendChild(row);
+    });
+    container.innerHTML = "";
+    container.appendChild(list);
+  }
+
+  async function toggleWishlistDone(id){
+    const item = wishlistData.find(w=>w.id === id);
+    if(!item) return;
+    item.done = !item.done;
+    item.doneAt = item.done ? new Date().toISOString() : "";
+    renderWishlist();
+    try{
+      await saveWishlist();
+    }catch(err){
+      alert("更新失敗，請再試一次。");
+    }
+  }
+
+  async function deleteWishlistItem(id){
+    const ok = confirm("要刪除這個願望嗎？");
+    if(!ok) return;
+    wishlistData = wishlistData.filter(w=>w.id !== id);
+    renderWishlist();
+    try{
+      await saveWishlist();
+    }catch(err){
+      alert("刪除失敗，請再試一次。");
+    }
+  }
+
+  function openWishlistAdd(){
+    document.getElementById("wishlist-add-input").value = "";
+    document.getElementById("wishlist-add-overlay").classList.add("active");
+    document.getElementById("wishlist-add-input").focus();
+  }
+
+  async function onWishlistAddSave(){
+    const input = document.getElementById("wishlist-add-input");
+    const text = input.value.trim();
+    if(!text) return;
+    document.getElementById("wishlist-add-overlay").classList.remove("active");
+    const item = {
+      id: "w_"+Date.now()+"_"+Math.random().toString(16).slice(2),
+      text: text,
+      done: false,
+      createdAt: new Date().toISOString(),
+      author: currentUserEmail || ""
+    };
+    wishlistData.push(item);
+    renderWishlist();
+    try{
+      await saveWishlist();
+    }catch(err){
+      alert("新增失敗，請再試一次。");
+    }
+  }
+
+  /* ---------------- MOOD DIARY ---------------- */
+  function openMoodDiary(){
+    show("screen-mood");
+    selectedMoodEmoji = "";
+    document.getElementById("mood-text-input").value = "";
+    renderMoodEmojiRow();
+    loadMoods();
+  }
+
+  function renderMoodEmojiRow(){
+    const row = document.getElementById("mood-emoji-row");
+    row.innerHTML = "";
+    MOOD_EMOJIS.forEach(emo=>{
+      const chip = document.createElement("div");
+      chip.className = "mood-emoji-chip" + (selectedMoodEmoji === emo ? " selected" : "");
+      chip.textContent = emo;
+      chip.addEventListener("click", ()=>{
+        selectedMoodEmoji = (selectedMoodEmoji === emo) ? "" : emo;
+        renderMoodEmojiRow();
+      });
+      row.appendChild(chip);
+    });
+  }
+
+  async function findMoodsFile(){
+    const q = encodeURIComponent("name='"+MOODS_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function loadMoods(){
+    const container = document.getElementById("mood-list-container");
+    container.innerHTML = '<div class="mood-empty">載入中...</div>';
+    try{
+      moodsFileId = await findMoodsFile();
+      if(moodsFileId){
+        const res = await driveFetch("files/"+moodsFileId+"?alt=media");
+        try{ moodsData = await res.json(); }catch(e){ moodsData = []; }
+      } else {
+        moodsData = [];
+      }
+      renderMoodList();
+    }catch(err){
+      container.innerHTML = '<div class="mood-empty">載入失敗，點右上角 ⟳ 重新整理再試一次。</div>';
+    }
+  }
+
+  async function saveMoods(){
+    const content = JSON.stringify(moodsData);
+    if(moodsFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+moodsFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      moodsFileId = await createFileMultipart(MOODS_FILENAME, "application/json", content, folderId);
+    }
+  }
+
+  function formatMoodDateLabel(dateStr){
+    if(!dateStr) return "";
+    const today = new Date();
+    const pad = n => String(n).padStart(2,"0");
+    const todayStr = today.getFullYear()+"-"+pad(today.getMonth()+1)+"-"+pad(today.getDate());
+    const y = new Date(today); y.setDate(y.getDate()-1);
+    const yStr = y.getFullYear()+"-"+pad(y.getMonth()+1)+"-"+pad(y.getDate());
+    if(dateStr === todayStr) return "今天";
+    if(dateStr === yStr) return "昨天";
+    const d = new Date(dateStr+"T00:00:00");
+    return (d.getMonth()+1)+"/"+d.getDate();
+  }
+
+  function renderMoodList(){
+    const container = document.getElementById("mood-list-container");
+    if(!moodsData || moodsData.length === 0){
+      container.innerHTML = '<div class="mood-empty">還沒有心情紀錄～<br>選個表情記下今天的心情吧！</div>';
+      return;
+    }
+    const sorted = moodsData.slice().sort((a,b)=> (b.time||"").localeCompare(a.time||""));
+    const groups = [];
+    let lastDate = null, curGroup = null;
+    sorted.forEach(m=>{
+      const d = m.date || (m.time ? m.time.slice(0,10) : "");
+      if(d !== lastDate){
+        curGroup = { date: d, items: [] };
+        groups.push(curGroup);
+        lastDate = d;
+      }
+      curGroup.items.push(m);
+    });
+    container.innerHTML = "";
+    groups.forEach(g=>{
+      const wrap = document.createElement("div");
+      wrap.className = "mood-day-group";
+      const label = document.createElement("div");
+      label.className = "mood-day-label";
+      label.textContent = formatMoodDateLabel(g.date);
+      wrap.appendChild(label);
+      g.items.forEach(m=>{
+        const entry = document.createElement("div");
+        entry.className = "mood-entry";
+        const emoji = document.createElement("div");
+        emoji.className = "mood-entry-emoji";
+        emoji.textContent = m.mood || "💬";
+        entry.appendChild(emoji);
+        const body = document.createElement("div");
+        body.className = "mood-entry-body";
+        if(m.text){
+          const txt = document.createElement("div");
+          txt.className = "mood-entry-text";
+          txt.textContent = m.text;
+          body.appendChild(txt);
+        }
+        const meta = document.createElement("div");
+        meta.className = "mood-entry-meta";
+        const who = (m.author || "").split("@")[0] || "某人";
+        let timeStr = "";
+        if(m.time){
+          const t = new Date(m.time);
+          timeStr = String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0");
+        }
+        meta.textContent = who + (timeStr ? (" · "+timeStr) : "");
+        body.appendChild(meta);
+        entry.appendChild(body);
+        wrap.appendChild(entry);
+      });
+      container.appendChild(wrap);
+    });
+  }
+
+  async function onMoodSend(){
+    if(!selectedMoodEmoji){ alert("先選一個心情表情吧～"); return; }
+    const textInput = document.getElementById("mood-text-input");
+    const text = textInput.value.trim();
+    const now = new Date();
+    const pad = n => String(n).padStart(2,"0");
+    const entry = {
+      id: "m_"+Date.now()+"_"+Math.random().toString(16).slice(2),
+      mood: selectedMoodEmoji,
+      text: text,
+      date: now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate()),
+      time: now.toISOString(),
+      author: currentUserEmail || ""
+    };
+    moodsData.push(entry);
+    selectedMoodEmoji = "";
+    textInput.value = "";
+    renderMoodEmojiRow();
+    renderMoodList();
+    try{
+      await saveMoods();
+    }catch(err){
+      alert("記錄失敗，請再試一次。");
+    }
+  }
+
   /* ---------------- GALLERY ---------------- */
   function toggleFab(visible){
     document.getElementById("btn-upload").style.display = visible ? "flex" : "none";
@@ -1584,7 +2044,11 @@
           e.stopPropagation();
           likeBtn.disabled = true;
           try{
-            await toggleLike(f);
+            const nowLiked = await toggleLike(f);
+            if(nowLiked){
+              const rect = likeBtn.getBoundingClientRect();
+              spawnHeartBurst(rect.left + rect.width/2, rect.top + rect.height/2);
+            }
             galleryFiles.sort((a,b)=>{
               const aLiked = isLiked(a), bLiked = isLiked(b);
               if(aLiked && bLiked){
@@ -1874,8 +2338,12 @@
     const btn = document.getElementById("btn-viewer-like");
     btn.disabled = true;
     try{
-      await toggleLike(currentViewingFile);
+      const nowLiked = await toggleLike(currentViewingFile);
       updateViewerLikeIcon();
+      if(nowLiked){
+        const rect = btn.getBoundingClientRect();
+        spawnHeartBurst(rect.left + rect.width/2, rect.top + rect.height/2);
+      }
     }catch(err){
       alert("愛心更新失敗，請再試一次。");
     } finally {
