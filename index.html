@@ -204,6 +204,29 @@
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
   .gallery-header .gtitle{font-size:18px; font-weight:700; color:var(--terracotta);}
+  .header-actions{display:flex; gap:8px;}
+  .icon-btn.active{background:var(--grad); color:#fff; box-shadow:none;}
+  .search-row{margin-bottom:10px;}
+  .search-row input{padding:12px 16px; font-size:14px; font-weight:500;}
+  .cat-filter-row{display:flex; gap:8px; overflow-x:auto; padding:2px 2px 6px; margin-bottom:10px; -webkit-overflow-scrolling:touch;}
+  .cat-filter-row::-webkit-scrollbar{display:none;}
+  .cat-filter-chip{
+    flex:none; padding:8px 16px; border-radius:999px; background:#fff; box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.22);
+    color:var(--amber-dark); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;
+  }
+  .cat-filter-chip.active{background:var(--grad); color:#fff; box-shadow:none;}
+  .cat-chip-list{display:flex; flex-wrap:wrap; gap:8px;}
+  .cat-chip{
+    padding:9px 16px; border-radius:999px; background:#fff; box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.25);
+    color:var(--amber-dark); font-size:14px; font-weight:600; cursor:pointer; user-select:none;
+  }
+  .cat-chip.selected{background:var(--grad); color:#fff; box-shadow:none;}
+  .cat-add-row{display:flex; gap:8px;}
+  .cat-add-row input{margin-bottom:0; padding:12px 16px; font-size:14px; font-weight:500;}
+  .cat-add-btn{
+    flex:none; padding:0 16px; border-radius:14px; border:none; background:#fff;
+    box-shadow:inset 0 0 0 1.5px rgba(67,48,30,.14); color:var(--text-soft); font-size:14px; font-weight:700; cursor:pointer;
+  }
   .month-label{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; color:var(--text-faint); padding:4px 4px 12px;}
   .photo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:22px;}
   .photo-thumb{
@@ -231,6 +254,28 @@
     width:44px;height:44px;border-radius:14px;
     background:repeating-linear-gradient(135deg,rgba(201,122,60,.22) 0 5px,rgba(201,122,60,.07) 5px 10px);
   }
+
+  /* multi-select batch mode */
+  .select-check{
+    position:absolute; left:6px; top:6px; width:22px; height:22px; border-radius:50%;
+    background:rgba(255,255,255,.85); box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.4);
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--amber-dark);
+  }
+  .select-check.checked{background:var(--grad); color:#fff; box-shadow:none;}
+  .thumb-selected{outline:3px solid var(--amber-dark); outline-offset:-3px;}
+  .batch-bar{
+    position:fixed; left:16px; right:16px; bottom:26px; max-width:428px; margin:0 auto;
+    background:var(--text); border-radius:20px; padding:14px 16px;
+    box-shadow:0 18px 34px -16px rgba(67,48,30,.7); z-index:40; display:none;
+    align-items:center; justify-content:space-between; gap:10px;
+  }
+  .batch-bar.active{display:flex;}
+  .batch-count{color:#fff; font-size:13px; font-weight:600; flex:none;}
+  .batch-actions{display:flex; gap:8px;}
+  .batch-actions button{border:none; border-radius:14px; padding:9px 14px; font-size:13px; font-weight:700; cursor:pointer;}
+  .batch-actions #btn-batch-recat{background:rgba(255,255,255,.15); color:#fff;}
+  .batch-actions #btn-batch-delete{background:#E9756B; color:#fff;}
+  .batch-actions #btn-batch-cancel{background:rgba(255,255,255,.1); color:rgba(255,255,255,.7);}
 
   .upload-fab{
     position:fixed; bottom:26px; right:calc(50% - 206px);
@@ -271,7 +316,21 @@
   .viewer-img{max-width:100%; max-height:56vh; border-radius:18px; object-fit:contain;}
   .viewer-bottom{width:100%; padding:14px 22px 30px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;}
   .viewer-caption-row{display:flex; align-items:center; justify-content:center; gap:10px;}
-  .viewer-caption{text-align:center; font-size:13px; color:rgba(255,255,255,.5);}
+  .viewer-caption{text-align:center; font-size:13px; color:rgba(255,255,255,.5); cursor:pointer; flex:1;}
+  .viewer-caption-edit-btn{
+    flex:none; width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,.1); border:none;
+    color:rgba(255,255,255,.65); font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .caption-edit-row{display:none; align-items:center; gap:8px; width:100%;}
+  .caption-edit-row.active{display:flex;}
+  .caption-edit-row input{
+    flex:1; background:rgba(255,255,255,.1); border:none; border-radius:14px; padding:10px 14px;
+    color:#fff; font-size:13.5px; outline:none; margin-bottom:0;
+  }
+  .caption-edit-row button{
+    flex:none; padding:0 14px; height:36px; border-radius:14px; border:none; background:var(--grad); color:#fff;
+    font-size:13px; font-weight:700; cursor:pointer;
+  }
   .viewer-like-btn{
     flex:none; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.1); border:none;
     display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer;
@@ -439,8 +498,16 @@
     <div class="gallery-header">
       <button class="icon-btn" id="btn-gallery-back">‹</button>
       <div class="gtitle">回憶相簿</div>
-      <button class="icon-btn" id="btn-gallery-refresh">⟳</button>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-gallery-search">🔍</button>
+        <button class="icon-btn" id="btn-gallery-select">☑️</button>
+        <button class="icon-btn" id="btn-gallery-refresh">⟳</button>
+      </div>
     </div>
+    <div class="search-row" id="gallery-search-row" style="display:none;">
+      <input type="text" id="gallery-search-input" placeholder="搜尋圖說、分類、日期...">
+    </div>
+    <div class="cat-filter-row" id="cat-filter-row"></div>
     <div id="photo-grid-container"></div>
     <input type="file" id="file-input" accept="image/*" multiple>
   </div>
@@ -448,6 +515,14 @@
   <div class="upload-progress" id="upload-progress">
     <div class="row"><span id="upload-progress-text">上傳中...</span><span id="upload-progress-pct">0%</span></div>
     <div class="bar-bg"><div class="bar-fill" id="upload-progress-bar" style="width:0%;"></div></div>
+  </div>
+  <div class="batch-bar" id="batch-bar">
+    <div class="batch-count" id="batch-count">已選 0 張</div>
+    <div class="batch-actions">
+      <button id="btn-batch-recat">改分類</button>
+      <button id="btn-batch-delete">刪除</button>
+      <button id="btn-batch-cancel">取消</button>
+    </div>
   </div>
 
 </div>
@@ -457,9 +532,14 @@
   <div class="viewer-topbar"><button class="viewer-close" id="btn-viewer-close">✕</button></div>
   <div class="viewer-img-wrap"><img class="viewer-img" id="viewer-img" src=""></div>
   <div class="viewer-bottom">
-    <div class="viewer-caption-row">
+    <div class="viewer-caption-row" id="viewer-caption-row">
       <div class="viewer-caption" id="viewer-caption"></div>
+      <button class="viewer-caption-edit-btn" id="btn-viewer-caption-edit">✎</button>
       <button class="viewer-like-btn" id="btn-viewer-like">🤍</button>
+    </div>
+    <div class="caption-edit-row" id="caption-edit-row">
+      <input type="text" id="caption-edit-input" maxlength="40" placeholder="幫這張照片加句話...">
+      <button id="btn-caption-save">儲存</button>
     </div>
     <div class="viewer-comments">
       <div class="viewer-comments-list" id="viewer-comments-list"></div>
@@ -476,8 +556,8 @@
 <div class="modal-overlay" id="confirm-overlay">
   <div class="confirm-box">
     <div>
-      <div class="ctitle">確定要刪除這張照片？</div>
-      <div class="csub" style="margin-top:8px;">照片會從你們的共用資料夾移除，無法復原。</div>
+      <div class="ctitle" id="confirm-title">確定要刪除這張照片？</div>
+      <div class="csub" id="confirm-sub" style="margin-top:8px;">照片會從你們的共用資料夾移除，無法復原。</div>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;">
       <button class="cbtn-danger" id="btn-confirm-delete">刪除</button>
@@ -498,6 +578,23 @@
     <div class="sheet-actions">
       <button class="btn-cancel" id="btn-edit-anniv-cancel">取消</button>
       <button class="btn-save" id="btn-edit-anniv-save">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- category picker (shown before upload) -->
+<div class="modal-overlay" id="category-picker-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3 id="category-picker-title">這次照片要放進哪個分類？</h3>
+    <div class="cat-chip-list" id="cat-picker-list"></div>
+    <div class="cat-add-row">
+      <input type="text" id="new-category-input" placeholder="新增分類名稱">
+      <button class="cat-add-btn" id="btn-add-category">新增</button>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-category-cancel">取消</button>
+      <button class="btn-save" id="btn-category-confirm">確定上傳</button>
     </div>
   </div>
 </div>
@@ -528,6 +625,14 @@
   let currentUserEmail = "";
   let commentsFileId = null;
   let commentsData = {};
+  let pendingUploadFiles = [];
+  let pendingUploadCategory = "";
+  let currentCategoryFilter = "__all__";
+  let gallerySearchQuery = "";
+  let selectMode = false;
+  let selectedIds = new Set();
+  let categoryPickerMode = "upload"; // "upload" | "batch"
+  let batchDeleteMode = false;
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -556,16 +661,34 @@
     document.getElementById("btn-logout").addEventListener("click", onLogout);
     document.getElementById("btn-gallery-back").addEventListener("click", ()=>{ show("screen-home"); toggleFab(false); });
     document.getElementById("btn-gallery-refresh").addEventListener("click", loadGallery);
+    document.getElementById("btn-gallery-search").addEventListener("click", toggleSearchRow);
+    document.getElementById("gallery-search-input").addEventListener("input", (e)=>{
+      gallerySearchQuery = e.target.value.trim().toLowerCase();
+      renderGalleryGrid();
+    });
+    document.getElementById("btn-gallery-select").addEventListener("click", toggleSelectMode);
+    document.getElementById("btn-batch-cancel").addEventListener("click", exitSelectMode);
+    document.getElementById("btn-batch-delete").addEventListener("click", onBatchDeleteClick);
+    document.getElementById("btn-batch-recat").addEventListener("click", onBatchRecatClick);
     document.getElementById("btn-upload").addEventListener("click", ()=> document.getElementById("file-input").click());
     document.getElementById("file-input").addEventListener("change", onFilesSelected);
     document.getElementById("btn-viewer-close").addEventListener("click", closeViewer);
+    document.getElementById("btn-viewer-caption-edit").addEventListener("click", openCaptionEdit);
+    document.getElementById("viewer-caption").addEventListener("click", openCaptionEdit);
+    document.getElementById("btn-caption-save").addEventListener("click", saveCaption);
+    document.getElementById("caption-edit-input").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") saveCaption();
+    });
     document.getElementById("btn-viewer-delete").addEventListener("click", ()=>{
+      batchDeleteMode = false;
+      document.getElementById("confirm-title").textContent = "確定要刪除這張照片？";
+      document.getElementById("confirm-sub").textContent = "照片會從你們的共用資料夾移除，無法復原。";
       document.getElementById("confirm-overlay").classList.add("active");
     });
     document.getElementById("btn-cancel-delete").addEventListener("click", ()=>{
       document.getElementById("confirm-overlay").classList.remove("active");
     });
-    document.getElementById("btn-confirm-delete").addEventListener("click", onDeletePhoto);
+    document.getElementById("btn-confirm-delete").addEventListener("click", onConfirmDeleteClick);
     document.getElementById("btn-edit-anniv-save").addEventListener("click", onSaveEditAnniv);
     document.getElementById("btn-edit-anniv-cancel").addEventListener("click", ()=>{
       document.getElementById("edit-anniv-overlay").classList.remove("active");
@@ -581,6 +704,22 @@
     document.getElementById("btn-viewer-comment-send").addEventListener("click", sendPhotoComment);
     document.getElementById("viewer-comment-input").addEventListener("keydown", (e)=>{
       if(e.key === "Enter") sendPhotoComment();
+    });
+    document.getElementById("btn-add-category").addEventListener("click", onAddCategory);
+    document.getElementById("btn-category-cancel").addEventListener("click", ()=>{
+      document.getElementById("category-picker-overlay").classList.remove("active");
+      pendingUploadFiles = [];
+      document.getElementById("file-input").value = "";
+    });
+    document.getElementById("btn-category-confirm").addEventListener("click", async ()=>{
+      document.getElementById("category-picker-overlay").classList.remove("active");
+      if(categoryPickerMode === "batch"){
+        await applyBatchRecategorize(pendingUploadCategory);
+      } else {
+        const files = pendingUploadFiles;
+        pendingUploadFiles = [];
+        doUploadFiles(files, pendingUploadCategory);
+      }
     });
 
     if(window.google && google.accounts && google.accounts.oauth2){
@@ -805,8 +944,9 @@
     settings = newSettings;
   }
 
-  async function createFileMultipart(filename, mimeType, bodyContent, parentId){
+  async function createFileMultipart(filename, mimeType, bodyContent, parentId, appProperties){
     const metadata = { name: filename, parents:[parentId] };
+    if(appProperties) metadata.appProperties = appProperties;
     const boundary = "-------driveboundary" + Date.now() + Math.random().toString(16).slice(2);
     const delimiter = "\r\n--"+boundary+"\r\n";
     const closeDelim = "\r\n--"+boundary+"--";
@@ -1121,8 +1261,118 @@
 
   function openGallery(){
     show("screen-gallery");
+    currentCategoryFilter = "__all__";
+    gallerySearchQuery = "";
+    document.getElementById("gallery-search-input").value = "";
+    document.getElementById("gallery-search-row").style.display = "none";
+    selectMode = false;
+    selectedIds.clear();
+    document.getElementById("btn-gallery-select").classList.remove("active");
+    document.getElementById("batch-bar").classList.remove("active");
     toggleFab(true);
     loadGallery();
+  }
+
+  function toggleSearchRow(){
+    const row = document.getElementById("gallery-search-row");
+    const willShow = row.style.display === "none";
+    row.style.display = willShow ? "block" : "none";
+    if(willShow){
+      document.getElementById("gallery-search-input").focus();
+    } else {
+      document.getElementById("gallery-search-input").value = "";
+      gallerySearchQuery = "";
+      renderGalleryGrid();
+    }
+  }
+
+  function exitSelectMode(){
+    selectMode = false;
+    selectedIds.clear();
+    document.getElementById("btn-gallery-select").classList.remove("active");
+    document.getElementById("batch-bar").classList.remove("active");
+    toggleFab(true);
+    renderGalleryGrid();
+  }
+
+  function toggleSelectMode(){
+    if(selectMode){
+      exitSelectMode();
+      return;
+    }
+    selectMode = true;
+    document.getElementById("btn-gallery-select").classList.add("active");
+    document.getElementById("batch-bar").classList.add("active");
+    toggleFab(false);
+    updateBatchCount();
+    renderGalleryGrid();
+  }
+
+  function updateBatchCount(){
+    document.getElementById("batch-count").textContent = "已選 " + selectedIds.size + " 張";
+  }
+
+  function onBatchDeleteClick(){
+    if(selectedIds.size === 0){ alert("先選幾張照片吧～"); return; }
+    batchDeleteMode = true;
+    document.getElementById("confirm-title").textContent = "確定要刪除這 "+selectedIds.size+" 張照片？";
+    document.getElementById("confirm-sub").textContent = "照片會從你們的共用資料夾移除，無法復原。";
+    document.getElementById("confirm-overlay").classList.add("active");
+  }
+
+  function onBatchRecatClick(){
+    if(selectedIds.size === 0){ alert("先選幾張照片吧～"); return; }
+    categoryPickerMode = "batch";
+    pendingUploadCategory = "";
+    document.getElementById("category-picker-title").textContent = "把選取的 "+selectedIds.size+" 張照片改成哪個分類？";
+    document.getElementById("btn-category-confirm").textContent = "確定套用";
+    openCategoryPicker();
+  }
+
+  async function applyBatchRecategorize(category){
+    const ids = Array.from(selectedIds);
+    show("screen-loading");
+    document.getElementById("loading-text").textContent = "更新分類中...";
+    for(const id of ids){
+      try{
+        await driveFetch("files/"+id, {
+          method:"PATCH",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ appProperties: { category: category } })
+        });
+      }catch(err){ console.error(err); }
+    }
+    document.getElementById("category-picker-title").textContent = "這次照片要放進哪個分類？";
+    document.getElementById("btn-category-confirm").textContent = "確定上傳";
+    categoryPickerMode = "upload";
+    exitSelectMode();
+    show("screen-gallery");
+    loadGallery();
+  }
+
+  async function onConfirmDeleteClick(){
+    document.getElementById("confirm-overlay").classList.remove("active");
+    if(batchDeleteMode){
+      const ids = Array.from(selectedIds);
+      batchDeleteMode = false;
+      show("screen-loading");
+      document.getElementById("loading-text").textContent = "刪除中...";
+      for(const id of ids){
+        try{ await driveFetch("files/"+id, {method:"DELETE"}); }catch(err){ console.error(err); }
+      }
+      exitSelectMode();
+      show("screen-gallery");
+      loadGallery();
+    } else {
+      if(!currentViewingFile) return;
+      try{
+        await driveFetch("files/"+currentViewingFile.id, {method:"DELETE"});
+        closeViewer();
+        loadGallery();
+      }catch(err){
+        alert("刪除失敗，請再試一次。");
+      }
+    }
   }
 
   let galleryFiles = [];
@@ -1131,35 +1381,85 @@
     const container = document.getElementById("photo-grid-container");
     container.innerHTML = '<div class="photo-empty"><div class="center-msg">載入中...</div></div>';
     try{
-      const files = await listPhotos();
-      galleryFiles = files;
-      container.innerHTML = "";
-      if(files.length === 0){
-        container.innerHTML =
-          '<div class="photo-empty">'+
-            '<div class="icon-box"><div class="sq"></div></div>'+
-            '<div>還沒有照片～<br>點右下角 ＋ 上傳第一張吧！</div>'+
-          '</div>';
-        return;
-      }
+      galleryFiles = await listPhotos();
+      renderCategoryFilterChips();
+      renderGalleryGrid();
+    }catch(err){
+      container.innerHTML = '<div class="photo-empty"><div>載入失敗，下拉重新整理再試一次。</div></div>';
+      console.error(err);
+    }
+  }
 
-      const label = document.createElement("div");
-      label.className = "month-label";
-      label.textContent = "共 " + files.length + " 張 · 有愛心的排在最前面";
-      container.appendChild(label);
+  function renderCategoryFilterChips(){
+    const row = document.getElementById("cat-filter-row");
+    row.innerHTML = "";
+    const cats = settings.categories || [];
+    const allChip = document.createElement("div");
+    allChip.className = "cat-filter-chip" + (currentCategoryFilter === "__all__" ? " active" : "");
+    allChip.textContent = "全部";
+    allChip.addEventListener("click", ()=>{ currentCategoryFilter = "__all__"; renderCategoryFilterChips(); renderGalleryGrid(); });
+    row.appendChild(allChip);
+    cats.forEach(c=>{
+      const chip = document.createElement("div");
+      chip.className = "cat-filter-chip" + (currentCategoryFilter === c ? " active" : "");
+      chip.textContent = c;
+      chip.addEventListener("click", ()=>{ currentCategoryFilter = c; renderCategoryFilterChips(); renderGalleryGrid(); });
+      row.appendChild(chip);
+    });
+  }
 
-      const grid = document.createElement("div");
-      grid.className = "photo-grid";
-      files.forEach(f=>{
-        const div = document.createElement("div");
-        div.className = "photo-thumb";
-        const img = document.createElement("img");
-        img.loading = "lazy";
-        img.src = f.thumbnailLink || "";
-        img.alt = f.name || "";
-        img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
-        div.appendChild(img);
+  function renderGalleryGrid(){
+    const container = document.getElementById("photo-grid-container");
+    container.innerHTML = "";
+    let files = galleryFiles;
+    if(currentCategoryFilter !== "__all__"){
+      files = files.filter(f => (f.appProperties && f.appProperties.category) === currentCategoryFilter);
+    }
+    if(gallerySearchQuery){
+      files = files.filter(f=>{
+        const cap = ((f.appProperties && f.appProperties.caption) || "").toLowerCase();
+        const cat = ((f.appProperties && f.appProperties.category) || "").toLowerCase();
+        const name = (f.name || "").toLowerCase();
+        const dateStr = f.createdTime ? f.createdTime.slice(0,10) : "";
+        return cap.indexOf(gallerySearchQuery) !== -1 || cat.indexOf(gallerySearchQuery) !== -1 ||
+               name.indexOf(gallerySearchQuery) !== -1 || dateStr.indexOf(gallerySearchQuery) !== -1;
+      });
+    }
+    if(files.length === 0){
+      const emptyMsg = gallerySearchQuery ? "找不到符合的照片～" : (currentCategoryFilter === "__all__" ? "還沒有照片～<br>點右下角 ＋ 上傳第一張吧！" : "這個分類還沒有照片喔～");
+      container.innerHTML =
+        '<div class="photo-empty">'+
+          '<div class="icon-box"><div class="sq"></div></div>'+
+          '<div>'+emptyMsg+'</div>'+
+        '</div>';
+      return;
+    }
 
+    const label = document.createElement("div");
+    label.className = "month-label";
+    label.textContent = "共 " + files.length + " 張 · 有愛心的排在最前面";
+    container.appendChild(label);
+
+    const grid = document.createElement("div");
+    grid.className = "photo-grid";
+    files.forEach(f=>{
+      const div = document.createElement("div");
+      div.className = "photo-thumb";
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.src = f.thumbnailLink || "";
+      img.alt = f.name || "";
+      img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
+      div.appendChild(img);
+
+      if(selectMode){
+        const checked = selectedIds.has(f.id);
+        if(checked) div.classList.add("thumb-selected");
+        const check = document.createElement("div");
+        check.className = "select-check" + (checked ? " checked" : "");
+        check.textContent = checked ? "✓" : "";
+        div.appendChild(check);
+      } else {
         const likeBtn = document.createElement("button");
         likeBtn.className = "like-btn" + (isLiked(f) ? " liked" : "");
         likeBtn.textContent = isLiked(f) ? "❤️" : "🤍";
@@ -1168,22 +1468,39 @@
           likeBtn.disabled = true;
           try{
             await toggleLike(f);
-            loadGallery();
+            galleryFiles.sort((a,b)=>{
+              const aLiked = isLiked(a), bLiked = isLiked(b);
+              if(aLiked && bLiked){
+                const at = (a.appProperties && a.appProperties.likedAt) || "";
+                const bt = (b.appProperties && b.appProperties.likedAt) || "";
+                return bt.localeCompare(at);
+              }
+              if(aLiked && !bLiked) return -1;
+              if(!aLiked && bLiked) return 1;
+              return 0;
+            });
+            renderGalleryGrid();
           }catch(err){
             alert("愛心更新失敗，請再試一次。");
             likeBtn.disabled = false;
           }
         });
         div.appendChild(likeBtn);
+      }
 
-        div.addEventListener("click", ()=> openViewer(f));
-        grid.appendChild(div);
+      div.addEventListener("click", ()=>{
+        if(selectMode){
+          if(selectedIds.has(f.id)) selectedIds.delete(f.id);
+          else selectedIds.add(f.id);
+          updateBatchCount();
+          renderGalleryGrid();
+        } else {
+          openViewer(f);
+        }
       });
-      container.appendChild(grid);
-    }catch(err){
-      container.innerHTML = '<div class="photo-empty"><div>載入失敗，下拉重新整理再試一次。</div></div>';
-      console.error(err);
-    }
+      grid.appendChild(div);
+    });
+    container.appendChild(grid);
   }
 
   async function loadFullImageAsThumb(fileId, imgEl){
@@ -1194,21 +1511,80 @@
     }catch(e){ /* leave broken, non-fatal */ }
   }
 
-  async function onFilesSelected(e){
+  function onFilesSelected(e){
     const files = Array.from(e.target.files || []);
     if(files.length === 0) return;
+    pendingUploadFiles = files;
+    pendingUploadCategory = "";
+    categoryPickerMode = "upload";
+    document.getElementById("category-picker-title").textContent = "這次照片要放進哪個分類？";
+    document.getElementById("btn-category-confirm").textContent = "確定上傳";
+    openCategoryPicker();
+  }
+
+  function openCategoryPicker(){
+    renderCategoryPickerList();
+    document.getElementById("category-picker-overlay").classList.add("active");
+  }
+
+  function makeCatChip(label, value, selected, onSelect){
+    const chip = document.createElement("div");
+    chip.className = "cat-chip" + (selected ? " selected" : "");
+    chip.textContent = label;
+    chip.addEventListener("click", onSelect);
+    return chip;
+  }
+
+  function renderCategoryPickerList(){
+    const list = document.getElementById("cat-picker-list");
+    list.innerHTML = "";
+    const cats = settings.categories || [];
+    list.appendChild(makeCatChip("不分類", "", pendingUploadCategory === "", ()=>{
+      pendingUploadCategory = "";
+      renderCategoryPickerList();
+    }));
+    cats.forEach(c=>{
+      list.appendChild(makeCatChip(c, c, pendingUploadCategory === c, ()=>{
+        pendingUploadCategory = c;
+        renderCategoryPickerList();
+      }));
+    });
+  }
+
+  async function onAddCategory(){
+    const input = document.getElementById("new-category-input");
+    const name = input.value.trim();
+    if(!name) return;
+    const cats = settings.categories || [];
+    if(cats.indexOf(name) === -1){
+      const newSettings = Object.assign({}, settings, { categories: cats.concat([name]) });
+      try{
+        await saveSettingsFile(newSettings);
+      }catch(err){
+        alert("新增分類失敗，請再試一次。");
+        return;
+      }
+    }
+    pendingUploadCategory = name;
+    input.value = "";
+    renderCategoryPickerList();
+  }
+
+  async function doUploadFiles(files, category){
+    if(!files || files.length === 0) return;
     const progress = document.getElementById("upload-progress");
     const textEl = document.getElementById("upload-progress-text");
     const pctEl = document.getElementById("upload-progress-pct");
     const barEl = document.getElementById("upload-progress-bar");
     progress.classList.add("active");
+    const props = category ? { category: category } : null;
     for(let i=0;i<files.length;i++){
       const pct = Math.round(((i)/files.length)*100);
       textEl.textContent = "上傳中 "+(i+1)+" / "+files.length+" ...";
       pctEl.textContent = pct+"%";
       barEl.style.width = pct+"%";
       try{
-        await createFileMultipart(files[i].name || ("photo_"+Date.now()+".jpg"), files[i].type || "image/jpeg", files[i], folderId);
+        await createFileMultipart(files[i].name || ("photo_"+Date.now()+".jpg"), files[i].type || "image/jpeg", files[i], folderId, props);
       }catch(err){
         console.error(err);
         alert("有一張照片上傳失敗："+files[i].name);
@@ -1217,7 +1593,7 @@
     barEl.style.width = "100%";
     pctEl.textContent = "100%";
     setTimeout(()=>{ progress.classList.remove("active"); }, 400);
-    e.target.value = "";
+    document.getElementById("file-input").value = "";
     loadGallery();
   }
 
@@ -1246,8 +1622,8 @@
   function openViewer(file){
     currentViewingFile = file;
     document.getElementById("viewer-img").src = file.thumbnailLink || "";
-    const dateStr = file.createdTime ? file.createdTime.slice(0,10).replace(/-/g,"/") : "";
-    document.getElementById("viewer-caption").textContent = [dateStr, file.name].filter(Boolean).join(" · ");
+    renderViewerCaptionText();
+    document.getElementById("caption-edit-row").classList.remove("active");
     updateViewerLikeIcon();
     document.getElementById("viewer-overlay").classList.add("active");
     driveFetch("files/"+file.id+"?alt=media").then(res=>res.blob()).then(blob=>{
@@ -1257,17 +1633,48 @@
   }
   function closeViewer(){
     document.getElementById("viewer-overlay").classList.remove("active");
+    document.getElementById("caption-edit-row").classList.remove("active");
     currentViewingFile = null;
   }
-  async function onDeletePhoto(){
-    document.getElementById("confirm-overlay").classList.remove("active");
+
+  /* ---------------- PHOTO CAPTION ---------------- */
+  function renderViewerCaptionText(){
+    const file = currentViewingFile;
+    if(!file) return;
+    const cap = (file.appProperties && file.appProperties.caption) || "";
+    if(cap){
+      document.getElementById("viewer-caption").textContent = cap;
+    } else {
+      const dateStr = file.createdTime ? file.createdTime.slice(0,10).replace(/-/g,"/") : "";
+      document.getElementById("viewer-caption").textContent = [dateStr, file.name].filter(Boolean).join(" · ") || "點這裡加句話";
+    }
+  }
+
+  function openCaptionEdit(){
     if(!currentViewingFile) return;
+    const cur = (currentViewingFile.appProperties && currentViewingFile.appProperties.caption) || "";
+    document.getElementById("caption-edit-input").value = cur;
+    document.getElementById("caption-edit-row").classList.add("active");
+    document.getElementById("caption-edit-input").focus();
+  }
+
+  async function saveCaption(){
+    if(!currentViewingFile) return;
+    const text = document.getElementById("caption-edit-input").value.trim().slice(0,40);
     try{
-      await driveFetch("files/"+currentViewingFile.id, {method:"DELETE"});
-      closeViewer();
-      loadGallery();
+      await driveFetch("files/"+currentViewingFile.id, {
+        method:"PATCH",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ appProperties: { caption: text } })
+      });
+      if(!currentViewingFile.appProperties) currentViewingFile.appProperties = {};
+      currentViewingFile.appProperties.caption = text;
+      const gf = galleryFiles.find(f=>f.id === currentViewingFile.id);
+      if(gf){ if(!gf.appProperties) gf.appProperties = {}; gf.appProperties.caption = text; }
+      renderViewerCaptionText();
+      document.getElementById("caption-edit-row").classList.remove("active");
     }catch(err){
-      alert("刪除失敗，請再試一次。");
+      alert("圖說儲存失敗，請再試一次。");
     }
   }
 
