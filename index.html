@@ -236,6 +236,11 @@
     box-shadow:0 2px 6px rgba(0,0,0,0.08);
   }
   .photo-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .video-badge{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,.45); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:13px; pointer-events:none;
+  }
   .like-btn{
     position:absolute; right:5px; bottom:5px; width:26px; height:26px; border-radius:50%;
     background:rgba(30,21,9,.4); border:none; display:flex; align-items:center; justify-content:center;
@@ -526,7 +531,7 @@
     </div>
     <div class="cat-filter-row" id="cat-filter-row"></div>
     <div id="photo-grid-container"></div>
-    <input type="file" id="file-input" accept="image/*" multiple>
+    <input type="file" id="file-input" accept="image/*,video/*" multiple>
   </div>
   <button class="upload-fab" id="btn-upload" style="display:none;">＋</button>
   <div class="upload-progress" id="upload-progress">
@@ -551,7 +556,10 @@
 <!-- photo viewer modal -->
 <div class="modal-overlay" id="viewer-overlay">
   <div class="viewer-topbar"><button class="viewer-close" id="btn-viewer-close">✕</button></div>
-  <div class="viewer-img-wrap"><img class="viewer-img" id="viewer-img" src=""></div>
+  <div class="viewer-img-wrap">
+    <img class="viewer-img" id="viewer-img" src="">
+    <video class="viewer-img" id="viewer-video" controls playsinline style="display:none;"></video>
+  </div>
   <div class="viewer-bottom">
     <div class="viewer-caption-row" id="viewer-caption-row">
       <div class="viewer-caption" id="viewer-caption"></div>
@@ -968,6 +976,20 @@
     });
   }
 
+  function loadVideoIntoEl(videoEl, file, isStillRelevant){
+    if(imageCache.has(file.id)){
+      videoEl.src = imageCache.get(file.id);
+      return;
+    }
+    driveFetch("files/"+file.id+"?alt=media").then(res=>res.blob()).then(blob=>{
+      const url = URL.createObjectURL(blob);
+      imageCache.set(file.id, url);
+      if(!isStillRelevant || isStillRelevant()){
+        videoEl.src = url;
+      }
+    }).catch(()=>{});
+  }
+
   async function findFolder(){
     const q = encodeURIComponent("name='"+FOLDER_NAME+"' and mimeType='application/vnd.google-apps.folder' and trashed=false");
     const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
@@ -1049,8 +1071,8 @@
   }
 
   async function listPhotos(){
-    const q = encodeURIComponent("'"+folderId+"' in parents and mimeType contains 'image/' and trashed=false and name != '"+COVER_FILENAME+"'");
-    const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,thumbnailLink,createdTime,appProperties)&pageSize=300&spaces=drive");
+    const q = encodeURIComponent("'"+folderId+"' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false and name != '"+COVER_FILENAME+"'");
+    const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,mimeType,thumbnailLink,createdTime,appProperties)&pageSize=300&spaces=drive");
     const data = await res.json();
     const files = data.files || [];
     files.sort((a,b)=>{
@@ -1070,6 +1092,10 @@
 
   function isLiked(file){
     return !!(file.appProperties && file.appProperties.liked === "true");
+  }
+
+  function isVideo(file){
+    return !!(file.mimeType && file.mimeType.indexOf("video/") === 0);
   }
 
   async function toggleLike(file){
@@ -1525,12 +1551,23 @@
     files.forEach(f=>{
       const div = document.createElement("div");
       div.className = "photo-thumb";
-      const img = document.createElement("img");
-      img.loading = "lazy";
-      img.src = f.thumbnailLink || "";
-      img.alt = f.name || "";
-      img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
-      div.appendChild(img);
+      const vid = isVideo(f);
+      if(f.thumbnailLink){
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.src = f.thumbnailLink;
+        img.alt = f.name || "";
+        if(!vid){
+          img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
+        }
+        div.appendChild(img);
+      }
+      if(vid){
+        const badge = document.createElement("div");
+        badge.className = "video-badge";
+        badge.textContent = "▶";
+        div.appendChild(badge);
+      }
 
       if(selectMode){
         const checked = selectedIds.has(f.id);
@@ -1610,12 +1647,19 @@
     const f = slideshowFiles[slideshowIndex];
     if(!f) return;
     const imgEl = document.getElementById("slideshow-img");
-    loadImageIntoEl(imgEl, f, ()=>{
-      const cur = slideshowFiles[slideshowIndex];
-      return cur && cur.id === f.id;
-    });
+    if(isVideo(f)){
+      if(slideshowProgressRAF){ cancelAnimationFrame(slideshowProgressRAF); slideshowProgressRAF = null; }
+      imgEl.classList.remove("img-blur");
+      imgEl.src = f.thumbnailLink || "";
+    } else {
+      loadImageIntoEl(imgEl, f, ()=>{
+        const cur = slideshowFiles[slideshowIndex];
+        return cur && cur.id === f.id;
+      });
+    }
     const cap = (f.appProperties && f.appProperties.caption) || f.name || "";
-    document.getElementById("slideshow-caption").textContent = (slideshowIndex+1)+" / "+slideshowFiles.length + (cap ? (" · "+cap) : "");
+    const prefix = isVideo(f) ? "🎬 影片(點右上角✕到相簿播放) · " : "";
+    document.getElementById("slideshow-caption").textContent = prefix + (slideshowIndex+1)+" / "+slideshowFiles.length + (cap ? (" · "+cap) : "");
     restartSlideshowProgress();
   }
   function nextSlide(){
@@ -1723,8 +1767,17 @@
   }
 
   function onFilesSelected(e){
-    const files = Array.from(e.target.files || []);
-    if(files.length === 0) return;
+    let files = Array.from(e.target.files || []);
+    files = files.filter(f=> f.type && (f.type.indexOf("image/") === 0 || f.type.indexOf("video/") === 0));
+    if(files.length === 0){
+      document.getElementById("file-input").value = "";
+      return;
+    }
+    const bigVideo = files.find(f=> f.type.indexOf("video/") === 0 && f.size > 200*1024*1024);
+    if(bigVideo){
+      const ok = confirm("「"+bigVideo.name+"」超過 200MB，上傳可能會花不少時間，要繼續嗎？");
+      if(!ok){ document.getElementById("file-input").value = ""; return; }
+    }
     pendingUploadFiles = files;
     pendingUploadCategory = "";
     categoryPickerMode = "upload";
@@ -1833,16 +1886,30 @@
   function openViewer(file){
     currentViewingFile = file;
     const imgEl = document.getElementById("viewer-img");
+    const videoEl = document.getElementById("viewer-video");
     renderViewerCaptionText();
     document.getElementById("caption-edit-row").classList.remove("active");
     updateViewerLikeIcon();
     document.getElementById("viewer-overlay").classList.add("active");
-    loadImageIntoEl(imgEl, file, ()=> currentViewingFile && currentViewingFile.id === file.id);
+    if(isVideo(file)){
+      imgEl.style.display = "none";
+      videoEl.style.display = "block";
+      videoEl.pause();
+      videoEl.removeAttribute("src");
+      videoEl.poster = file.thumbnailLink || "";
+      loadVideoIntoEl(videoEl, file, ()=> currentViewingFile && currentViewingFile.id === file.id);
+    } else {
+      videoEl.pause();
+      videoEl.style.display = "none";
+      imgEl.style.display = "block";
+      loadImageIntoEl(imgEl, file, ()=> currentViewingFile && currentViewingFile.id === file.id);
+    }
     loadPhotoComments(file.id);
   }
   function closeViewer(){
     document.getElementById("viewer-overlay").classList.remove("active");
     document.getElementById("caption-edit-row").classList.remove("active");
+    document.getElementById("viewer-video").pause();
     currentViewingFile = null;
   }
 
