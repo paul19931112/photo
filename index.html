@@ -212,6 +212,12 @@
     box-shadow:0 2px 6px rgba(0,0,0,0.08);
   }
   .photo-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .like-btn{
+    position:absolute; right:5px; bottom:5px; width:26px; height:26px; border-radius:50%;
+    background:rgba(30,21,9,.4); border:none; display:flex; align-items:center; justify-content:center;
+    font-size:13px; cursor:pointer; padding:0; line-height:1;
+  }
+  .like-btn.liked{background:rgba(30,21,9,.55);}
   .photo-empty{
     text-align:center; padding:60px 20px 40px; color:var(--text-soft); font-size:15px; line-height:1.9;
     display:flex; flex-direction:column; align-items:center; gap:22px;
@@ -262,13 +268,35 @@
     display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-weight:300; border:none; cursor:pointer;
   }
   .viewer-img-wrap{flex:1; width:100%; display:flex; align-items:center; justify-content:center; padding:0 20px;}
-  .viewer-img{max-width:100%; max-height:70vh; border-radius:18px; object-fit:contain;}
-  .viewer-bottom{width:100%; padding:20px 26px 34px; display:flex; flex-direction:column; gap:14px;}
+  .viewer-img{max-width:100%; max-height:56vh; border-radius:18px; object-fit:contain;}
+  .viewer-bottom{width:100%; padding:14px 22px 30px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;}
+  .viewer-caption-row{display:flex; align-items:center; justify-content:center; gap:10px;}
   .viewer-caption{text-align:center; font-size:13px; color:rgba(255,255,255,.5);}
+  .viewer-like-btn{
+    flex:none; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.1); border:none;
+    display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer;
+  }
+  .viewer-like-btn.liked{background:rgba(233,160,92,.35);}
   .btn-delete-outline{
     height:52px; border-radius:26px; background:rgba(255,255,255,.1);
     box-shadow:inset 0 0 0 1.5px rgba(233,160,92,.5); display:flex; align-items:center; justify-content:center;
-    gap:8px; color:#EDAC69; font-size:16px; font-weight:600; border:none; cursor:pointer; width:100%;
+    gap:8px; color:#EDAC69; font-size:16px; font-weight:600; border:none; cursor:pointer; width:100%; flex:none;
+  }
+  .viewer-comments{display:flex; flex-direction:column; gap:8px;}
+  .viewer-comments-list{display:flex; flex-direction:column; gap:6px; max-height:130px; overflow-y:auto;}
+  .vc-item{background:rgba(255,255,255,.08); border-radius:12px; padding:8px 12px;}
+  .vc-meta{font-size:10.5px; color:rgba(255,255,255,.45); margin-bottom:2px; font-weight:600;}
+  .vc-text{font-size:13px; color:#fff; line-height:1.5; word-break:break-word;}
+  .vc-empty, .vc-loading{text-align:center; font-size:12px; color:rgba(255,255,255,.4); padding:6px 0;}
+  .viewer-comments-input-row{display:flex; gap:8px; flex:none;}
+  .viewer-comments-input-row input{
+    flex:1; background:rgba(255,255,255,.1); border:none; border-radius:14px; padding:11px 14px;
+    color:#fff; font-size:13.5px; outline:none; margin-bottom:0;
+  }
+  .viewer-comments-input-row input::placeholder{color:rgba(255,255,255,.4);}
+  .viewer-comments-input-row button{
+    flex:none; padding:0 16px; border-radius:14px; border:none; background:var(--grad); color:#fff;
+    font-size:13.5px; font-weight:700; cursor:pointer;
   }
 
   /* confirm delete modal */
@@ -429,7 +457,17 @@
   <div class="viewer-topbar"><button class="viewer-close" id="btn-viewer-close">✕</button></div>
   <div class="viewer-img-wrap"><img class="viewer-img" id="viewer-img" src=""></div>
   <div class="viewer-bottom">
-    <div class="viewer-caption" id="viewer-caption"></div>
+    <div class="viewer-caption-row">
+      <div class="viewer-caption" id="viewer-caption"></div>
+      <button class="viewer-like-btn" id="btn-viewer-like">🤍</button>
+    </div>
+    <div class="viewer-comments">
+      <div class="viewer-comments-list" id="viewer-comments-list"></div>
+      <div class="viewer-comments-input-row">
+        <input type="text" id="viewer-comment-input" placeholder="留言...">
+        <button id="btn-viewer-comment-send">送出</button>
+      </div>
+    </div>
     <button class="btn-delete-outline" id="btn-viewer-delete">🗑️ 刪除這張</button>
   </div>
 </div>
@@ -476,6 +514,8 @@
   const MESSAGES_FILENAME = "messages.json";
   const COVER_FILENAME = "cover.jpg";
   const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
+  const COMMENTS_FILENAME = "comments.json";
+  const AUTO_LOGIN_KEY = "album_has_signed_in_before";
   /* =================================================================== */
 
   let accessToken = null;
@@ -486,6 +526,8 @@
   let settings = { anniversary: null };
   let currentViewingFile = null;
   let currentUserEmail = "";
+  let commentsFileId = null;
+  let commentsData = {};
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -535,15 +577,30 @@
     document.getElementById("msgboard-input").addEventListener("keydown", (e)=>{
       if(e.key === "Enter") sendMessage();
     });
+    document.getElementById("btn-viewer-like").addEventListener("click", onViewerLikeClick);
+    document.getElementById("btn-viewer-comment-send").addEventListener("click", sendPhotoComment);
+    document.getElementById("viewer-comment-input").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") sendPhotoComment();
+    });
 
     if(window.google && google.accounts && google.accounts.oauth2){
       initGis();
+      maybeAutoSignIn();
     } else {
-      window.addEventListener("load", ()=>{ if(window.google) initGis(); });
+      window.addEventListener("load", ()=>{ if(window.google){ initGis(); maybeAutoSignIn(); } });
     }
 
     setupPullReveal();
   });
+
+  function maybeAutoSignIn(){
+    if(location.protocol === "file:") return;
+    let hasSignedInBefore = false;
+    try{ hasSignedInBefore = localStorage.getItem(AUTO_LOGIN_KEY) === "1"; }catch(e){}
+    if(!hasSignedInBefore || !tokenClient) return;
+    document.getElementById("login-status").innerHTML = '<div class="center-msg">自動登入中...</div>';
+    tokenClient.requestAccessToken({ prompt: "" });
+  }
 
   /* ---------------- PULL DOWN TO REVEAL COVER PHOTO ---------------- */
   function setupPullReveal(){
@@ -603,6 +660,7 @@
           return;
         }
         accessToken = resp.access_token;
+        try{ localStorage.setItem(AUTO_LOGIN_KEY, "1"); }catch(e){}
         afterSignIn();
       }
     });
@@ -638,8 +696,11 @@
     folderId = null;
     settingsFileId = null;
     messagesFileId = null;
+    commentsFileId = null;
+    commentsData = {};
     settings = { anniversary: null };
     currentUserEmail = "";
+    try{ localStorage.removeItem(AUTO_LOGIN_KEY); }catch(e){}
     resetSigninButton();
     document.getElementById("login-status").innerHTML = "";
     show("screen-login");
@@ -774,9 +835,40 @@
 
   async function listPhotos(){
     const q = encodeURIComponent("'"+folderId+"' in parents and mimeType contains 'image/' and trashed=false and name != '"+COVER_FILENAME+"'");
-    const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,thumbnailLink,createdTime)&pageSize=300&spaces=drive");
+    const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,thumbnailLink,createdTime,appProperties)&pageSize=300&spaces=drive");
     const data = await res.json();
-    return data.files || [];
+    const files = data.files || [];
+    files.sort((a,b)=>{
+      const aLiked = !!(a.appProperties && a.appProperties.liked === "true");
+      const bLiked = !!(b.appProperties && b.appProperties.liked === "true");
+      if(aLiked && bLiked){
+        const at = (a.appProperties && a.appProperties.likedAt) || "";
+        const bt = (b.appProperties && b.appProperties.likedAt) || "";
+        return bt.localeCompare(at);
+      }
+      if(aLiked && !bLiked) return -1;
+      if(!aLiked && bLiked) return 1;
+      return 0;
+    });
+    return files;
+  }
+
+  function isLiked(file){
+    return !!(file.appProperties && file.appProperties.liked === "true");
+  }
+
+  async function toggleLike(file){
+    const liked = isLiked(file);
+    const newProps = liked
+      ? { liked: "false", likedAt: "" }
+      : { liked: "true", likedAt: new Date().toISOString() };
+    await driveFetch("files/"+file.id, {
+      method:"PATCH",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ appProperties: newProps })
+    });
+    file.appProperties = newProps;
+    return !liked;
   }
 
   /* ---------------- INVITE PARTNER (first run) ---------------- */
@@ -1033,16 +1125,14 @@
     loadGallery();
   }
 
-  function monthLabel(dateStr){
-    const dt = new Date(dateStr);
-    return dt.getFullYear()+" 年 "+(dt.getMonth()+1)+" 月";
-  }
+  let galleryFiles = [];
 
   async function loadGallery(){
     const container = document.getElementById("photo-grid-container");
     container.innerHTML = '<div class="photo-empty"><div class="center-msg">載入中...</div></div>';
     try{
       const files = await listPhotos();
+      galleryFiles = files;
       container.innerHTML = "";
       if(files.length === 0){
         container.innerHTML =
@@ -1053,40 +1143,43 @@
         return;
       }
 
-      const groups = [];
-      let currentKey = null, currentGroup = null;
+      const label = document.createElement("div");
+      label.className = "month-label";
+      label.textContent = "共 " + files.length + " 張 · 有愛心的排在最前面";
+      container.appendChild(label);
+
+      const grid = document.createElement("div");
+      grid.className = "photo-grid";
       files.forEach(f=>{
-        const key = f.createdTime ? f.createdTime.slice(0,7) : "unknown";
-        if(key !== currentKey){
-          currentKey = key;
-          currentGroup = { key, label: f.createdTime ? monthLabel(f.createdTime) : "", files: [] };
-          groups.push(currentGroup);
-        }
-        currentGroup.files.push(f);
-      });
+        const div = document.createElement("div");
+        div.className = "photo-thumb";
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.src = f.thumbnailLink || "";
+        img.alt = f.name || "";
+        img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
+        div.appendChild(img);
 
-      groups.forEach(g=>{
-        const labelEl = document.createElement("div");
-        labelEl.className = "month-label";
-        labelEl.textContent = g.label + " · " + g.files.length + " 張";
-        container.appendChild(labelEl);
-
-        const grid = document.createElement("div");
-        grid.className = "photo-grid";
-        g.files.forEach(f=>{
-          const div = document.createElement("div");
-          div.className = "photo-thumb";
-          const img = document.createElement("img");
-          img.loading = "lazy";
-          img.src = f.thumbnailLink || "";
-          img.alt = f.name || "";
-          img.addEventListener("error", ()=>{ loadFullImageAsThumb(f.id, img); });
-          div.appendChild(img);
-          div.addEventListener("click", ()=> openViewer(f));
-          grid.appendChild(div);
+        const likeBtn = document.createElement("button");
+        likeBtn.className = "like-btn" + (isLiked(f) ? " liked" : "");
+        likeBtn.textContent = isLiked(f) ? "❤️" : "🤍";
+        likeBtn.addEventListener("click", async (e)=>{
+          e.stopPropagation();
+          likeBtn.disabled = true;
+          try{
+            await toggleLike(f);
+            loadGallery();
+          }catch(err){
+            alert("愛心更新失敗，請再試一次。");
+            likeBtn.disabled = false;
+          }
         });
-        container.appendChild(grid);
+        div.appendChild(likeBtn);
+
+        div.addEventListener("click", ()=> openViewer(f));
+        grid.appendChild(div);
       });
+      container.appendChild(grid);
     }catch(err){
       container.innerHTML = '<div class="photo-empty"><div>載入失敗，下拉重新整理再試一次。</div></div>';
       console.error(err);
@@ -1129,15 +1222,38 @@
   }
 
   /* ---------------- VIEWER ---------------- */
+  function updateViewerLikeIcon(){
+    const btn = document.getElementById("btn-viewer-like");
+    const liked = currentViewingFile && isLiked(currentViewingFile);
+    btn.textContent = liked ? "❤️" : "🤍";
+    btn.classList.toggle("liked", !!liked);
+  }
+
+  async function onViewerLikeClick(){
+    if(!currentViewingFile) return;
+    const btn = document.getElementById("btn-viewer-like");
+    btn.disabled = true;
+    try{
+      await toggleLike(currentViewingFile);
+      updateViewerLikeIcon();
+    }catch(err){
+      alert("愛心更新失敗，請再試一次。");
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
   function openViewer(file){
     currentViewingFile = file;
     document.getElementById("viewer-img").src = file.thumbnailLink || "";
     const dateStr = file.createdTime ? file.createdTime.slice(0,10).replace(/-/g,"/") : "";
     document.getElementById("viewer-caption").textContent = [dateStr, file.name].filter(Boolean).join(" · ");
+    updateViewerLikeIcon();
     document.getElementById("viewer-overlay").classList.add("active");
     driveFetch("files/"+file.id+"?alt=media").then(res=>res.blob()).then(blob=>{
       document.getElementById("viewer-img").src = URL.createObjectURL(blob);
     }).catch(()=>{});
+    loadPhotoComments(file.id);
   }
   function closeViewer(){
     document.getElementById("viewer-overlay").classList.remove("active");
@@ -1152,6 +1268,99 @@
       loadGallery();
     }catch(err){
       alert("刪除失敗，請再試一次。");
+    }
+  }
+
+  /* ---------------- PER-PHOTO COMMENTS ---------------- */
+  async function findCommentsFile(){
+    const q = encodeURIComponent("name='"+COMMENTS_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function loadAllComments(){
+    commentsFileId = await findCommentsFile();
+    if(commentsFileId){
+      const res = await driveFetch("files/"+commentsFileId+"?alt=media");
+      try{ commentsData = await res.json(); }catch(e){ commentsData = {}; }
+    } else {
+      commentsData = {};
+    }
+  }
+
+  async function saveAllComments(){
+    const content = JSON.stringify(commentsData);
+    if(commentsFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+commentsFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      commentsFileId = await createFileMultipart(COMMENTS_FILENAME, "application/json", content, folderId);
+    }
+  }
+
+  function renderPhotoComments(fileId){
+    const list = document.getElementById("viewer-comments-list");
+    const arr = (commentsData[fileId]) || [];
+    if(arr.length === 0){
+      list.innerHTML = '<div class="vc-empty">還沒有留言，說句話吧～</div>';
+      return;
+    }
+    list.innerHTML = "";
+    arr.forEach(c=>{
+      const item = document.createElement("div");
+      item.className = "vc-item";
+      const who = (c.author || "").split("@")[0] || "某人";
+      let timeStr = "";
+      if(c.time){
+        const t = new Date(c.time);
+        timeStr = (t.getMonth()+1)+"/"+t.getDate()+" "+String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0");
+      }
+      const meta = document.createElement("div");
+      meta.className = "vc-meta";
+      meta.textContent = who + (timeStr ? (" · "+timeStr) : "");
+      const txt = document.createElement("div");
+      txt.className = "vc-text";
+      txt.textContent = c.text || "";
+      item.appendChild(meta);
+      item.appendChild(txt);
+      list.appendChild(item);
+    });
+    list.scrollTop = list.scrollHeight;
+  }
+
+  async function loadPhotoComments(fileId){
+    document.getElementById("viewer-comments-list").innerHTML = '<div class="vc-loading">載入中...</div>';
+    try{
+      await loadAllComments();
+      if(currentViewingFile && currentViewingFile.id === fileId){
+        renderPhotoComments(fileId);
+      }
+    }catch(err){
+      document.getElementById("viewer-comments-list").innerHTML = '<div class="vc-loading">留言載入失敗</div>';
+    }
+  }
+
+  async function sendPhotoComment(){
+    if(!currentViewingFile) return;
+    const input = document.getElementById("viewer-comment-input");
+    const text = input.value.trim();
+    if(!text) return;
+    input.disabled = true;
+    const fid = currentViewingFile.id;
+    try{
+      if(!commentsData[fid]) commentsData[fid] = [];
+      commentsData[fid].push({ text: text, time: new Date().toISOString(), author: currentUserEmail || "" });
+      await saveAllComments();
+      input.value = "";
+      renderPhotoComments(fid);
+    }catch(err){
+      alert("留言送出失敗，請再試一次。");
+    } finally {
+      input.disabled = false;
     }
   }
 
