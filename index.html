@@ -55,6 +55,7 @@
     padding:22px 24px 32px;
     min-height:100vh;
     animation: fadeIn .35s ease;
+    position:relative;
   }
   .screen.active{display:flex;}
   @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
@@ -79,10 +80,10 @@
     font:700 13px/24px inherit; text-align:center; flex:none;
   }
 
-  input[type="date"]{
+  input[type="date"], input[type="email"], input[type="text"]{
     width:100%; padding:16px 18px; border-radius:16px;
     background:var(--cream); box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.22);
-    font-size:19px; font-weight:600; color:var(--text); outline:none; border:none; margin-bottom:0;
+    font-size:17px; font-weight:600; color:var(--text); outline:none; border:none; margin-bottom:0;
   }
 
   .logo-badge{
@@ -122,6 +123,28 @@
   .center-msg{text-align:center; font-size:15px; font-weight:500; color:var(--text-soft);}
 
   /* home */
+  .home-bg-wrap{
+    position:relative;
+    margin:-22px -24px 18px;
+    height:34vh;
+    min-height:200px;
+    max-height:300px;
+    overflow:hidden;
+    display:none;
+  }
+  .home-bg-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+  .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(180deg, rgba(253,244,232,0), var(--cream));}
+  .bg-edit-btn{
+    position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%;
+    background:rgba(0,0,0,.35); color:#fff; border:none; font-size:16px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .home-bg-empty{
+    margin:-22px -24px 18px; height:110px; display:flex; align-items:center; justify-content:center;
+    background:repeating-linear-gradient(135deg,rgba(201,122,60,.10) 0 8px,rgba(201,122,60,.03) 8px 16px);
+    color:var(--text-faint); font-size:13.5px; font-weight:600; cursor:pointer;
+  }
+
   .home-topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
   .home-topbar .hi{font-size:15px; font-weight:600; color:var(--text-soft);}
   .home-topbar .dots{display:flex; gap:6px;}
@@ -141,17 +164,33 @@
   .anniv-card .lbl{font-size:14px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.85); position:relative;}
   .anniv-card .days-row{display:flex;align-items:baseline;gap:8px;color:#fff; position:relative;}
   .anniv-card .days-row .n{font-size:76px;font-weight:800;line-height:1;letter-spacing:-.03em;}
+  .anniv-card .days-row .n.small{font-size:30px;font-weight:700;}
   .anniv-card .days-row .u{font-size:20px;font-weight:600;}
   .anniv-card .pill{margin-top:4px;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.18);font-size:13px;font-weight:500;color:#fff; position:relative;}
 
   .home-actions{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
 
-  .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px;}
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
   .stat-card{background:#fff; border-radius:20px; padding:16px 18px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow);}
   .stat-card .k{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.1em; color:var(--text-faint);}
   .stat-card .v{font-size:22px; font-weight:700; color:var(--text);}
 
-  .footer-link{text-align:center; font-size:13px; color:var(--text-faint); margin-top:auto; padding-top:22px; text-decoration:underline; cursor:pointer;}
+  /* message board */
+  .msgboard{background:#fff; border-radius:24px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; display:flex; flex-direction:column; gap:14px;}
+  .msgboard-title{font-size:16px; font-weight:700; color:var(--terracotta);}
+  .msgboard-list{display:flex; flex-direction:column; gap:10px; max-height:260px; overflow-y:auto;}
+  .msg-item{background:var(--cream); border-radius:14px; padding:10px 14px;}
+  .msg-meta{font-size:11px; color:var(--text-faint); margin-bottom:3px; font-weight:600;}
+  .msg-text{font-size:14px; color:var(--text); line-height:1.6; word-break:break-word;}
+  .msg-empty, .msg-loading{text-align:center; font-size:13px; color:var(--text-faint); padding:10px 0;}
+  .msgboard-input-row{display:flex; gap:8px;}
+  .msgboard-input-row input{margin-bottom:0; padding:12px 16px; font-size:14px; font-weight:500;}
+  .msgboard-input-row button{
+    flex:none; padding:0 18px; border-radius:16px; border:none; background:var(--grad); color:#fff;
+    font-size:14px; font-weight:700; cursor:pointer;
+  }
+
+  .footer-link{text-align:center; font-size:13px; color:var(--text-faint); margin-top:auto; padding-top:10px; text-decoration:underline; cursor:pointer;}
 
   /* gallery */
   .gallery-header{
@@ -193,7 +232,7 @@
     display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:30;
   }
   @media (max-width:520px){ .upload-fab{ right:22px; } }
-  #file-input{display:none;}
+  #file-input, #cover-file-input{display:none;}
 
   .upload-progress{
     position:fixed; left:16px; right:16px; bottom:26px;
@@ -286,6 +325,9 @@
       <div id="https-warning" class="not-https-warning" style="display:none;">
         ⚠️ 這個 App 需要透過網址（https）開啟才能登入 Google，直接打開本機檔案無法使用喔，請先用瀏覽器開啟你架設好的網址。
       </div>
+      <div id="standalone-warning" class="not-https-warning" style="display:none;">
+        📱 偵測到你是從主畫面圖示打開的。iOS 對「加到主畫面」的網頁 App 登入 Google 有已知限制，如果登入沒反應或出現錯誤，請改用 Safari／Chrome 瀏覽器分頁打開這個網址登入一次看看。
+      </div>
       <div style="height:24px;"></div>
       <button class="btn" id="btn-google-signin"><span class="g-badge">G</span>使用 Google 帳號登入</button>
       <p class="center-msg" id="login-status" style="margin-top:16px; font-size:13px;"></p>
@@ -300,29 +342,38 @@
     </div>
   </div>
 
-  <!-- SET ANNIVERSARY (first run) -->
-  <div class="screen" id="screen-set-anniv">
+  <!-- INVITE PARTNER (only shown the very first time, when the shared folder doesn't exist yet) -->
+  <div class="screen" id="screen-invite-partner">
     <div class="center-col">
-      <h1 class="title" style="text-align:left;">設定紀念日</h1>
-      <p class="subtitle" style="text-align:left;">第一次使用，先設定你們在一起的日子吧～</p>
+      <h1 class="title" style="text-align:left;">邀請另一半</h1>
+      <p class="subtitle" style="text-align:left;">這是第一次使用，先輸入對方的 Google 帳號 Email，才能讓對方也看得到同一個共用資料夾。</p>
       <div style="height:22px;"></div>
       <div style="background:#fff; border-radius:24px; padding:22px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:14px; margin-bottom:22px;">
-        <div class="label-mono">START DATE</div>
-        <input type="date" id="anniv-date-input">
+        <div class="label-mono">PARTNER'S EMAIL</div>
+        <input type="email" id="partner-email-input" placeholder="example@gmail.com">
       </div>
-      <button class="btn" id="btn-save-anniv">儲存</button>
+      <button class="btn" id="btn-invite-submit">建立並分享資料夾</button>
+      <div class="footer-link" id="btn-invite-skip">先跳過，晚點自己到雲端硬碟分享</div>
     </div>
   </div>
 
   <!-- HOME -->
   <div class="screen" id="screen-home">
+    <div class="home-bg-wrap" id="home-bg-wrap">
+      <img id="home-bg-img" src="" alt="">
+      <div class="home-bg-fade"></div>
+      <button class="bg-edit-btn" id="btn-edit-cover">🖼️</button>
+    </div>
+    <div class="home-bg-empty" id="home-bg-empty">＋ 設定一張背景照片</div>
+    <input type="file" id="cover-file-input" accept="image/*">
+
     <div class="home-topbar">
       <div class="hi">Hi，我們</div>
       <div class="dots"><span></span><span></span></div>
     </div>
     <div class="anniv-card">
       <div class="lbl">在一起</div>
-      <div class="days-row"><span class="n" id="home-days">--</span><span class="u">天</span></div>
+      <div class="days-row"><span class="n" id="home-days">--</span><span class="u" id="home-days-unit">天</span></div>
       <div class="pill" id="home-date-sub">--</div>
     </div>
     <div class="home-actions">
@@ -339,6 +390,16 @@
         <span class="v" id="stat-milestone-value">--</span>
       </div>
     </div>
+
+    <div class="msgboard">
+      <div class="msgboard-title">留言板</div>
+      <div class="msgboard-list" id="msgboard-list"></div>
+      <div class="msgboard-input-row">
+        <input type="text" id="msgboard-input" placeholder="留句話給對方吧～" maxlength="200">
+        <button id="btn-msgboard-send">送出</button>
+      </div>
+    </div>
+
     <div class="footer-link" id="btn-logout">登出</div>
   </div>
 
@@ -388,7 +449,7 @@
 <div class="modal-overlay" id="edit-anniv-overlay">
   <div class="sheet-box">
     <div class="sheet-handle"></div>
-    <h3>編輯紀念日</h3>
+    <h3>設定紀念日</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div class="label-mono">START DATE</div>
       <input type="date" id="edit-anniv-input">
@@ -406,9 +467,11 @@
 
   /* ============== CONFIG（把你的 Client ID 貼在這裡） ============== */
   const GOOGLE_CLIENT_ID = "757486666065-c4s2d76o8ntpbalibogltibn5l19r55k.apps.googleusercontent.com";
-  const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive";
+  const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email";
   const FOLDER_NAME = "💕 我們的回憶";
   const SETTINGS_FILENAME = "settings.json";
+  const MESSAGES_FILENAME = "messages.json";
+  const COVER_FILENAME = "cover.jpg";
   const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
   /* =================================================================== */
 
@@ -416,8 +479,10 @@
   let tokenClient = null;
   let folderId = null;
   let settingsFileId = null;
+  let messagesFileId = null;
   let settings = { anniversary: null };
   let currentViewingFile = null;
+  let currentUserEmail = "";
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -426,13 +491,21 @@
     window.scrollTo(0,0);
   }
 
+  function isStandalone(){
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+
   /* ---------------- BOOT ---------------- */
   window.addEventListener("DOMContentLoaded", ()=>{
     if(location.protocol === "file:"){
       document.getElementById("https-warning").style.display = "block";
     }
+    if(isStandalone()){
+      document.getElementById("standalone-warning").style.display = "block";
+    }
     document.getElementById("btn-google-signin").addEventListener("click", onSignInClick);
-    document.getElementById("btn-save-anniv").addEventListener("click", onSaveFirstAnniversary);
+    document.getElementById("btn-invite-submit").addEventListener("click", onInviteSubmit);
+    document.getElementById("btn-invite-skip").addEventListener("click", onInviteSkip);
     document.getElementById("btn-goto-gallery").addEventListener("click", openGallery);
     document.getElementById("btn-edit-anniv").addEventListener("click", openEditAnniv);
     document.getElementById("btn-logout").addEventListener("click", onLogout);
@@ -452,6 +525,13 @@
     document.getElementById("btn-edit-anniv-cancel").addEventListener("click", ()=>{
       document.getElementById("edit-anniv-overlay").classList.remove("active");
     });
+    document.getElementById("btn-edit-cover").addEventListener("click", (e)=>{ e.stopPropagation(); document.getElementById("cover-file-input").click(); });
+    document.getElementById("home-bg-empty").addEventListener("click", ()=> document.getElementById("cover-file-input").click());
+    document.getElementById("cover-file-input").addEventListener("change", onCoverFileSelected);
+    document.getElementById("btn-msgboard-send").addEventListener("click", sendMessage);
+    document.getElementById("msgboard-input").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") sendMessage();
+    });
 
     if(window.google && google.accounts && google.accounts.oauth2){
       initGis();
@@ -466,7 +546,12 @@
       scope: DRIVE_SCOPE,
       callback: (resp)=>{
         if(resp.error){
-          showLoginError("登入失敗：" + resp.error + "（若顯示 unverified app，請點『進階』→『前往(不安全)』繼續）");
+          resetSigninButton();
+          let msg = "登入失敗：" + resp.error + "（若顯示 unverified app，請點『進階』→『前往(不安全)』繼續）";
+          if(isStandalone()){
+            msg += " 你是從主畫面圖示打開的，這種登入失敗常常是 iOS 對加到主畫面的網頁App的已知限制，建議改用 Safari／Chrome 瀏覽器分頁開啟這個網址再登入一次。";
+          }
+          showLoginError(msg);
           return;
         }
         accessToken = resp.access_token;
@@ -480,15 +565,12 @@
     status.innerHTML = "";
     const card = document.createElement("div");
     card.className = "error-card";
-    card.innerHTML = '<span class="x">!</span><p>'+msg+'</p>';
+    card.innerHTML = '<span class="x">!</span><p></p>';
+    card.querySelector("p").textContent = msg;
     status.appendChild(card);
   }
 
   function onSignInClick(){
-    if(GOOGLE_CLIENT_ID.indexOf("YOUR_CLIENT_ID_HERE") !== -1){
-      alert("還沒有設定 Google Client ID 喔，請照教學把 Client ID 貼到程式碼裡的 CONFIG 區塊。");
-      return;
-    }
     if(!tokenClient){
       alert("Google 登入元件還在載入，請稍等幾秒再試一次。");
       return;
@@ -507,10 +589,20 @@
     accessToken = null;
     folderId = null;
     settingsFileId = null;
+    messagesFileId = null;
     settings = { anniversary: null };
+    currentUserEmail = "";
     resetSigninButton();
     document.getElementById("login-status").innerHTML = "";
     show("screen-login");
+  }
+
+  async function fetchUserEmail(){
+    try{
+      const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers:{ "Authorization":"Bearer "+accessToken } });
+      const data = await res.json();
+      currentUserEmail = data.email || "";
+    }catch(e){ currentUserEmail = ""; }
   }
 
   /* ---------------- AFTER SIGN IN ---------------- */
@@ -518,25 +610,27 @@
     show("screen-loading");
     document.getElementById("loading-text").textContent = "正在準備你們的回憶空間...";
     try{
-      folderId = await findOrCreateFolder();
-      settingsFileId = await findSettingsFile(folderId);
-      if(settingsFileId){
-        settings = await readSettingsFile(settingsFileId);
+      await fetchUserEmail();
+      const existing = await findFolder();
+      if(existing){
+        folderId = existing;
+        await loadSettingsAndGoHome();
       } else {
-        settings = { anniversary: null };
-      }
-      if(!settings.anniversary){
-        show("screen-set-anniv");
-      } else {
-        show("screen-home");
-        renderHome();
+        show("screen-invite-partner");
       }
     }catch(err){
       console.error(err);
       resetSigninButton();
-      showLoginError("連線 Google 雲端硬碟時發生問題，請確認 Client ID 設定正確，或稍後再試一次。錯誤訊息："+err.message);
+      showLoginError("連線 Google 雲端硬碟時發生問題，請稍後再試一次。錯誤訊息："+err.message);
       show("screen-login");
     }
+  }
+
+  async function loadSettingsAndGoHome(){
+    settingsFileId = await findSettingsFile();
+    settings = settingsFileId ? await readSettingsFile(settingsFileId) : { anniversary: null };
+    show("screen-home");
+    renderHome();
   }
 
   /* ---------------- DRIVE HELPERS ---------------- */
@@ -551,11 +645,14 @@
     return res;
   }
 
-  async function findOrCreateFolder(){
+  async function findFolder(){
     const q = encodeURIComponent("name='"+FOLDER_NAME+"' and mimeType='application/vnd.google-apps.folder' and trashed=false");
     const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
     const data = await res.json();
-    if(data.files && data.files.length>0) return data.files[0].id;
+    return (data.files && data.files.length>0) ? data.files[0].id : null;
+  }
+
+  async function createFolder(){
     const createRes = await driveFetch("files", {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -565,8 +662,16 @@
     return created.id;
   }
 
-  async function findSettingsFile(fid){
-    const q = encodeURIComponent("name='"+SETTINGS_FILENAME+"' and '"+fid+"' in parents and trashed=false");
+  async function shareFolderWith(fid, email){
+    await driveFetch("files/"+fid+"/permissions?sendNotificationEmail=true", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ role:"writer", type:"user", emailAddress: email })
+    });
+  }
+
+  async function findSettingsFile(){
+    const q = encodeURIComponent("name='"+SETTINGS_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
     const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
     const data = await res.json();
     return (data.files && data.files[0]) ? data.files[0].id : null;
@@ -620,28 +725,52 @@
   }
 
   async function listPhotos(){
-    const q = encodeURIComponent("'"+folderId+"' in parents and mimeType contains 'image/' and trashed=false");
+    const q = encodeURIComponent("'"+folderId+"' in parents and mimeType contains 'image/' and trashed=false and name != '"+COVER_FILENAME+"'");
     const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,thumbnailLink,createdTime)&pageSize=300&spaces=drive");
     const data = await res.json();
     return data.files || [];
   }
 
-  /* ---------------- FIRST-RUN ANNIVERSARY ---------------- */
-  async function onSaveFirstAnniversary(){
-    const val = document.getElementById("anniv-date-input").value;
-    if(!val){ alert("請選擇日期喔～"); return; }
+  /* ---------------- INVITE PARTNER (first run) ---------------- */
+  async function onInviteSubmit(){
+    const email = document.getElementById("partner-email-input").value.trim();
+    if(!email || email.indexOf("@") === -1){ alert("請輸入正確的 Email 喔～"); return; }
     show("screen-loading");
-    document.getElementById("loading-text").textContent = "儲存中...";
+    document.getElementById("loading-text").textContent = "建立共用資料夾中...";
     try{
-      await saveSettingsFile({ anniversary: val });
+      folderId = await createFolder();
+      try{
+        await shareFolderWith(folderId, email);
+      }catch(shareErr){
+        console.error(shareErr);
+        alert("資料夾已建立，但分享給對方時發生問題，你可以之後自己到雲端硬碟手動分享「"+FOLDER_NAME+"」這個資料夾給對方。");
+      }
+      settings = { anniversary: null };
+      settingsFileId = null;
       show("screen-home");
       renderHome();
     }catch(err){
-      alert("儲存失敗，請再試一次。\n"+err.message);
-      show("screen-set-anniv");
+      alert("建立失敗，請再試一次。\n"+err.message);
+      show("screen-invite-partner");
     }
   }
 
+  async function onInviteSkip(){
+    show("screen-loading");
+    document.getElementById("loading-text").textContent = "建立資料夾中...";
+    try{
+      folderId = await createFolder();
+      settings = { anniversary: null };
+      settingsFileId = null;
+      show("screen-home");
+      renderHome();
+    }catch(err){
+      alert("建立失敗，請再試一次。\n"+err.message);
+      show("screen-invite-partner");
+    }
+  }
+
+  /* ---------------- EDIT / SET ANNIVERSARY ---------------- */
   function openEditAnniv(){
     document.getElementById("edit-anniv-input").value = settings.anniversary || "";
     document.getElementById("edit-anniv-overlay").classList.add("active");
@@ -671,25 +800,38 @@
   }
 
   function renderHome(){
-    const annivDate = new Date(settings.anniversary+"T00:00:00");
-    const today = new Date();
-    const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const annivMid = new Date(annivDate.getFullYear(), annivDate.getMonth(), annivDate.getDate());
-    const diffDays = Math.round((todayMid - annivMid) / 86400000) + 1;
-    const shownDays = diffDays>=0 ? diffDays : Math.abs(diffDays);
-    document.getElementById("home-days").textContent = shownDays;
-    const y = annivDate.getFullYear(), m = annivDate.getMonth()+1, d = annivDate.getDate();
-    document.getElementById("home-date-sub").textContent = diffDays>=0
-      ? ("從 "+y+"/"+m+"/"+d+" 開始")
-      : ("距離 "+y+"/"+m+"/"+d+" 還有 "+Math.abs(diffDays)+" 天");
+    document.getElementById("btn-edit-anniv").textContent = settings.anniversary ? "編輯紀念日" : "設定紀念日";
 
-    if(diffDays >= 0){
-      const next = getNextMilestone(diffDays);
-      document.getElementById("stat-milestone-label").textContent = "距離 "+next+" 天";
-      document.getElementById("stat-milestone-value").textContent = "還有 "+(next-diffDays)+" 天";
+    if(!settings.anniversary){
+      document.getElementById("home-days").textContent = "尚未設定";
+      document.getElementById("home-days").classList.add("small");
+      document.getElementById("home-days-unit").style.display = "none";
+      document.getElementById("home-date-sub").textContent = "點下面「設定紀念日」開始倒數吧";
+      document.getElementById("stat-milestone-label").textContent = "紀念日";
+      document.getElementById("stat-milestone-value").textContent = "尚未設定";
     } else {
-      document.getElementById("stat-milestone-label").textContent = "紀念日倒數";
-      document.getElementById("stat-milestone-value").textContent = Math.abs(diffDays)+" 天";
+      document.getElementById("home-days").classList.remove("small");
+      document.getElementById("home-days-unit").style.display = "";
+      const annivDate = new Date(settings.anniversary+"T00:00:00");
+      const today = new Date();
+      const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const annivMid = new Date(annivDate.getFullYear(), annivDate.getMonth(), annivDate.getDate());
+      const diffDays = Math.round((todayMid - annivMid) / 86400000) + 1;
+      const shownDays = diffDays>=0 ? diffDays : Math.abs(diffDays);
+      document.getElementById("home-days").textContent = shownDays;
+      const y = annivDate.getFullYear(), m = annivDate.getMonth()+1, d = annivDate.getDate();
+      document.getElementById("home-date-sub").textContent = diffDays>=0
+        ? ("從 "+y+"/"+m+"/"+d+" 開始")
+        : ("距離 "+y+"/"+m+"/"+d+" 還有 "+Math.abs(diffDays)+" 天");
+
+      if(diffDays >= 0){
+        const next = getNextMilestone(diffDays);
+        document.getElementById("stat-milestone-label").textContent = "距離 "+next+" 天";
+        document.getElementById("stat-milestone-value").textContent = "還有 "+(next-diffDays)+" 天";
+      } else {
+        document.getElementById("stat-milestone-label").textContent = "紀念日倒數";
+        document.getElementById("stat-milestone-value").textContent = Math.abs(diffDays)+" 天";
+      }
     }
 
     document.getElementById("stat-photo-count").textContent = "...";
@@ -698,6 +840,138 @@
     }).catch(()=>{
       document.getElementById("stat-photo-count").textContent = "--";
     });
+
+    loadCoverPhoto();
+    loadMessages();
+  }
+
+  /* ---------------- COVER PHOTO ---------------- */
+  async function findCoverFile(){
+    const q = encodeURIComponent("name='"+COVER_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function loadCoverPhoto(){
+    const wrap = document.getElementById("home-bg-wrap");
+    const empty = document.getElementById("home-bg-empty");
+    try{
+      const fid = await findCoverFile();
+      if(!fid){ wrap.style.display = "none"; empty.style.display = "flex"; return; }
+      const res = await driveFetch("files/"+fid+"?alt=media");
+      const blob = await res.blob();
+      document.getElementById("home-bg-img").src = URL.createObjectURL(blob);
+      wrap.style.display = "block";
+      empty.style.display = "none";
+    }catch(e){
+      wrap.style.display = "none";
+      empty.style.display = "flex";
+    }
+  }
+
+  async function onCoverFileSelected(e){
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    try{
+      const existingId = await findCoverFile();
+      if(existingId){
+        await fetch("https://www.googleapis.com/upload/drive/v3/files/"+existingId+"?uploadType=media", {
+          method:"PATCH",
+          headers:{ "Authorization":"Bearer "+accessToken, "Content-Type": file.type || "image/jpeg" },
+          body: file
+        });
+      } else {
+        await createFileMultipart(COVER_FILENAME, file.type || "image/jpeg", file, folderId);
+      }
+      await loadCoverPhoto();
+    }catch(err){
+      alert("背景照片上傳失敗，請再試一次。");
+    }
+    e.target.value = "";
+  }
+
+  /* ---------------- MESSAGE BOARD ---------------- */
+  async function findMessagesFile(){
+    const q = encodeURIComponent("name='"+MESSAGES_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function loadMessages(){
+    const listEl = document.getElementById("msgboard-list");
+    listEl.innerHTML = '<div class="msg-loading">載入中...</div>';
+    try{
+      messagesFileId = await findMessagesFile();
+      let msgs = [];
+      if(messagesFileId){
+        const res = await driveFetch("files/"+messagesFileId+"?alt=media");
+        try{ msgs = await res.json(); }catch(e){ msgs = []; }
+      }
+      renderMessages(msgs);
+    }catch(err){
+      listEl.innerHTML = '<div class="msg-loading">留言載入失敗</div>';
+    }
+  }
+
+  function renderMessages(msgs){
+    const listEl = document.getElementById("msgboard-list");
+    if(!msgs || msgs.length === 0){
+      listEl.innerHTML = '<div class="msg-empty">還沒有人留言，說句話吧～</div>';
+      return;
+    }
+    listEl.innerHTML = "";
+    msgs.slice().reverse().slice(0,50).forEach(m=>{
+      const item = document.createElement("div");
+      item.className = "msg-item";
+      const who = (m.author || "").split("@")[0] || "某人";
+      let timeStr = "";
+      if(m.time){
+        const t = new Date(m.time);
+        timeStr = (t.getMonth()+1)+"/"+t.getDate()+" "+String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0");
+      }
+      const meta = document.createElement("div");
+      meta.className = "msg-meta";
+      meta.textContent = who + (timeStr ? (" · "+timeStr) : "");
+      const txt = document.createElement("div");
+      txt.className = "msg-text";
+      txt.textContent = m.text || "";
+      item.appendChild(meta);
+      item.appendChild(txt);
+      listEl.appendChild(item);
+    });
+  }
+
+  async function sendMessage(){
+    const input = document.getElementById("msgboard-input");
+    const text = input.value.trim();
+    if(!text) return;
+    input.disabled = true;
+    try{
+      let msgs = [];
+      if(messagesFileId){
+        const res = await driveFetch("files/"+messagesFileId+"?alt=media");
+        try{ msgs = await res.json(); }catch(e){ msgs = []; }
+      }
+      msgs.push({ text: text, time: new Date().toISOString(), author: currentUserEmail || "" });
+      const content = JSON.stringify(msgs);
+      if(messagesFileId){
+        await fetch("https://www.googleapis.com/upload/drive/v3/files/"+messagesFileId+"?uploadType=media", {
+          method:"PATCH",
+          headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+          body: content
+        });
+      } else {
+        messagesFileId = await createFileMultipart(MESSAGES_FILENAME, "application/json", content, folderId);
+      }
+      input.value = "";
+      renderMessages(msgs);
+    }catch(err){
+      alert("留言送出失敗，請再試一次。");
+    } finally {
+      input.disabled = false;
+    }
   }
 
   /* ---------------- GALLERY ---------------- */
