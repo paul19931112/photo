@@ -25,6 +25,7 @@
     --text-soft:#8A6A4C;
     --text-faint:#AF9370;
     --viewer-bg:#1E1509;
+    --page-bg:#EFE6D6;
     --shadow: 0 14px 30px -20px rgba(67,48,30,.5);
     --grad: linear-gradient(135deg,var(--amber),var(--amber-dark));
   }
@@ -32,7 +33,7 @@
   html,body{margin:0;padding:0;height:100%;}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
-    background:#EFE6D6;
+    background:var(--page-bg);
     min-height:100%;
     display:flex;
     justify-content:center;
@@ -134,7 +135,7 @@
     display:none;
     touch-action: pan-y;
   }
-  .home-bg-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+  .home-bg-wrap img{width:100%; height:100%; object-fit:cover; display:block; transition:opacity .35s ease;}
   .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(180deg, rgba(253,244,232,0), var(--cream));}
   .bg-edit-btn{
     position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%;
@@ -152,6 +153,11 @@
   .home-topbar .dots{display:flex; gap:6px;}
   .home-topbar .dots span{width:9px;height:9px;border-radius:50%;background:var(--amber);}
   .home-topbar .dots span:last-child{background:rgba(233,160,92,.35);}
+  .theme-btn{
+    width:30px;height:30px;border-radius:50%; border:none; background:#fff;
+    box-shadow:inset 0 0 0 1px rgba(67,48,30,.1); font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
 
   .anniv-card{
     border-radius:34px; padding:44px 28px 34px;
@@ -293,6 +299,35 @@
   .timeline-row.milestone .timeline-card{background:var(--cream-warm);}
   .milestone-text{font-weight:700; color:var(--terracotta);}
   .timeline-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
+
+  /* cover photo manager */
+  .cover-thumb-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .cover-thumb{
+    width:70px; height:70px; border-radius:14px; overflow:hidden; position:relative;
+    background:repeating-linear-gradient(135deg,rgba(201,122,60,.16) 0 6px,rgba(201,122,60,.05) 6px 12px);
+  }
+  .cover-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .cover-thumb .cover-del{
+    position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%;
+    background:rgba(30,21,9,.55); color:#fff; border:none; font-size:11px; display:flex;
+    align-items:center; justify-content:center; cursor:pointer;
+  }
+  .cover-thumb-add{
+    width:70px; height:70px; border-radius:14px; background:var(--cream);
+    box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.25); display:flex; align-items:center; justify-content:center;
+    font-size:26px; color:var(--amber-dark); cursor:pointer;
+  }
+
+  /* theme picker */
+  .theme-swatch-row{display:flex; gap:14px; flex-wrap:wrap; padding:4px 0;}
+  .theme-swatch{
+    width:52px; height:52px; border-radius:50%; cursor:pointer; position:relative;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.5);
+  }
+  .theme-swatch.selected::after{
+    content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:18px; font-weight:700; text-shadow:0 1px 2px rgba(0,0,0,.35);
+  }
 
   /* gallery */
   .gallery-header{
@@ -544,7 +579,9 @@
         ⚠️ 這個 App 需要透過網址（https）開啟才能登入 Google，直接打開本機檔案無法使用喔，請先用瀏覽器開啟你架設好的網址。
       </div>
       <div id="standalone-warning" class="not-https-warning" style="display:none;">
-        📱 偵測到你是從主畫面圖示打開的。iOS 對「加到主畫面」的網頁 App 登入 Google 有已知限制，如果登入沒反應或出現錯誤，請改用 Safari／Chrome 瀏覽器分頁打開這個網址登入一次看看。
+        📱 偵測到你是從主畫面圖示打開的。iOS 對「加到主畫面」的網頁 App 登入 Google 有已知限制。請先點下面的按鈕用 Safari 分頁登入一次，登入成功後回到這個主畫面圖示重新打開，通常就會自動偵測到已登入，不用再跳窗。
+        <div style="height:12px;"></div>
+        <a class="btn secondary" id="btn-open-safari" target="_blank" rel="noopener" style="text-decoration:none; box-sizing:border-box;">在 Safari 開啟並登入</a>
       </div>
       <div style="height:24px;"></div>
       <button class="btn" id="btn-google-signin"><span class="g-badge">G</span>使用 Google 帳號登入</button>
@@ -587,7 +624,10 @@
 
     <div class="home-topbar">
       <div class="hi">Hi，我們</div>
-      <div class="dots"><span></span><span></span></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button class="theme-btn" id="btn-open-theme">🎨</button>
+        <div class="dots"><span></span><span></span></div>
+      </div>
     </div>
     <div class="anniv-card">
       <div class="anniv-card-decor"></div>
@@ -876,6 +916,30 @@
   </div>
 </div>
 
+<!-- background cover photo manager sheet -->
+<div class="modal-overlay" id="cover-manager-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3>背景照片(最多5張,會自動輪播)</h3>
+    <div class="cover-thumb-row" id="cover-thumb-row"></div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-cover-manager-close">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- theme picker sheet -->
+<div class="modal-overlay" id="theme-picker-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3>選一個喜歡的顏色</h3>
+    <div class="theme-swatch-row" id="theme-swatch-row"></div>
+    <div class="sheet-actions">
+      <button class="btn-save" id="btn-theme-close">完成</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -887,6 +951,17 @@
   const SETTINGS_FILENAME = "settings.json";
   const MESSAGES_FILENAME = "messages.json";
   const COVER_FILENAME = "cover.jpg";
+  const COVER_PREFIX = "cover_";
+  const MAX_COVER_PHOTOS = 5;
+  const THEME_KEY = "album_theme";
+  const THEMES = {
+    amber:     { amber:"#E9A05C", amberDark:"#C97A3C", terracotta:"#9E4E22", cream:"#FDF4E8", creamWarm:"#FAE7C9", text:"#43301E", textSoft:"#8A6A4C", textFaint:"#AF9370", viewerBg:"#1E1509", pageBg:"#EFE6D6" },
+    pink:      { amber:"#E98CA0", amberDark:"#C95C77", terracotta:"#9E2E4E", cream:"#FDEDF0", creamWarm:"#FAD3DC", text:"#3A1E28", textSoft:"#8A5A68", textFaint:"#AF8F98", viewerBg:"#1E0A10", pageBg:"#EFDDE2" },
+    ocean:     { amber:"#5C9EE9", amberDark:"#3C6FC9", terracotta:"#22539E", cream:"#EAF2FD", creamWarm:"#C9DEFA", text:"#1E2C43", textSoft:"#6A7D8A", textFaint:"#8FA0AF", viewerBg:"#09131E", pageBg:"#DDE6EF" },
+    mint:      { amber:"#6ECBA0", amberDark:"#41A377", terracotta:"#1F6E4D", cream:"#EAFAF3", creamWarm:"#C6EEDA", text:"#1B3A2C", textSoft:"#5D8A73", textFaint:"#82AF98", viewerBg:"#081E14", pageBg:"#DEEFE6" },
+    lavender:  { amber:"#A08CE9", amberDark:"#775CC9", terracotta:"#4E2E9E", cream:"#F1EDFD", creamWarm:"#DCD3FA", text:"#28203A", textSoft:"#736A8A", textFaint:"#9890AF", viewerBg:"#120A1E", pageBg:"#E3DDEF" }
+  };
+  const THEME_LABELS = { amber:"琥珀", pink:"粉櫻", ocean:"海洋", mint:"薄荷", lavender:"薰衣草" };
   const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
   const COMMENTS_FILENAME = "comments.json";
   const WISHLIST_FILENAME = "wishlist.json";
@@ -894,6 +969,8 @@
   const MOOD_EMOJIS = ["😊","😍","🥰","😴","😢","😡","😐","🥳","😰","🤒"];
   const CALENDAR_FILENAME = "calendar.json";
   const AUTO_LOGIN_KEY = "album_has_signed_in_before";
+  const TOKEN_BRIDGE_KEY = "album_bridged_access_token";
+  const TOKEN_BRIDGE_EXP_KEY = "album_bridged_access_token_exp";
   /* =================================================================== */
 
   let accessToken = null;
@@ -930,6 +1007,10 @@
   let calendarViewYear = 0;
   let calendarViewMonth = 0; // 0-indexed
   let calendarSelectedDate = null;
+  let coverPhotos = [];
+  let coverRotateIndex = 0;
+  let coverRotateTimer = null;
+  let coverManagerFiles = [];
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -942,13 +1023,65 @@
     return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
   }
 
+  /* ---------------- THEME ---------------- */
+  function applyTheme(key){
+    const t = THEMES[key] || THEMES.amber;
+    const root = document.documentElement.style;
+    root.setProperty("--amber", t.amber);
+    root.setProperty("--amber-dark", t.amberDark);
+    root.setProperty("--terracotta", t.terracotta);
+    root.setProperty("--cream", t.cream);
+    root.setProperty("--cream-warm", t.creamWarm);
+    root.setProperty("--text", t.text);
+    root.setProperty("--text-soft", t.textSoft);
+    root.setProperty("--text-faint", t.textFaint);
+    root.setProperty("--viewer-bg", t.viewerBg);
+    root.setProperty("--page-bg", t.pageBg);
+    try{
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if(meta) meta.setAttribute("content", t.amberDark);
+    }catch(e){}
+  }
+
+  function loadSavedTheme(){
+    let key = "amber";
+    try{ key = localStorage.getItem(THEME_KEY) || "amber"; }catch(e){}
+    applyTheme(key);
+  }
+
+  function openThemePicker(){
+    renderThemeSwatches();
+    document.getElementById("theme-picker-overlay").classList.add("active");
+  }
+
+  function renderThemeSwatches(){
+    const row = document.getElementById("theme-swatch-row");
+    row.innerHTML = "";
+    let current = "amber";
+    try{ current = localStorage.getItem(THEME_KEY) || "amber"; }catch(e){}
+    Object.keys(THEMES).forEach(key=>{
+      const sw = document.createElement("div");
+      sw.className = "theme-swatch" + (key === current ? " selected" : "");
+      sw.style.background = THEMES[key].amberDark;
+      sw.title = THEME_LABELS[key] || key;
+      sw.addEventListener("click", ()=>{
+        try{ localStorage.setItem(THEME_KEY, key); }catch(e){}
+        applyTheme(key);
+        renderThemeSwatches();
+      });
+      row.appendChild(sw);
+    });
+  }
+
   /* ---------------- BOOT ---------------- */
   window.addEventListener("DOMContentLoaded", ()=>{
+    loadSavedTheme();
     if(location.protocol === "file:"){
       document.getElementById("https-warning").style.display = "block";
     }
     if(isStandalone()){
       document.getElementById("standalone-warning").style.display = "block";
+      document.getElementById("btn-open-safari").href = location.href;
     }
     document.getElementById("btn-google-signin").addEventListener("click", onSignInClick);
     document.getElementById("btn-invite-submit").addEventListener("click", onInviteSubmit);
@@ -1038,9 +1171,16 @@
     document.getElementById("btn-edit-anniv-cancel").addEventListener("click", ()=>{
       document.getElementById("edit-anniv-overlay").classList.remove("active");
     });
-    document.getElementById("btn-edit-cover").addEventListener("click", (e)=>{ e.stopPropagation(); document.getElementById("cover-file-input").click(); });
-    document.getElementById("home-bg-empty").addEventListener("click", ()=> document.getElementById("cover-file-input").click());
+    document.getElementById("btn-edit-cover").addEventListener("click", (e)=>{ e.stopPropagation(); openCoverManager(); });
+    document.getElementById("home-bg-empty").addEventListener("click", openCoverManager);
     document.getElementById("cover-file-input").addEventListener("change", onCoverFileSelected);
+    document.getElementById("btn-cover-manager-close").addEventListener("click", ()=>{
+      document.getElementById("cover-manager-overlay").classList.remove("active");
+    });
+    document.getElementById("btn-open-theme").addEventListener("click", openThemePicker);
+    document.getElementById("btn-theme-close").addEventListener("click", ()=>{
+      document.getElementById("theme-picker-overlay").classList.remove("active");
+    });
     document.getElementById("btn-msgboard-send").addEventListener("click", sendMessage);
     document.getElementById("msgboard-input").addEventListener("keydown", (e)=>{
       if(e.key === "Enter") sendMessage();
@@ -1075,15 +1215,43 @@
     }
 
     setupPullReveal();
+
+    document.addEventListener("visibilitychange", ()=>{
+      if(document.visibilityState === "visible") tryAdoptBridgedToken();
+    });
+    window.addEventListener("pageshow", ()=> tryAdoptBridgedToken());
   });
 
   function maybeAutoSignIn(){
     if(location.protocol === "file:") return;
+    if(tryAdoptBridgedToken()) return;
     let hasSignedInBefore = false;
     try{ hasSignedInBefore = localStorage.getItem(AUTO_LOGIN_KEY) === "1"; }catch(e){}
     if(!hasSignedInBefore || !tokenClient) return;
     document.getElementById("login-status").innerHTML = '<div class="center-msg">自動登入中...</div>';
     tokenClient.requestAccessToken({ prompt: "" });
+  }
+
+  /* ---------------- CROSS-TAB TOKEN BRIDGE (for standalone/home-screen mode) ----------------
+     Standalone PWA and Safari share localStorage for the same origin on iOS, so a token
+     obtained in a normal Safari tab (where the Google popup flow works) can be picked up
+     here when the user reopens the home-screen icon, without needing another popup. */
+  function getBridgedToken(){
+    try{
+      const tok = localStorage.getItem(TOKEN_BRIDGE_KEY);
+      const exp = parseInt(localStorage.getItem(TOKEN_BRIDGE_EXP_KEY) || "0", 10);
+      if(tok && exp && Date.now() < exp) return tok;
+    }catch(e){}
+    return null;
+  }
+
+  function tryAdoptBridgedToken(){
+    if(accessToken) return false;
+    const tok = getBridgedToken();
+    if(!tok) return false;
+    accessToken = tok;
+    afterSignIn();
+    return true;
   }
 
   /* ---------------- PULL DOWN TO REVEAL COVER PHOTO ---------------- */
@@ -1138,13 +1306,17 @@
           resetSigninButton();
           let msg = "登入失敗：" + resp.error + "（若顯示 unverified app，請點『進階』→『前往(不安全)』繼續）";
           if(isStandalone()){
-            msg += " 你是從主畫面圖示打開的，這種登入失敗常常是 iOS 對加到主畫面的網頁App的已知限制，建議改用 Safari／Chrome 瀏覽器分頁開啟這個網址再登入一次。";
+            msg += " 你是從主畫面圖示打開的，這種登入失敗常常是 iOS 對加到主畫面的網頁App的已知限制，請用上面的『在 Safari 開啟並登入』按鈕登入一次看看。";
           }
           showLoginError(msg);
           return;
         }
         accessToken = resp.access_token;
-        try{ localStorage.setItem(AUTO_LOGIN_KEY, "1"); }catch(e){}
+        try{
+          localStorage.setItem(AUTO_LOGIN_KEY, "1");
+          localStorage.setItem(TOKEN_BRIDGE_KEY, resp.access_token);
+          localStorage.setItem(TOKEN_BRIDGE_EXP_KEY, String(Date.now() + (resp.expires_in || 3600) * 1000 - 60000));
+        }catch(e){}
         afterSignIn();
       }
     });
@@ -1190,11 +1362,18 @@
     calendarFileId = null;
     calendarData = [];
     calendarSelectedDate = null;
+    stopCoverRotation();
+    coverPhotos.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(e){} });
+    coverPhotos = [];
     settings = { anniversary: null };
     currentUserEmail = "";
     imageCache.forEach(url=>{ try{ URL.revokeObjectURL(url); }catch(e){} });
     imageCache.clear();
-    try{ localStorage.removeItem(AUTO_LOGIN_KEY); }catch(e){}
+    try{
+      localStorage.removeItem(AUTO_LOGIN_KEY);
+      localStorage.removeItem(TOKEN_BRIDGE_KEY);
+      localStorage.removeItem(TOKEN_BRIDGE_EXP_KEY);
+    }catch(e){}
     resetSigninButton();
     document.getElementById("login-status").innerHTML = "";
     show("screen-login");
@@ -1368,7 +1547,7 @@
   }
 
   async function listPhotos(){
-    const q = encodeURIComponent("'"+folderId+"' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false and name != '"+COVER_FILENAME+"'");
+    const q = encodeURIComponent("'"+folderId+"' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false and name != '"+COVER_FILENAME+"' and not name contains '"+COVER_PREFIX+"'");
     const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,mimeType,thumbnailLink,createdTime,appProperties)&pageSize=300&spaces=drive");
     const data = await res.json();
     const files = data.files || [];
@@ -1541,49 +1720,137 @@
   }
 
   /* ---------------- COVER PHOTO ---------------- */
-  async function findCoverFile(){
-    const q = encodeURIComponent("name='"+COVER_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
-    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+  async function findCoverFiles(){
+    const q = encodeURIComponent("'"+folderId+"' in parents and trashed=false and mimeType contains 'image/' and (name contains '"+COVER_PREFIX+"' or name = '"+COVER_FILENAME+"')");
+    const res = await driveFetch("files?q="+q+"&orderBy=name&fields=files(id,name,thumbnailLink)&spaces=drive");
     const data = await res.json();
-    return (data.files && data.files[0]) ? data.files[0].id : null;
+    return data.files || [];
+  }
+
+  function stopCoverRotation(){
+    if(coverRotateTimer){ clearInterval(coverRotateTimer); coverRotateTimer = null; }
+  }
+
+  function startCoverRotation(){
+    stopCoverRotation();
+    coverRotateTimer = setInterval(()=>{
+      coverRotateIndex = (coverRotateIndex + 1) % coverPhotos.length;
+      const img = document.getElementById("home-bg-img");
+      img.style.opacity = "0";
+      setTimeout(()=>{
+        img.src = coverPhotos[coverRotateIndex];
+        img.style.opacity = "1";
+      }, 350);
+    }, 5000);
   }
 
   async function loadCoverPhoto(){
     const wrap = document.getElementById("home-bg-wrap");
     const empty = document.getElementById("home-bg-empty");
+    stopCoverRotation();
+    coverPhotos.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(e){} });
+    coverPhotos = [];
     try{
-      const fid = await findCoverFile();
-      if(!fid){ wrap.style.display = "none"; empty.style.display = "flex"; return; }
-      const res = await driveFetch("files/"+fid+"?alt=media");
-      const blob = await res.blob();
-      document.getElementById("home-bg-img").src = URL.createObjectURL(blob);
+      const files = await findCoverFiles();
+      if(!files || files.length === 0){
+        wrap.style.display = "none";
+        empty.style.display = "flex";
+        return;
+      }
+      const capped = files.slice(0, MAX_COVER_PHOTOS);
+      const urls = await Promise.all(capped.map(async f=>{
+        try{
+          const res = await driveFetch("files/"+f.id+"?alt=media");
+          const blob = await res.blob();
+          return URL.createObjectURL(blob);
+        }catch(e){ return null; }
+      }));
+      coverPhotos = urls.filter(Boolean);
+      if(coverPhotos.length === 0){
+        wrap.style.display = "none";
+        empty.style.display = "flex";
+        return;
+      }
       wrap.style.display = "block";
       empty.style.display = "none";
+      coverRotateIndex = 0;
+      document.getElementById("home-bg-img").style.opacity = "1";
+      document.getElementById("home-bg-img").src = coverPhotos[0];
+      if(coverPhotos.length > 1){
+        startCoverRotation();
+      }
     }catch(e){
       wrap.style.display = "none";
       empty.style.display = "flex";
     }
   }
 
+  async function openCoverManager(){
+    document.getElementById("cover-manager-overlay").classList.add("active");
+    await renderCoverManager();
+  }
+
+  async function renderCoverManager(){
+    const row = document.getElementById("cover-thumb-row");
+    row.innerHTML = '<div class="cal-day-empty">載入中...</div>';
+    try{
+      coverManagerFiles = await findCoverFiles();
+    }catch(e){
+      coverManagerFiles = [];
+    }
+    row.innerHTML = "";
+    coverManagerFiles.forEach(f=>{
+      const thumb = document.createElement("div");
+      thumb.className = "cover-thumb";
+      if(f.thumbnailLink){
+        const img = document.createElement("img");
+        img.src = f.thumbnailLink;
+        thumb.appendChild(img);
+      }
+      const del = document.createElement("button");
+      del.className = "cover-del";
+      del.textContent = "✕";
+      del.addEventListener("click", ()=> onDeleteCoverPhoto(f.id));
+      thumb.appendChild(del);
+      row.appendChild(thumb);
+    });
+    if(coverManagerFiles.length < MAX_COVER_PHOTOS){
+      const add = document.createElement("div");
+      add.className = "cover-thumb-add";
+      add.textContent = "＋";
+      add.addEventListener("click", ()=> document.getElementById("cover-file-input").click());
+      row.appendChild(add);
+    }
+  }
+
+  async function onDeleteCoverPhoto(id){
+    const ok = confirm("要刪除這張背景照片嗎？");
+    if(!ok) return;
+    try{
+      await driveFetch("files/"+id, {method:"DELETE"});
+      await renderCoverManager();
+      await loadCoverPhoto();
+    }catch(err){
+      alert("刪除失敗，請再試一次。");
+    }
+  }
+
   async function onCoverFileSelected(e){
     const file = e.target.files && e.target.files[0];
     if(!file) return;
+    e.target.value = "";
+    if(coverManagerFiles.length >= MAX_COVER_PHOTOS){
+      alert("最多只能放 "+MAX_COVER_PHOTOS+" 張背景照片喔～");
+      return;
+    }
     try{
-      const existingId = await findCoverFile();
-      if(existingId){
-        await fetch("https://www.googleapis.com/upload/drive/v3/files/"+existingId+"?uploadType=media", {
-          method:"PATCH",
-          headers:{ "Authorization":"Bearer "+accessToken, "Content-Type": file.type || "image/jpeg" },
-          body: file
-        });
-      } else {
-        await createFileMultipart(COVER_FILENAME, file.type || "image/jpeg", file, folderId);
-      }
+      const filename = COVER_PREFIX + Date.now() + ".jpg";
+      await createFileMultipart(filename, file.type || "image/jpeg", file, folderId);
+      await renderCoverManager();
       await loadCoverPhoto();
     }catch(err){
       alert("背景照片上傳失敗，請再試一次。");
     }
-    e.target.value = "";
   }
 
   /* ---------------- MESSAGE BOARD ---------------- */
