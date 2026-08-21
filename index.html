@@ -131,6 +131,7 @@
     max-height:300px;
     overflow:hidden;
     display:none;
+    touch-action: pan-y;
   }
   .home-bg-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
   .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(180deg, rgba(253,244,232,0), var(--cream));}
@@ -155,12 +156,13 @@
     border-radius:34px; padding:44px 28px 34px;
     background:linear-gradient(155deg,var(--amber) 0%,var(--amber-dark) 55%,var(--terracotta) 100%);
     box-shadow:0 26px 46px -22px rgba(158,78,34,.85);
-    position:relative; overflow:hidden;
+    position:relative;
     display:flex; flex-direction:column; align-items:center; gap:8px;
     margin-bottom:16px;
   }
-  .anniv-card::before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.09);right:-70px;top:-80px;}
-  .anniv-card::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);left:-60px;bottom:-70px;}
+  .anniv-card-decor{position:absolute; inset:0; border-radius:34px; overflow:hidden; pointer-events:none;}
+  .anniv-card-decor::before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.09);right:-70px;top:-80px;}
+  .anniv-card-decor::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);left:-60px;bottom:-70px;}
   .anniv-card .lbl{font-size:14px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.85); position:relative;}
   .anniv-card .days-row{display:flex;align-items:baseline;gap:8px;color:#fff; position:relative;}
   .anniv-card .days-row .n{font-size:76px;font-weight:800;line-height:1;letter-spacing:-.03em;}
@@ -372,6 +374,7 @@
       <div class="dots"><span></span><span></span></div>
     </div>
     <div class="anniv-card">
+      <div class="anniv-card-decor"></div>
       <div class="lbl">在一起</div>
       <div class="days-row"><span class="n" id="home-days">--</span><span class="u" id="home-days-unit">天</span></div>
       <div class="pill" id="home-date-sub">--</div>
@@ -538,7 +541,52 @@
     } else {
       window.addEventListener("load", ()=>{ if(window.google) initGis(); });
     }
+
+    setupPullReveal();
   });
+
+  /* ---------------- PULL DOWN TO REVEAL COVER PHOTO ---------------- */
+  function setupPullReveal(){
+    const homeScreen = document.getElementById("screen-home");
+    const bgWrap = document.getElementById("home-bg-wrap");
+    let startY = 0;
+    let dragging = false;
+    let baseHeight = 0;
+
+    function atTop(){
+      return (window.scrollY || document.documentElement.scrollTop || 0) <= 0;
+    }
+    function homeActive(){
+      return homeScreen.classList.contains("active") && bgWrap.style.display !== "none";
+    }
+
+    homeScreen.addEventListener("touchstart", (e)=>{
+      if(!homeActive() || !atTop()) return;
+      startY = e.touches[0].clientY;
+      dragging = true;
+      baseHeight = bgWrap.getBoundingClientRect().height;
+      bgWrap.style.transition = "none";
+      bgWrap.style.maxHeight = "none";
+    }, {passive:true});
+
+    homeScreen.addEventListener("touchmove", (e)=>{
+      if(!dragging) return;
+      const dy = e.touches[0].clientY - startY;
+      if(dy <= 0){ return; }
+      const extra = Math.min(dy * 0.6, 240);
+      bgWrap.style.height = (baseHeight + extra) + "px";
+    }, {passive:true});
+
+    function endDrag(){
+      if(!dragging) return;
+      dragging = false;
+      bgWrap.style.transition = "height .4s cubic-bezier(.22,1,.36,1)";
+      bgWrap.style.height = "";
+      bgWrap.style.maxHeight = "";
+    }
+    homeScreen.addEventListener("touchend", endDrag);
+    homeScreen.addEventListener("touchcancel", endDrag);
+  }
 
   function initGis(){
     tokenClient = google.accounts.oauth2.initTokenClient({
