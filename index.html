@@ -241,6 +241,59 @@
   .mood-entry-meta{font-size:11px; color:var(--text-faint); margin-top:2px;}
   .mood-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
 
+  /* calendar */
+  .cal-month-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .cal-month-label{font-size:16px; font-weight:700; color:var(--terracotta);}
+  .cal-legend{display:flex; gap:16px; font-size:12px; color:var(--text-soft); margin-bottom:10px; padding:0 4px;}
+  .cal-legend span{display:flex; align-items:center; gap:6px;}
+  .cal-dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .cal-dot.mine{background:#5B8DEF;}
+  .cal-dot.partner{background:var(--amber-dark);}
+  .cal-weekday-row{display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-size:11px; font-weight:700; color:var(--text-faint); padding:4px 0 8px;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:20px;}
+  .cal-day{
+    aspect-ratio:1/1; border-radius:12px; background:#fff; box-shadow:inset 0 0 0 1px rgba(67,48,30,.06);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    font-size:13px; color:var(--text); cursor:pointer; position:relative;
+  }
+  .cal-day.empty{background:transparent; box-shadow:none; cursor:default;}
+  .cal-day.today{box-shadow:inset 0 0 0 2px var(--amber-dark); font-weight:700;}
+  .cal-day-dots{display:flex; gap:3px;}
+  .cal-day-dots .cal-dot{width:6px; height:6px;}
+
+  .cal-time-row{display:flex; align-items:center; gap:10px;}
+  .cal-time-row select{
+    flex:1; padding:14px 12px; border-radius:14px; background:var(--cream);
+    box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.22); font-size:15px; font-weight:600; color:var(--text); border:none; outline:none;
+  }
+  .cal-time-sep{color:var(--text-faint); font-weight:700;}
+
+  .cal-day-event{
+    background:var(--cream); border-radius:14px; padding:12px 14px; margin-bottom:8px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .cal-day-event .dot{width:9px; height:9px; border-radius:50%; flex:none;}
+  .cal-day-event .info{flex:1; min-width:0;}
+  .cal-day-event .time{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; color:var(--text-faint); margin-bottom:2px;}
+  .cal-day-event .title-text{font-size:14px; font-weight:600; color:var(--text); word-break:break-word;}
+  .cal-day-event .del{flex:none; width:22px; height:22px; border-radius:50%; border:none; background:transparent; color:var(--text-faint); font-size:13px; cursor:pointer;}
+  .cal-day-empty{text-align:center; padding:20px; color:var(--text-faint); font-size:13px;}
+
+  /* timeline */
+  .timeline-day-group{margin-bottom:6px;}
+  .timeline-spine{position:relative; padding-left:22px;}
+  .timeline-spine::before{content:""; position:absolute; left:7px; top:4px; bottom:4px; width:1.5px; background:rgba(201,122,60,.25);}
+  .timeline-row{position:relative; margin-bottom:10px;}
+  .timeline-dot{position:absolute; left:-22px; top:50%; transform:translateY(-50%); width:12px; height:12px; border-radius:50%; background:var(--amber); box-shadow:0 0 0 3px var(--cream);}
+  .timeline-card{background:#fff; border-radius:14px; padding:10px 12px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px;}
+  .timeline-thumb{width:40px; height:40px; border-radius:10px; overflow:hidden; flex:none; position:relative; background:repeating-linear-gradient(135deg,rgba(201,122,60,.16) 0 6px,rgba(201,122,60,.05) 6px 12px);}
+  .timeline-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .timeline-icon{font-size:16px; flex:none;}
+  .timeline-text{font-size:13px; color:var(--text-soft); line-height:1.5; word-break:break-word;}
+  .timeline-row.milestone .timeline-card{background:var(--cream-warm);}
+  .milestone-text{font-weight:700; color:var(--terracotta);}
+  .timeline-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
+
   /* gallery */
   .gallery-header{
     display:flex; align-items:center; justify-content:space-between; margin:-4px -4px 14px;
@@ -547,8 +600,12 @@
       <div class="home-actions-row">
         <button class="btn secondary" id="btn-goto-wishlist">願望清單</button>
         <button class="btn secondary" id="btn-goto-mood">心情日記</button>
-        <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
       </div>
+      <div class="home-actions-row">
+        <button class="btn secondary" id="btn-goto-calendar">行事曆</button>
+        <button class="btn secondary" id="btn-goto-timeline">回憶時間軸</button>
+      </div>
+      <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
     </div>
     <div class="stat-grid">
       <div class="stat-card">
@@ -603,6 +660,42 @@
       </div>
     </div>
     <div id="mood-list-container"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="screen" id="screen-calendar">
+    <div class="gallery-header">
+      <button class="icon-btn" id="btn-calendar-back">‹</button>
+      <div class="gtitle">行事曆</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-calendar-refresh">⟳</button>
+      </div>
+    </div>
+    <div class="cal-month-nav">
+      <button class="icon-btn" id="btn-cal-prev-month">‹</button>
+      <div class="cal-month-label" id="cal-month-label">--</div>
+      <button class="icon-btn" id="btn-cal-next-month">›</button>
+    </div>
+    <div class="cal-legend">
+      <span><i class="cal-dot mine"></i> 我的</span>
+      <span><i class="cal-dot partner"></i> 對方的</span>
+    </div>
+    <div class="cal-weekday-row">
+      <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="screen" id="screen-timeline">
+    <div class="gallery-header">
+      <button class="icon-btn" id="btn-timeline-back">‹</button>
+      <div class="gtitle">回憶時間軸</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-timeline-refresh">⟳</button>
+      </div>
+    </div>
+    <div id="timeline-container"></div>
   </div>
 
   <!-- GALLERY -->
@@ -750,6 +843,39 @@
   </div>
 </div>
 
+<!-- calendar day detail sheet -->
+<div class="modal-overlay" id="calendar-day-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3 id="calendar-day-title">--</h3>
+    <div id="calendar-day-list"></div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-calendar-day-close">關閉</button>
+      <button class="btn-save" id="btn-calendar-day-add">＋ 新增行程</button>
+    </div>
+  </div>
+</div>
+
+<!-- add calendar event sheet -->
+<div class="modal-overlay" id="calendar-add-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3 id="calendar-add-title">新增行程</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <input type="text" id="calendar-event-title-input" placeholder="要做什麼事..." maxlength="40">
+      <div class="cal-time-row">
+        <select id="calendar-start-hour"></select>
+        <span class="cal-time-sep">–</span>
+        <select id="calendar-end-hour"></select>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-calendar-add-cancel">取消</button>
+      <button class="btn-save" id="btn-calendar-add-save">新增</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -766,6 +892,7 @@
   const WISHLIST_FILENAME = "wishlist.json";
   const MOODS_FILENAME = "moods.json";
   const MOOD_EMOJIS = ["😊","😍","🥰","😴","😢","😡","😐","🥳","😰","🤒"];
+  const CALENDAR_FILENAME = "calendar.json";
   const AUTO_LOGIN_KEY = "album_has_signed_in_before";
   /* =================================================================== */
 
@@ -798,6 +925,11 @@
   let moodsFileId = null;
   let moodsData = [];
   let selectedMoodEmoji = "";
+  let calendarFileId = null;
+  let calendarData = [];
+  let calendarViewYear = 0;
+  let calendarViewMonth = 0; // 0-indexed
+  let calendarSelectedDate = null;
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -843,6 +975,27 @@
     document.getElementById("mood-text-input").addEventListener("keydown", (e)=>{
       if(e.key === "Enter") onMoodSend();
     });
+    document.getElementById("btn-goto-calendar").addEventListener("click", openCalendar);
+    document.getElementById("btn-calendar-back").addEventListener("click", ()=>{
+      document.getElementById("calendar-day-overlay").classList.remove("active");
+      document.getElementById("calendar-add-overlay").classList.remove("active");
+      show("screen-home");
+    });
+    document.getElementById("btn-calendar-refresh").addEventListener("click", loadCalendarEvents);
+    document.getElementById("btn-cal-prev-month").addEventListener("click", ()=> changeCalendarMonth(-1));
+    document.getElementById("btn-cal-next-month").addEventListener("click", ()=> changeCalendarMonth(1));
+    document.getElementById("btn-calendar-day-close").addEventListener("click", ()=>{
+      document.getElementById("calendar-day-overlay").classList.remove("active");
+    });
+    document.getElementById("btn-calendar-day-add").addEventListener("click", openAddEventSheet);
+    document.getElementById("btn-calendar-add-cancel").addEventListener("click", ()=>{
+      document.getElementById("calendar-add-overlay").classList.remove("active");
+      document.getElementById("calendar-day-overlay").classList.add("active");
+    });
+    document.getElementById("btn-calendar-add-save").addEventListener("click", onAddEventSave);
+    document.getElementById("btn-goto-timeline").addEventListener("click", openTimeline);
+    document.getElementById("btn-timeline-back").addEventListener("click", ()=> show("screen-home"));
+    document.getElementById("btn-timeline-refresh").addEventListener("click", loadTimelineData);
     document.getElementById("btn-edit-anniv").addEventListener("click", openEditAnniv);
     document.getElementById("btn-logout").addEventListener("click", onLogout);
     document.getElementById("btn-gallery-back").addEventListener("click", ()=>{ show("screen-home"); toggleFab(false); });
@@ -1034,6 +1187,9 @@
     moodsFileId = null;
     moodsData = [];
     selectedMoodEmoji = "";
+    calendarFileId = null;
+    calendarData = [];
+    calendarSelectedDate = null;
     settings = { anniversary: null };
     currentUserEmail = "";
     imageCache.forEach(url=>{ try{ URL.revokeObjectURL(url); }catch(e){} });
@@ -1812,6 +1968,431 @@
       await saveMoods();
     }catch(err){
       alert("記錄失敗，請再試一次。");
+    }
+  }
+
+  /* ---------------- SHARED CALENDAR ---------------- */
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  async function findCalendarFile(){
+    const q = encodeURIComponent("name='"+CALENDAR_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function saveCalendarEvents(){
+    const content = JSON.stringify(calendarData);
+    if(calendarFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+calendarFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      calendarFileId = await createFileMultipart(CALENDAR_FILENAME, "application/json", content, folderId);
+    }
+  }
+
+  function openCalendar(){
+    show("screen-calendar");
+    const now = new Date();
+    calendarViewYear = now.getFullYear();
+    calendarViewMonth = now.getMonth();
+    loadCalendarEvents();
+  }
+
+  async function loadCalendarEvents(){
+    const grid = document.getElementById("cal-grid");
+    grid.innerHTML = '<div class="cal-day-empty">載入中...</div>';
+    try{
+      calendarFileId = await findCalendarFile();
+      if(calendarFileId){
+        const res = await driveFetch("files/"+calendarFileId+"?alt=media");
+        try{ calendarData = await res.json(); }catch(e){ calendarData = []; }
+      } else {
+        calendarData = [];
+      }
+      renderCalendarMonth();
+    }catch(err){
+      grid.innerHTML = '<div class="cal-day-empty">載入失敗，請重新整理再試一次。</div>';
+    }
+  }
+
+  function changeCalendarMonth(delta){
+    calendarViewMonth += delta;
+    if(calendarViewMonth < 0){ calendarViewMonth = 11; calendarViewYear--; }
+    else if(calendarViewMonth > 11){ calendarViewMonth = 0; calendarViewYear++; }
+    renderCalendarMonth();
+  }
+
+  function eventsOnDate(dateStr){
+    return calendarData.filter(e => e.date === dateStr);
+  }
+
+  function renderCalendarMonth(){
+    document.getElementById("cal-month-label").textContent = (calendarViewMonth+1)+"月 "+calendarViewYear;
+    const grid = document.getElementById("cal-grid");
+    grid.innerHTML = "";
+    const firstDay = new Date(calendarViewYear, calendarViewMonth, 1);
+    const startWeekday = firstDay.getDay();
+    const daysInMonth = new Date(calendarViewYear, calendarViewMonth+1, 0).getDate();
+    const today = new Date();
+    const todayStr = today.getFullYear()+"-"+pad2(today.getMonth()+1)+"-"+pad2(today.getDate());
+
+    for(let i=0;i<startWeekday;i++){
+      const blank = document.createElement("div");
+      blank.className = "cal-day empty";
+      grid.appendChild(blank);
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      const dateStr = calendarViewYear+"-"+pad2(calendarViewMonth+1)+"-"+pad2(d);
+      const cell = document.createElement("div");
+      cell.className = "cal-day" + (dateStr === todayStr ? " today" : "");
+      const num = document.createElement("div");
+      num.textContent = d;
+      cell.appendChild(num);
+
+      const evts = eventsOnDate(dateStr);
+      if(evts.length > 0){
+        const dotsWrap = document.createElement("div");
+        dotsWrap.className = "cal-day-dots";
+        const hasMine = evts.some(e => e.author === currentUserEmail);
+        const hasPartner = evts.some(e => e.author !== currentUserEmail);
+        if(hasMine){
+          const dot = document.createElement("span");
+          dot.className = "cal-dot mine";
+          dotsWrap.appendChild(dot);
+        }
+        if(hasPartner){
+          const dot = document.createElement("span");
+          dot.className = "cal-dot partner";
+          dotsWrap.appendChild(dot);
+        }
+        cell.appendChild(dotsWrap);
+      }
+
+      cell.addEventListener("click", ()=> openDayDetail(dateStr));
+      grid.appendChild(cell);
+    }
+  }
+
+  function formatCalendarDayTitle(dateStr){
+    const d = new Date(dateStr+"T00:00:00");
+    const weekdays = ["日","一","二","三","四","五","六"];
+    return (d.getMonth()+1)+"月"+d.getDate()+"日 星期"+weekdays[d.getDay()];
+  }
+
+  function openDayDetail(dateStr){
+    calendarSelectedDate = dateStr;
+    document.getElementById("calendar-day-title").textContent = formatCalendarDayTitle(dateStr);
+    renderDayDetailList();
+    document.getElementById("calendar-day-overlay").classList.add("active");
+  }
+
+  function renderDayDetailList(){
+    const container = document.getElementById("calendar-day-list");
+    const evts = eventsOnDate(calendarSelectedDate).slice().sort((a,b)=> (a.startHour||0) - (b.startHour||0));
+    if(evts.length === 0){
+      container.innerHTML = '<div class="cal-day-empty">這天還沒有安排～</div>';
+      return;
+    }
+    container.innerHTML = "";
+    evts.forEach(e=>{
+      const row = document.createElement("div");
+      row.className = "cal-day-event";
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.style.background = (e.author === currentUserEmail) ? "#5B8DEF" : "#C97A3C";
+      row.appendChild(dot);
+      const info = document.createElement("div");
+      info.className = "info";
+      const time = document.createElement("div");
+      time.className = "time";
+      time.textContent = pad2(e.startHour)+":00 – "+pad2(e.endHour)+":00";
+      info.appendChild(time);
+      const title = document.createElement("div");
+      title.className = "title-text";
+      title.textContent = e.title || "";
+      info.appendChild(title);
+      row.appendChild(info);
+      const del = document.createElement("button");
+      del.className = "del";
+      del.textContent = "✕";
+      del.addEventListener("click", ()=> onDeleteCalendarEvent(e.id));
+      row.appendChild(del);
+      container.appendChild(row);
+    });
+  }
+
+  async function onDeleteCalendarEvent(id){
+    const ok = confirm("要刪除這個行程嗎？");
+    if(!ok) return;
+    calendarData = calendarData.filter(e=>e.id !== id);
+    renderDayDetailList();
+    renderCalendarMonth();
+    try{
+      await saveCalendarEvents();
+    }catch(err){
+      alert("刪除失敗，請再試一次。");
+    }
+  }
+
+  function populateHourSelects(){
+    const startSel = document.getElementById("calendar-start-hour");
+    const endSel = document.getElementById("calendar-end-hour");
+    if(startSel.options.length > 0) return;
+    for(let h=0; h<24; h++){
+      const opt1 = document.createElement("option");
+      opt1.value = h;
+      opt1.textContent = pad2(h)+":00";
+      startSel.appendChild(opt1);
+      const opt2 = document.createElement("option");
+      opt2.value = h;
+      opt2.textContent = pad2(h)+":00";
+      endSel.appendChild(opt2);
+    }
+  }
+
+  function openAddEventSheet(){
+    populateHourSelects();
+    document.getElementById("calendar-event-title-input").value = "";
+    document.getElementById("calendar-start-hour").value = "9";
+    document.getElementById("calendar-end-hour").value = "10";
+    document.getElementById("calendar-add-title").textContent = calendarSelectedDate ? (formatCalendarDayTitle(calendarSelectedDate)+" 新增行程") : "新增行程";
+    document.getElementById("calendar-day-overlay").classList.remove("active");
+    document.getElementById("calendar-add-overlay").classList.add("active");
+  }
+
+  async function onAddEventSave(){
+    const titleInput = document.getElementById("calendar-event-title-input");
+    const title = titleInput.value.trim();
+    if(!title){ alert("輸入一下這個行程是什麼吧～"); return; }
+    const startHour = parseInt(document.getElementById("calendar-start-hour").value, 10);
+    const endHour = parseInt(document.getElementById("calendar-end-hour").value, 10);
+    if(endHour <= startHour){ alert("結束時間要比開始時間晚喔～"); return; }
+    const event = {
+      id: "c_"+Date.now()+"_"+Math.random().toString(16).slice(2),
+      date: calendarSelectedDate,
+      startHour: startHour,
+      endHour: endHour,
+      title: title,
+      author: currentUserEmail || "",
+      createdAt: new Date().toISOString()
+    };
+    calendarData.push(event);
+    document.getElementById("calendar-add-overlay").classList.remove("active");
+    renderCalendarMonth();
+    openDayDetail(calendarSelectedDate);
+    try{
+      await saveCalendarEvents();
+    }catch(err){
+      alert("新增失敗，請再試一次。");
+    }
+  }
+
+  /* ---------------- MEMORY TIMELINE ---------------- */
+  async function loadMessagesRaw(){
+    const fid = await findMessagesFile();
+    messagesFileId = fid;
+    if(!fid) return [];
+    const res = await driveFetch("files/"+fid+"?alt=media");
+    try{ return await res.json(); }catch(e){ return []; }
+  }
+
+  async function loadMoodsRaw(){
+    const fid = await findMoodsFile();
+    moodsFileId = fid;
+    if(!fid) return [];
+    const res = await driveFetch("files/"+fid+"?alt=media");
+    try{ return await res.json(); }catch(e){ return []; }
+  }
+
+  async function loadCalendarRaw(){
+    const fid = await findCalendarFile();
+    calendarFileId = fid;
+    if(!fid) return [];
+    const res = await driveFetch("files/"+fid+"?alt=media");
+    try{ return await res.json(); }catch(e){ return []; }
+  }
+
+  function computeMilestoneEvents(){
+    const events = [];
+    if(!settings || !settings.anniversary) return events;
+    const annivDate = new Date(settings.anniversary+"T00:00:00");
+    const today = new Date();
+    const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const annivMid = new Date(annivDate.getFullYear(), annivDate.getMonth(), annivDate.getDate());
+    const diffDays = Math.round((todayMid - annivMid) / 86400000) + 1;
+    if(diffDays < 1) return events;
+    MILESTONES.forEach(m=>{
+      if(m <= diffDays){
+        const d = new Date(annivMid);
+        d.setDate(d.getDate() + (m-1));
+        const dateStr = d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+        events.push({ type:"milestone", date: dateStr, time: dateStr+"T12:00:00", days: m });
+      }
+    });
+    return events;
+  }
+
+  function buildTimelineEvents(photos, msgs, moods, cal){
+    const events = [];
+    (photos||[]).forEach(f=>{
+      events.push({
+        type: isVideo(f) ? "video" : "photo",
+        date: f.createdTime ? f.createdTime.slice(0,10) : "",
+        time: f.createdTime || "",
+        file: f
+      });
+    });
+    (msgs||[]).forEach(m=>{
+      if(!m.time) return;
+      events.push({ type:"message", date: m.time.slice(0,10), time: m.time, text: m.text || "" });
+    });
+    (moods||[]).forEach(m=>{
+      const d = m.date || (m.time ? m.time.slice(0,10) : "");
+      if(!d) return;
+      events.push({ type:"mood", date: d, time: m.time || (d+"T00:00:00"), mood: m.mood || "", text: m.text || "" });
+    });
+    const today = new Date();
+    const todayStr = today.getFullYear()+"-"+pad2(today.getMonth()+1)+"-"+pad2(today.getDate());
+    (cal||[]).forEach(e=>{
+      if(!e.date || e.date > todayStr) return;
+      events.push({ type:"calendar", date: e.date, time: e.date+"T"+pad2(e.startHour||0)+":00:00", title: e.title || "" });
+    });
+    computeMilestoneEvents().forEach(e=> events.push(e));
+    events.sort((a,b)=> (b.time||"").localeCompare(a.time||""));
+    return events;
+  }
+
+  function buildTimelineCardContent(e){
+    const wrap = document.createElement("div");
+    wrap.style.display = "flex";
+    wrap.style.alignItems = "center";
+    wrap.style.gap = "10px";
+    if(e.type === "photo" || e.type === "video"){
+      const thumbWrap = document.createElement("div");
+      thumbWrap.className = "timeline-thumb";
+      if(e.file.thumbnailLink){
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.src = e.file.thumbnailLink;
+        thumbWrap.appendChild(img);
+      }
+      wrap.appendChild(thumbWrap);
+      const txt = document.createElement("span");
+      txt.className = "timeline-text";
+      const cap = (e.file.appProperties && e.file.appProperties.caption) || "";
+      txt.textContent = (e.type === "video" ? "上傳了一段影片" : "上傳了一張照片") + (cap ? (" · "+cap) : "");
+      wrap.appendChild(txt);
+    } else if(e.type === "message"){
+      const icon = document.createElement("span");
+      icon.className = "timeline-icon";
+      icon.textContent = "💬";
+      wrap.appendChild(icon);
+      const txt = document.createElement("span");
+      txt.className = "timeline-text";
+      txt.textContent = "「"+e.text+"」";
+      wrap.appendChild(txt);
+    } else if(e.type === "mood"){
+      const icon = document.createElement("span");
+      icon.className = "timeline-icon";
+      icon.textContent = e.mood || "💭";
+      wrap.appendChild(icon);
+      const txt = document.createElement("span");
+      txt.className = "timeline-text";
+      txt.textContent = "心情紀錄" + (e.text ? (" · "+e.text) : "");
+      wrap.appendChild(txt);
+    } else if(e.type === "calendar"){
+      const icon = document.createElement("span");
+      icon.className = "timeline-icon";
+      icon.textContent = "📅";
+      wrap.appendChild(icon);
+      const txt = document.createElement("span");
+      txt.className = "timeline-text";
+      txt.textContent = e.title || "";
+      wrap.appendChild(txt);
+    } else if(e.type === "milestone"){
+      const icon = document.createElement("span");
+      icon.className = "timeline-icon";
+      icon.textContent = "🎉";
+      wrap.appendChild(icon);
+      const txt = document.createElement("span");
+      txt.className = "timeline-text milestone-text";
+      txt.textContent = "在一起 "+e.days+" 天了";
+      wrap.appendChild(txt);
+    }
+    return wrap;
+  }
+
+  function renderTimeline(events){
+    const container = document.getElementById("timeline-container");
+    if(!events || events.length === 0){
+      container.innerHTML = '<div class="timeline-empty">還沒有任何回憶紀錄～<br>去上傳照片、留言或記錄心情吧！</div>';
+      return;
+    }
+    const groups = [];
+    let lastDate = null, curGroup = null;
+    events.forEach(e=>{
+      if(e.date !== lastDate){
+        curGroup = { date: e.date, items: [] };
+        groups.push(curGroup);
+        lastDate = e.date;
+      }
+      curGroup.items.push(e);
+    });
+    container.innerHTML = "";
+    groups.forEach(g=>{
+      const dayWrap = document.createElement("div");
+      dayWrap.className = "timeline-day-group";
+      const label = document.createElement("div");
+      label.className = "mood-day-label";
+      label.textContent = formatMoodDateLabel(g.date);
+      dayWrap.appendChild(label);
+
+      const spine = document.createElement("div");
+      spine.className = "timeline-spine";
+      g.items.forEach(e=>{
+        const row = document.createElement("div");
+        row.className = "timeline-row" + (e.type === "milestone" ? " milestone" : "");
+        const dot = document.createElement("div");
+        dot.className = "timeline-dot";
+        row.appendChild(dot);
+        const card = document.createElement("div");
+        card.className = "timeline-card";
+        card.appendChild(buildTimelineCardContent(e));
+        row.appendChild(card);
+        if(e.type === "photo" || e.type === "video"){
+          card.style.cursor = "pointer";
+          card.addEventListener("click", ()=> openViewer(e.file));
+        }
+        spine.appendChild(row);
+      });
+      dayWrap.appendChild(spine);
+      container.appendChild(dayWrap);
+    });
+  }
+
+  function openTimeline(){
+    show("screen-timeline");
+    loadTimelineData();
+  }
+
+  async function loadTimelineData(){
+    const container = document.getElementById("timeline-container");
+    container.innerHTML = '<div class="timeline-empty">載入中...</div>';
+    try{
+      const results = await Promise.all([
+        listPhotos(),
+        loadMessagesRaw(),
+        loadMoodsRaw(),
+        loadCalendarRaw()
+      ]);
+      const events = buildTimelineEvents(results[0], results[1], results[2], results[3]);
+      renderTimeline(events);
+    }catch(err){
+      container.innerHTML = '<div class="timeline-empty">載入失敗，請點右上角 ⟳ 重新整理再試一次。</div>';
     }
   }
 
