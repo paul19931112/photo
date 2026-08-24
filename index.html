@@ -329,6 +329,21 @@
     color:#fff; font-size:18px; font-weight:700; text-shadow:0 1px 2px rgba(0,0,0,.35);
   }
 
+  /* food map */
+  .foodmap-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;}
+  .foodmap-card{background:#fff; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); cursor:pointer;}
+  .foodmap-thumb{aspect-ratio:4/3; background:repeating-linear-gradient(135deg,rgba(201,122,60,.16) 0 6px,rgba(201,122,60,.05) 6px 12px); display:flex; align-items:center; justify-content:center;}
+  .foodmap-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .foodmap-thumb-icon{font-size:26px; opacity:.5;}
+  .foodmap-card-body{padding:10px 12px 12px;}
+  .foodmap-card-title{font-size:13.5px; font-weight:700; color:var(--text); line-height:1.4; word-break:break-word;}
+  .foodmap-card-tags{font-size:11px; color:var(--amber-dark); margin-top:4px;}
+  .ai-suggest-btn{
+    padding:11px 16px; border-radius:16px; border:none; background:var(--cream-warm); color:var(--terracotta);
+    font-size:13.5px; font-weight:700; cursor:pointer; align-self:flex-start;
+  }
+  .ai-suggest-btn:disabled{opacity:.6; cursor:default;}
+
   /* gallery */
   .gallery-header{
     display:flex; align-items:center; justify-content:space-between; margin:-4px -4px 14px;
@@ -643,7 +658,10 @@
         <button class="btn secondary" id="btn-goto-calendar">行事曆</button>
         <button class="btn secondary" id="btn-goto-timeline">回憶時間軸</button>
       </div>
-      <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
+      <div class="home-actions-row">
+        <button class="btn secondary" id="btn-goto-foodmap">美食地圖</button>
+        <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
+      </div>
     </div>
     <div class="stat-grid">
       <div class="stat-card">
@@ -735,6 +753,24 @@
     </div>
     <div id="timeline-container"></div>
   </div>
+
+  <!-- FOOD MAP -->
+  <div class="screen" id="screen-foodmap">
+    <div class="gallery-header">
+      <button class="icon-btn" id="btn-foodmap-back">‹</button>
+      <div class="gtitle">美食地圖</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-foodmap-search">🔍</button>
+        <button class="icon-btn" id="btn-foodmap-refresh">⟳</button>
+      </div>
+    </div>
+    <div class="search-row" id="foodmap-search-row" style="display:none;">
+      <input type="text" id="foodmap-search-input" placeholder="搜尋名稱、標籤、備註...">
+    </div>
+    <div class="cat-filter-row" id="foodmap-tag-filter-row"></div>
+    <div id="foodmap-container"></div>
+  </div>
+  <button class="upload-fab" id="btn-foodmap-add" style="display:none;">＋</button>
 
   <!-- GALLERY -->
   <div class="screen" id="screen-gallery">
@@ -938,6 +974,50 @@
   </div>
 </div>
 
+<!-- food map add/edit sheet -->
+<div class="modal-overlay" id="foodmap-edit-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3 id="foodmap-edit-title">新增收藏</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <input type="text" id="foodmap-title-input" placeholder="這是什麼？(例如:鰻魚壽司)" maxlength="60">
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="foodmap-link-input" placeholder="連結網址(非必填)" maxlength="500" style="flex:1; margin-bottom:0;">
+        <button type="button" id="btn-foodmap-open-link" style="flex:none; width:48px; border-radius:16px; border:none; background:var(--cream); box-shadow:inset 0 0 0 1.5px rgba(201,122,60,.22); color:var(--amber-dark); font-size:16px; cursor:pointer;">🔗</button>
+      </div>
+      <input type="text" id="foodmap-note-input" placeholder="備註(非必填)" maxlength="120">
+      <div class="foodmap-image-row" id="foodmap-image-row"></div>
+      <button type="button" id="btn-foodmap-ai-suggest" class="ai-suggest-btn">✨ AI 建議標籤</button>
+      <div class="cat-chip-list" id="foodmap-suggested-tags" style="display:none;"></div>
+      <div class="cat-chip-list" id="foodmap-tag-list"></div>
+      <div class="cat-add-row">
+        <input type="text" id="foodmap-new-tag-input" placeholder="新增標籤(例如:壽司、日本)">
+        <button class="cat-add-btn" id="btn-foodmap-add-tag">新增</button>
+      </div>
+    </div>
+    <div class="footer-link" id="btn-foodmap-delete" style="display:none; color:#C0524A; font-weight:600;">🗑️ 刪除這個收藏</div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-foodmap-cancel">取消</button>
+      <button class="btn-save" id="btn-foodmap-save">儲存</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="foodmap-image-input" accept="image/*" style="display:none;">
+
+<!-- gemini api key setup sheet -->
+<div class="modal-overlay" id="gemini-key-overlay">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3>設定 AI 標籤金鑰</h3>
+    <p style="font-size:13px; color:var(--text-soft); line-height:1.7; margin:0;">貼上你的 Gemini API 金鑰，儲存後會放進你們的共用資料夾裡（不會出現在網頁原始碼中），兩人都能使用。</p>
+    <input type="text" id="gemini-key-input" placeholder="貼上 Gemini API 金鑰">
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btn-gemini-key-cancel">取消</button>
+      <button class="btn-save" id="btn-gemini-key-save">儲存</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -960,6 +1040,10 @@
     lavender:  { amber:"#A08CE9", amberDark:"#775CC9", terracotta:"#4E2E9E", cream:"#F1EDFD", creamWarm:"#DCD3FA", text:"#28203A", textSoft:"#736A8A", textFaint:"#9890AF", viewerBg:"#120A1E", pageBg:"#E3DDEF" }
   };
   const THEME_LABELS = { amber:"琥珀", pink:"粉櫻", ocean:"海洋", mint:"薄荷", lavender:"薰衣草" };
+  const FOODMAP_FILENAME = "foodmap.json";
+  const FOODMAP_IMAGE_PREFIX = "foodmap_";
+  const AI_KEY_FILENAME = "ai_key.json";
+  const GEMINI_MODEL = "gemini-2.5-flash";
   const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
   const COMMENTS_FILENAME = "comments.json";
   const WISHLIST_FILENAME = "wishlist.json";
@@ -1007,6 +1091,18 @@
   let coverRotateIndex = 0;
   let coverRotateTimer = null;
   let coverManagerFiles = [];
+  let foodmapFileId = null;
+  let foodmapData = [];
+  let foodmapImageMap = {};
+  let foodmapEditId = null;
+  let foodmapEditTags = new Set();
+  let foodmapEditImageFileId = null;
+  let foodmapEditImageFile = null;
+  let foodmapEditImageRemoved = false;
+  let foodmapSearchQuery = "";
+  let foodmapTagFilter = "__all__";
+  let geminiApiKey = null;
+  let geminiKeyFileId = null;
 
   /* ---------------- SCREEN NAV ---------------- */
   function show(id){
@@ -1124,6 +1220,50 @@
     document.getElementById("btn-goto-timeline").addEventListener("click", openTimeline);
     document.getElementById("btn-timeline-back").addEventListener("click", ()=> show("screen-home"));
     document.getElementById("btn-timeline-refresh").addEventListener("click", loadTimelineData);
+    document.getElementById("btn-goto-foodmap").addEventListener("click", openFoodmap);
+    document.getElementById("btn-foodmap-back").addEventListener("click", ()=>{
+      document.getElementById("btn-foodmap-add").style.display = "none";
+      show("screen-home");
+    });
+    document.getElementById("btn-foodmap-refresh").addEventListener("click", loadFoodmap);
+    document.getElementById("btn-foodmap-search").addEventListener("click", ()=>{
+      const row = document.getElementById("foodmap-search-row");
+      const willShow = row.style.display === "none";
+      row.style.display = willShow ? "block" : "none";
+      if(willShow){
+        document.getElementById("foodmap-search-input").focus();
+      } else {
+        document.getElementById("foodmap-search-input").value = "";
+        foodmapSearchQuery = "";
+        renderFoodmapList();
+      }
+    });
+    document.getElementById("foodmap-search-input").addEventListener("input", (e)=>{
+      foodmapSearchQuery = e.target.value.trim().toLowerCase();
+      renderFoodmapList();
+    });
+    document.getElementById("btn-foodmap-add").addEventListener("click", openFoodmapAdd);
+    document.getElementById("btn-foodmap-cancel").addEventListener("click", ()=>{
+      document.getElementById("foodmap-edit-overlay").classList.remove("active");
+    });
+    document.getElementById("btn-foodmap-save").addEventListener("click", onFoodmapSave);
+    document.getElementById("btn-foodmap-delete").addEventListener("click", onFoodmapDelete);
+    document.getElementById("btn-foodmap-add-tag").addEventListener("click", onAddFoodmapTag);
+    document.getElementById("foodmap-new-tag-input").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") onAddFoodmapTag();
+    });
+    document.getElementById("foodmap-image-input").addEventListener("change", onFoodmapImageSelected);
+    document.getElementById("btn-foodmap-open-link").addEventListener("click", ()=>{
+      const url = document.getElementById("foodmap-link-input").value.trim();
+      if(!url){ alert("還沒有輸入連結喔～"); return; }
+      const finalUrl = /^https?:\/\//i.test(url) ? url : ("https://"+url);
+      window.open(finalUrl, "_blank", "noopener");
+    });
+    document.getElementById("btn-foodmap-ai-suggest").addEventListener("click", suggestFoodmapTags);
+    document.getElementById("btn-gemini-key-cancel").addEventListener("click", ()=>{
+      document.getElementById("gemini-key-overlay").classList.remove("active");
+    });
+    document.getElementById("btn-gemini-key-save").addEventListener("click", onSaveGeminiKey);
     document.getElementById("btn-edit-anniv").addEventListener("click", openEditAnniv);
     document.getElementById("btn-logout").addEventListener("click", onLogout);
     document.getElementById("btn-gallery-back").addEventListener("click", ()=>{ show("screen-home"); toggleFab(false); });
@@ -1328,6 +1468,16 @@
     stopCoverRotation();
     coverPhotos.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(e){} });
     coverPhotos = [];
+    foodmapFileId = null;
+    foodmapData = [];
+    foodmapImageMap = {};
+    foodmapEditId = null;
+    foodmapEditTags = new Set();
+    foodmapEditImageFileId = null;
+    foodmapEditImageFile = null;
+    foodmapEditImageRemoved = false;
+    geminiApiKey = null;
+    geminiKeyFileId = null;
     settings = { anniversary: null };
     currentUserEmail = "";
     imageCache.forEach(url=>{ try{ URL.revokeObjectURL(url); }catch(e){} });
@@ -1514,7 +1664,7 @@
   }
 
   async function listPhotos(){
-    const q = encodeURIComponent("'"+folderId+"' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false and name != '"+COVER_FILENAME+"' and not name contains '"+COVER_PREFIX+"'");
+    const q = encodeURIComponent("'"+folderId+"' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false and name != '"+COVER_FILENAME+"' and not name contains '"+COVER_PREFIX+"' and not name contains '"+FOODMAP_IMAGE_PREFIX+"'");
     const res = await driveFetch("files?q="+q+"&orderBy=createdTime desc&fields=files(id,name,mimeType,thumbnailLink,createdTime,appProperties)&pageSize=300&spaces=drive");
     const data = await res.json();
     const files = data.files || [];
@@ -2627,6 +2777,468 @@
       renderTimeline(events);
     }catch(err){
       container.innerHTML = '<div class="timeline-empty">載入失敗，請點右上角 ⟳ 重新整理再試一次。</div>';
+    }
+  }
+
+  /* ---------------- FOOD MAP (saved links / places / spots) ---------------- */
+  async function findFoodmapFile(){
+    const q = encodeURIComponent("name='"+FOODMAP_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function saveFoodmapData(){
+    const content = JSON.stringify(foodmapData);
+    if(foodmapFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+foodmapFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      foodmapFileId = await createFileMultipart(FOODMAP_FILENAME, "application/json", content, folderId);
+    }
+  }
+
+  async function loadFoodmapImages(){
+    const q = encodeURIComponent("'"+folderId+"' in parents and trashed=false and name contains '"+FOODMAP_IMAGE_PREFIX+"'");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,thumbnailLink)&spaces=drive&pageSize=200");
+    const data = await res.json();
+    const map = {};
+    (data.files || []).forEach(f=>{ map[f.id] = f.thumbnailLink; });
+    return map;
+  }
+
+  function openFoodmap(){
+    show("screen-foodmap");
+    document.getElementById("btn-foodmap-add").style.display = "flex";
+    foodmapSearchQuery = "";
+    foodmapTagFilter = "__all__";
+    document.getElementById("foodmap-search-input").value = "";
+    document.getElementById("foodmap-search-row").style.display = "none";
+    loadFoodmap();
+  }
+
+  async function loadFoodmap(){
+    const container = document.getElementById("foodmap-container");
+    container.innerHTML = '<div class="timeline-empty">載入中...</div>';
+    try{
+      foodmapFileId = await findFoodmapFile();
+      if(foodmapFileId){
+        const res = await driveFetch("files/"+foodmapFileId+"?alt=media");
+        try{ foodmapData = await res.json(); }catch(e){ foodmapData = []; }
+      } else {
+        foodmapData = [];
+      }
+      foodmapImageMap = await loadFoodmapImages();
+      renderFoodmapTagFilter();
+      renderFoodmapList();
+    }catch(err){
+      container.innerHTML = '<div class="timeline-empty">載入失敗，點右上角 ⟳ 重新整理再試一次。</div>';
+    }
+  }
+
+  function getAllFoodmapTags(){
+    const set = new Set();
+    foodmapData.forEach(item => (item.tags||[]).forEach(t=> set.add(t)));
+    return Array.from(set).sort();
+  }
+
+  function renderFoodmapTagFilter(){
+    const row = document.getElementById("foodmap-tag-filter-row");
+    row.innerHTML = "";
+    const allChip = document.createElement("div");
+    allChip.className = "cat-filter-chip" + (foodmapTagFilter === "__all__" ? " active" : "");
+    allChip.textContent = "全部";
+    allChip.addEventListener("click", ()=>{ foodmapTagFilter = "__all__"; renderFoodmapTagFilter(); renderFoodmapList(); });
+    row.appendChild(allChip);
+    getAllFoodmapTags().forEach(t=>{
+      const chip = document.createElement("div");
+      chip.className = "cat-filter-chip" + (foodmapTagFilter === t ? " active" : "");
+      chip.textContent = t;
+      chip.addEventListener("click", ()=>{ foodmapTagFilter = t; renderFoodmapTagFilter(); renderFoodmapList(); });
+      row.appendChild(chip);
+    });
+  }
+
+  function getFilteredFoodmapItems(){
+    let items = foodmapData.slice();
+    if(foodmapTagFilter !== "__all__"){
+      items = items.filter(it => (it.tags||[]).indexOf(foodmapTagFilter) !== -1);
+    }
+    if(foodmapSearchQuery){
+      const q = foodmapSearchQuery;
+      items = items.filter(it=>{
+        const title = (it.title||"").toLowerCase();
+        const note = (it.note||"").toLowerCase();
+        const tags = (it.tags||[]).join(" ").toLowerCase();
+        return title.indexOf(q)!==-1 || note.indexOf(q)!==-1 || tags.indexOf(q)!==-1;
+      });
+    }
+    items.sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
+    return items;
+  }
+
+  function renderFoodmapList(){
+    const container = document.getElementById("foodmap-container");
+    const items = getFilteredFoodmapItems();
+    if(items.length === 0){
+      const msg = (foodmapSearchQuery || foodmapTagFilter !== "__all__")
+        ? "找不到符合的收藏～"
+        : "還沒有收藏任何地方～<br>看到想去的餐廳、景點，點右下角 ＋ 存起來吧！";
+      container.innerHTML = '<div class="timeline-empty">'+msg+'</div>';
+      return;
+    }
+    container.innerHTML = "";
+    const grid = document.createElement("div");
+    grid.className = "foodmap-grid";
+    items.forEach(it=>{
+      const card = document.createElement("div");
+      card.className = "foodmap-card";
+      const thumb = document.createElement("div");
+      thumb.className = "foodmap-thumb";
+      const thumbLink = it.imageFileId ? foodmapImageMap[it.imageFileId] : null;
+      if(thumbLink){
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.src = thumbLink;
+        thumb.appendChild(img);
+      } else {
+        thumb.innerHTML = '<span class="foodmap-thumb-icon">📍</span>';
+      }
+      card.appendChild(thumb);
+      const body = document.createElement("div");
+      body.className = "foodmap-card-body";
+      const title = document.createElement("div");
+      title.className = "foodmap-card-title";
+      title.textContent = it.title || "";
+      body.appendChild(title);
+      if(it.tags && it.tags.length){
+        const tagRow = document.createElement("div");
+        tagRow.className = "foodmap-card-tags";
+        tagRow.textContent = it.tags.map(t=>"#"+t).join(" ");
+        body.appendChild(tagRow);
+      }
+      card.appendChild(body);
+      card.addEventListener("click", ()=> openFoodmapEdit(it));
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  }
+
+  function renderFoodmapImageRow(){
+    const row = document.getElementById("foodmap-image-row");
+    row.innerHTML = "";
+    const hasImage = foodmapEditImageFile || (foodmapEditImageFileId && !foodmapEditImageRemoved);
+    if(hasImage){
+      const thumb = document.createElement("div");
+      thumb.className = "cover-thumb";
+      const img = document.createElement("img");
+      img.src = foodmapEditImageFile ? URL.createObjectURL(foodmapEditImageFile) : (foodmapImageMap[foodmapEditImageFileId] || "");
+      thumb.appendChild(img);
+      const del = document.createElement("button");
+      del.className = "cover-del";
+      del.textContent = "✕";
+      del.addEventListener("click", ()=>{
+        foodmapEditImageFile = null;
+        foodmapEditImageRemoved = true;
+        renderFoodmapImageRow();
+      });
+      thumb.appendChild(del);
+      row.appendChild(thumb);
+    } else {
+      const add = document.createElement("div");
+      add.className = "cover-thumb-add";
+      add.textContent = "🖼️";
+      add.addEventListener("click", ()=> document.getElementById("foodmap-image-input").click());
+      row.appendChild(add);
+    }
+  }
+
+  function onFoodmapImageSelected(e){
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if(!file) return;
+    foodmapEditImageFile = file;
+    foodmapEditImageRemoved = false;
+    renderFoodmapImageRow();
+  }
+
+  function renderFoodmapTagPicker(){
+    const list = document.getElementById("foodmap-tag-list");
+    list.innerHTML = "";
+    getAllFoodmapTags().forEach(t=>{
+      const chip = makeCatChip(t, t, foodmapEditTags.has(t), ()=>{
+        if(foodmapEditTags.has(t)) foodmapEditTags.delete(t); else foodmapEditTags.add(t);
+        renderFoodmapTagPicker();
+      });
+      list.appendChild(chip);
+    });
+  }
+
+  function onAddFoodmapTag(){
+    const input = document.getElementById("foodmap-new-tag-input");
+    const name = input.value.trim();
+    if(!name) return;
+    foodmapEditTags.add(name);
+    input.value = "";
+    renderFoodmapTagPicker();
+  }
+
+  function openFoodmapAdd(){
+    foodmapEditId = null;
+    foodmapEditTags = new Set();
+    foodmapEditImageFileId = null;
+    foodmapEditImageFile = null;
+    foodmapEditImageRemoved = false;
+    document.getElementById("foodmap-edit-title").textContent = "新增收藏";
+    document.getElementById("foodmap-title-input").value = "";
+    document.getElementById("foodmap-link-input").value = "";
+    document.getElementById("foodmap-note-input").value = "";
+    document.getElementById("btn-foodmap-delete").style.display = "none";
+    document.getElementById("foodmap-suggested-tags").innerHTML = "";
+    document.getElementById("foodmap-suggested-tags").style.display = "none";
+    renderFoodmapImageRow();
+    renderFoodmapTagPicker();
+    document.getElementById("foodmap-edit-overlay").classList.add("active");
+  }
+
+  function openFoodmapEdit(item){
+    foodmapEditId = item.id;
+    foodmapEditTags = new Set(item.tags || []);
+    foodmapEditImageFileId = item.imageFileId || null;
+    foodmapEditImageFile = null;
+    foodmapEditImageRemoved = false;
+    document.getElementById("foodmap-edit-title").textContent = "編輯收藏";
+    document.getElementById("foodmap-title-input").value = item.title || "";
+    document.getElementById("foodmap-link-input").value = item.link || "";
+    document.getElementById("foodmap-note-input").value = item.note || "";
+    document.getElementById("btn-foodmap-delete").style.display = "block";
+    document.getElementById("foodmap-suggested-tags").innerHTML = "";
+    document.getElementById("foodmap-suggested-tags").style.display = "none";
+    renderFoodmapImageRow();
+    renderFoodmapTagPicker();
+    document.getElementById("foodmap-edit-overlay").classList.add("active");
+  }
+
+  async function onFoodmapSave(){
+    const title = document.getElementById("foodmap-title-input").value.trim();
+    if(!title){ alert("輸入一下這是什麼吧～"); return; }
+    const link = document.getElementById("foodmap-link-input").value.trim();
+    const note = document.getElementById("foodmap-note-input").value.trim();
+    document.getElementById("foodmap-edit-overlay").classList.remove("active");
+    show("screen-loading");
+    document.getElementById("loading-text").textContent = "儲存中...";
+    try{
+      let imageFileId = foodmapEditImageFileId;
+      if(foodmapEditImageRemoved && imageFileId){
+        try{ await driveFetch("files/"+imageFileId, {method:"DELETE"}); }catch(e){}
+        imageFileId = null;
+      }
+      if(foodmapEditImageFile){
+        if(imageFileId){
+          try{ await driveFetch("files/"+imageFileId, {method:"DELETE"}); }catch(e){}
+        }
+        const filename = FOODMAP_IMAGE_PREFIX + Date.now() + ".jpg";
+        imageFileId = await createFileMultipart(filename, foodmapEditImageFile.type || "image/jpeg", foodmapEditImageFile, folderId);
+      }
+      const tagsArr = Array.from(foodmapEditTags);
+      if(foodmapEditId){
+        const idx = foodmapData.findIndex(it=>it.id === foodmapEditId);
+        if(idx !== -1){
+          foodmapData[idx] = Object.assign({}, foodmapData[idx], { title, link, note, tags: tagsArr, imageFileId: imageFileId });
+        }
+      } else {
+        foodmapData.push({
+          id: "fm_"+Date.now()+"_"+Math.random().toString(16).slice(2),
+          title, link, note, tags: tagsArr, imageFileId: imageFileId,
+          createdAt: new Date().toISOString(),
+          author: currentUserEmail || ""
+        });
+      }
+      await saveFoodmapData();
+      foodmapImageMap = await loadFoodmapImages();
+      show("screen-foodmap");
+      renderFoodmapTagFilter();
+      renderFoodmapList();
+    }catch(err){
+      alert("儲存失敗，請再試一次。");
+      show("screen-foodmap");
+    }
+  }
+
+  async function onFoodmapDelete(){
+    if(!foodmapEditId) return;
+    const ok = confirm("要刪除這個收藏嗎？");
+    if(!ok) return;
+    document.getElementById("foodmap-edit-overlay").classList.remove("active");
+    const item = foodmapData.find(it=>it.id === foodmapEditId);
+    foodmapData = foodmapData.filter(it=>it.id !== foodmapEditId);
+    try{
+      await saveFoodmapData();
+      if(item && item.imageFileId){
+        try{ await driveFetch("files/"+item.imageFileId, {method:"DELETE"}); }catch(e){}
+      }
+    }catch(err){
+      alert("刪除失敗，請再試一次。");
+    }
+    renderFoodmapTagFilter();
+    renderFoodmapList();
+  }
+
+  /* ---------------- AI TAG SUGGESTIONS (Gemini, key stored in shared Drive folder) ---------------- */
+  async function findGeminiKeyFile(){
+    const q = encodeURIComponent("name='"+AI_KEY_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
+    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
+    const data = await res.json();
+    return (data.files && data.files[0]) ? data.files[0].id : null;
+  }
+
+  async function loadGeminiApiKey(){
+    if(geminiApiKey) return geminiApiKey;
+    try{
+      geminiKeyFileId = await findGeminiKeyFile();
+      if(!geminiKeyFileId) return null;
+      const res = await driveFetch("files/"+geminiKeyFileId+"?alt=media");
+      const data = await res.json();
+      geminiApiKey = data.key || null;
+      return geminiApiKey;
+    }catch(e){
+      return null;
+    }
+  }
+
+  async function saveGeminiApiKey(key){
+    const content = JSON.stringify({ key: key });
+    if(geminiKeyFileId){
+      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+geminiKeyFileId+"?uploadType=media", {
+        method:"PATCH",
+        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
+        body: content
+      });
+    } else {
+      geminiKeyFileId = await createFileMultipart(AI_KEY_FILENAME, "application/json", content, folderId);
+    }
+    geminiApiKey = key;
+  }
+
+  function openGeminiKeySetup(){
+    document.getElementById("gemini-key-input").value = "";
+    document.getElementById("gemini-key-overlay").classList.add("active");
+  }
+
+  async function onSaveGeminiKey(){
+    const key = document.getElementById("gemini-key-input").value.trim();
+    if(!key){ alert("請貼上金鑰喔～"); return; }
+    document.getElementById("gemini-key-overlay").classList.remove("active");
+    try{
+      await saveGeminiApiKey(key);
+      alert("金鑰已儲存，再按一次「AI 建議標籤」試試看！");
+    }catch(err){
+      alert("儲存失敗，請再試一次。");
+    }
+  }
+
+  function fileToBase64(file){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onload = ()=> resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function blobToBase64(blob){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onload = ()=> resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  function showFoodmapSuggestedTags(tags){
+    const wrap = document.getElementById("foodmap-suggested-tags");
+    wrap.innerHTML = "";
+    if(tags.length === 0){ wrap.style.display = "none"; return; }
+    wrap.style.display = "flex";
+    tags.forEach(t=>{
+      const chip = document.createElement("div");
+      chip.className = "cat-chip";
+      chip.textContent = "＋ " + t;
+      chip.addEventListener("click", ()=>{
+        foodmapEditTags.add(t);
+        renderFoodmapTagPicker();
+        chip.remove();
+        if(!wrap.children.length) wrap.style.display = "none";
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  async function suggestFoodmapTags(){
+    const btn = document.getElementById("btn-foodmap-ai-suggest");
+    const title = document.getElementById("foodmap-title-input").value.trim();
+    const link = document.getElementById("foodmap-link-input").value.trim();
+    const note = document.getElementById("foodmap-note-input").value.trim();
+    const hasImage = !!(foodmapEditImageFile || (foodmapEditImageFileId && !foodmapEditImageRemoved));
+    if(!title && !link && !note && !hasImage){
+      alert("先填一點標題，或加張截圖，AI 才有東西可以分析喔～");
+      return;
+    }
+    const key = await loadGeminiApiKey();
+    if(!key){
+      openGeminiKeySetup();
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "分析中...";
+    try{
+      let imageBase64 = null, imageMime = null;
+      if(foodmapEditImageFile){
+        imageBase64 = await fileToBase64(foodmapEditImageFile);
+        imageMime = foodmapEditImageFile.type || "image/jpeg";
+      } else if(foodmapEditImageFileId && !foodmapEditImageRemoved){
+        const res = await driveFetch("files/"+foodmapEditImageFileId+"?alt=media");
+        const blob = await res.blob();
+        imageBase64 = await blobToBase64(blob);
+        imageMime = blob.type || "image/jpeg";
+      }
+      const promptText = "你是幫忙整理美食與景點收藏的助手。根據提供的截圖（如果有）和以下資訊，建議3到6個簡短的中文分類標籤（例如：壽司、日本、咖啡廳、燒肉、東京、拉麵、景點），只回傳一個 JSON 字串陣列，不要其他文字或說明。\n標題：" + (title||"（無）") + "\n連結：" + (link||"（無）") + "\n備註：" + (note||"（無）");
+      const parts = [{ text: promptText }];
+      if(imageBase64){
+        parts.push({ inline_data: { mime_type: imageMime, data: imageBase64 } });
+      }
+      const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+GEMINI_MODEL+":generateContent?key="+encodeURIComponent(key), {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ contents:[{ parts: parts }] })
+      });
+      if(!res.ok){
+        const t = await res.text();
+        throw new Error("Gemini API "+res.status+": "+t.slice(0,200));
+      }
+      const data = await res.json();
+      const textOut = data.candidates && data.candidates[0] && data.candidates[0].content &&
+        data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+      let tags = [];
+      if(textOut){
+        const cleaned = textOut.replace(/```json/gi,"").replace(/```/g,"").trim();
+        try{ tags = JSON.parse(cleaned); }catch(e){ tags = []; }
+      }
+      tags = (tags||[]).filter(t=> typeof t === "string" && t.trim()).map(t=>t.trim()).slice(0,6);
+      if(tags.length === 0){
+        alert("AI 沒有給出建議，可以再補充一點標題或備註試試看。");
+      } else {
+        showFoodmapSuggestedTags(tags);
+      }
+    }catch(err){
+      console.error(err);
+      alert("AI 分析失敗，請確認金鑰正確，或稍後再試一次。");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "✨ AI 建議標籤";
     }
   }
 
