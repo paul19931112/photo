@@ -14,6 +14,9 @@
 <meta name="application-name" content="回憶相簿">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --amber:#E9A05C;
@@ -139,8 +142,8 @@
     background:var(--viewer-bg);
     touch-action: pan-y;
   }
-  .home-bg-wrap img{width:100%; height:100%; object-fit:contain; object-position:center; display:block; transition:opacity .35s ease;}
-  .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:150px; background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.55));}
+  .home-bg-wrap img{width:100%; height:100%; object-fit:cover; object-position:center; display:block; transition:opacity .35s ease;}
+  .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:120px; background:linear-gradient(180deg, rgba(253,244,232,0), var(--cream));}
   .bg-edit-btn{
     position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%;
     background:rgba(0,0,0,.35); color:#fff; border:none; font-size:16px;
@@ -153,8 +156,8 @@
     color:var(--text-faint); font-size:13.5px; font-weight:600; cursor:pointer;
   }
   .anniv-overlay{
-    position:absolute; left:0; right:0; bottom:0; padding:18px 24px 20px;
-    display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center;
+    position:absolute; left:0; right:0; top:0; padding:22px 60px 14px;
+    display:flex; flex-direction:column; align-items:center; gap:2px; text-align:center;
     pointer-events:none;
   }
 
@@ -169,12 +172,12 @@
     display:flex; align-items:center; justify-content:center;
   }
 
-  .anniv-overlay .lbl{font-size:13px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.9); text-shadow:0 2px 10px rgba(0,0,0,.45);}
-  .anniv-overlay .days-row{display:flex;align-items:baseline;gap:8px;color:#fff; text-shadow:0 2px 14px rgba(0,0,0,.5);}
-  .anniv-overlay .days-row .n{font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;}
-  .anniv-overlay .days-row .n.small{font-size:26px;font-weight:700;}
-  .anniv-overlay .days-row .u{font-size:18px;font-weight:600;}
-  .anniv-overlay .pill{margin-top:4px;padding:7px 16px;border-radius:999px;background:rgba(0,0,0,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:12.5px;font-weight:500;color:#fff;}
+  .anniv-overlay .lbl{font-family:'Noto Serif TC',serif; font-size:10px;font-weight:600;letter-spacing:.28em;color:rgba(255,255,255,.92); text-shadow:0 1px 3px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.35);}
+  .anniv-overlay .days-row{display:flex;align-items:baseline;gap:5px;color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.5), 0 2px 14px rgba(0,0,0,.35);}
+  .anniv-overlay .days-row .n{font-family:'Fraunces','Noto Serif TC',serif; font-size:34px;font-weight:600;line-height:1;letter-spacing:-.01em;}
+  .anniv-overlay .days-row .n.small{font-size:17px;font-weight:600;}
+  .anniv-overlay .days-row .u{font-family:'Noto Serif TC',serif; font-size:13px;font-weight:600;}
+  .anniv-overlay .pill{font-family:'Noto Serif TC',serif; margin-top:3px;padding:5px 13px;border-radius:999px;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:10.5px;font-weight:500;color:#fff;}
 
   .home-actions{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
   .home-actions-row{display:flex; gap:10px;}
