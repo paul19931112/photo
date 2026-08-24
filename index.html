@@ -637,7 +637,7 @@
     <input type="file" id="cover-file-input" accept="image/*">
 
     <div class="home-topbar">
-      <div class="anniv-edit-link" id="btn-edit-anniv">編輯紀念日</div>
+      <div class="anniv-edit-link" id="btn-edit-anniv">設定</div>
       <div style="display:flex; align-items:center; gap:10px;">
         <button class="theme-btn" id="btn-open-theme">🎨</button>
         <div class="dots"><span></span><span></span></div>
@@ -822,14 +822,18 @@
   </div>
 </div>
 
-<!-- edit anniversary bottom sheet -->
+<!-- edit anniversary / display name bottom sheet -->
 <div class="modal-overlay" id="edit-anniv-overlay">
   <div class="sheet-box">
     <div class="sheet-handle"></div>
-    <h3>設定紀念日</h3>
+    <h3>設定</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div class="label-mono">START DATE</div>
       <input type="date" id="edit-anniv-input">
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+      <div class="label-mono">我的顯示名稱</div>
+      <input type="text" id="edit-display-name-input" placeholder="例如：阿翔" maxlength="20">
     </div>
     <div class="sheet-actions">
       <button class="btn-cancel" id="btn-edit-anniv-cancel">取消</button>
@@ -1761,19 +1765,30 @@
     }
   }
 
-  /* ---------------- EDIT / SET ANNIVERSARY ---------------- */
+  /* ---------------- DISPLAY NAMES (shared, so both partners see the same names) ---------------- */
+  function getDisplayName(email){
+    if(!email) return "某人";
+    if(settings && settings.displayNames && settings.displayNames[email]) return settings.displayNames[email];
+    return email.split("@")[0] || "某人";
+  }
+
+  /* ---------------- EDIT / SET ANNIVERSARY + DISPLAY NAME ---------------- */
   function openEditAnniv(){
     document.getElementById("edit-anniv-input").value = settings.anniversary || "";
+    document.getElementById("edit-display-name-input").value = (settings.displayNames && settings.displayNames[currentUserEmail]) || "";
     document.getElementById("edit-anniv-overlay").classList.add("active");
   }
   async function onSaveEditAnniv(){
     const val = document.getElementById("edit-anniv-input").value;
     if(!val){ alert("請選擇日期喔～"); return; }
+    const nameVal = document.getElementById("edit-display-name-input").value.trim();
     document.getElementById("edit-anniv-overlay").classList.remove("active");
     show("screen-loading");
     document.getElementById("loading-text").textContent = "更新中...";
     try{
-      await saveSettingsFile(Object.assign({}, settings, {anniversary: val}));
+      const displayNames = Object.assign({}, settings.displayNames || {});
+      if(nameVal){ displayNames[currentUserEmail] = nameVal; } else { delete displayNames[currentUserEmail]; }
+      await saveSettingsFile(Object.assign({}, settings, {anniversary: val, displayNames: displayNames}));
       show("screen-home");
       renderHome();
     }catch(err){
@@ -1791,8 +1806,6 @@
   }
 
   function renderHome(){
-    document.getElementById("btn-edit-anniv").textContent = settings.anniversary ? "編輯紀念日" : "設定紀念日";
-
     if(!settings.anniversary){
       document.getElementById("home-days").textContent = "尚未設定";
       document.getElementById("home-days").classList.add("small");
@@ -2004,7 +2017,7 @@
     msgs.slice().reverse().slice(0,50).forEach(m=>{
       const item = document.createElement("div");
       item.className = "msg-item";
-      const who = (m.author || "").split("@")[0] || "某人";
+      const who = getDisplayName(m.author);
       let timeStr = "";
       if(m.time){
         const t = new Date(m.time);
@@ -2152,7 +2165,7 @@
       if(item.author){
         const meta = document.createElement("div");
         meta.className = "wishlist-meta";
-        meta.textContent = (item.author.split("@")[0] || "") + " 新增";
+        meta.textContent = getDisplayName(item.author) + " 新增";
         body.appendChild(meta);
       }
       row.appendChild(body);
@@ -3737,7 +3750,7 @@
     arr.forEach(c=>{
       const item = document.createElement("div");
       item.className = "vc-item";
-      const who = (c.author || "").split("@")[0] || "某人";
+      const who = getDisplayName(c.author);
       let timeStr = "";
       if(c.time){
         const t = new Date(c.time);
