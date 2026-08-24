@@ -162,7 +162,7 @@
   }
 
   .home-topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
-  .home-topbar .hi{font-size:15px; font-weight:600; color:var(--text-soft);}
+  .anniv-edit-link{font-size:13px; font-weight:600; color:var(--text-faint); text-decoration:underline; cursor:pointer;}
   .home-topbar .dots{display:flex; gap:6px;}
   .home-topbar .dots span{width:9px;height:9px;border-radius:50%;background:var(--amber);}
   .home-topbar .dots span:last-child{background:rgba(233,160,92,.35);}
@@ -179,9 +179,6 @@
   .anniv-overlay .days-row .u{font-family:'Noto Serif TC',serif; font-size:13px;font-weight:600;}
   .anniv-overlay .pill{font-family:'Noto Serif TC',serif; margin-top:3px;padding:5px 13px;border-radius:999px;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:10.5px;font-weight:500;color:#fff;}
 
-  .home-actions{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
-  .home-actions-row{display:flex; gap:10px;}
-  .home-actions-row .btn{flex:1; padding:13px 6px; font-size:13px; border-radius:20px;}
 
   .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
   .stat-card{background:#fff; border-radius:20px; padding:16px 18px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow);}
@@ -224,30 +221,6 @@
   .wishlist-del{flex:none; width:26px; height:26px; border-radius:50%; border:none; background:transparent; color:var(--text-faint); font-size:15px; cursor:pointer;}
   .wishlist-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
 
-  /* mood diary */
-  .mood-compose{background:#fff; border-radius:20px; padding:16px; box-shadow:var(--shadow); margin-bottom:16px; display:flex; flex-direction:column; gap:12px;}
-  .mood-emoji-row{display:flex; gap:8px; overflow-x:auto; padding:2px; -webkit-overflow-scrolling:touch;}
-  .mood-emoji-row::-webkit-scrollbar{display:none;}
-  .mood-emoji-chip{
-    flex:none; width:42px; height:42px; border-radius:50%; background:var(--cream);
-    display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer;
-    box-shadow:inset 0 0 0 1.5px transparent; transition:transform .1s ease;
-  }
-  .mood-emoji-chip.selected{box-shadow:inset 0 0 0 2px var(--amber-dark); background:var(--cream-warm); transform:scale(1.08);}
-  .mood-compose-input-row{display:flex; gap:8px;}
-  .mood-compose-input-row input{margin-bottom:0; padding:12px 16px; font-size:14px; font-weight:500;}
-  .mood-compose-input-row button{
-    flex:none; padding:0 18px; border-radius:16px; border:none; background:var(--grad); color:#fff;
-    font-size:14px; font-weight:700; cursor:pointer;
-  }
-  .mood-day-group{margin-bottom:18px;}
-  .mood-day-label{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; color:var(--text-faint); padding:4px 4px 10px;}
-  .mood-entry{background:#fff; border-radius:16px; padding:12px 14px; box-shadow:var(--shadow); display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;}
-  .mood-entry-emoji{font-size:22px; flex:none;}
-  .mood-entry-body{flex:1; min-width:0;}
-  .mood-entry-text{font-size:14px; color:var(--text); line-height:1.6; word-break:break-word;}
-  .mood-entry-meta{font-size:11px; color:var(--text-faint); margin-top:2px;}
-  .mood-empty{text-align:center; padding:60px 20px; color:var(--text-soft); font-size:14px; line-height:1.9;}
 
   /* calendar */
   .cal-month-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
@@ -288,6 +261,7 @@
   .cal-day-empty{text-align:center; padding:20px; color:var(--text-faint); font-size:13px;}
 
   /* timeline */
+  .timeline-day-label{font:600 11px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; color:var(--text-faint); padding:4px 4px 10px;}
   .timeline-day-group{margin-bottom:6px;}
   .timeline-spine{position:relative; padding-left:22px;}
   .timeline-spine::before{content:""; position:absolute; left:7px; top:4px; bottom:4px; width:1.5px; background:rgba(201,122,60,.25);}
@@ -431,7 +405,7 @@
   .select-check.checked{background:var(--grad); color:#fff; box-shadow:none;}
   .thumb-selected{outline:3px solid var(--amber-dark); outline-offset:-3px;}
   .batch-bar{
-    position:fixed; left:16px; right:16px; bottom:26px; max-width:428px; margin:0 auto;
+    position:fixed; left:16px; right:16px; bottom:96px; max-width:428px; margin:0 auto;
     background:var(--text); border-radius:20px; padding:14px 16px;
     box-shadow:0 18px 34px -16px rgba(67,48,30,.7); z-index:40; display:none;
     align-items:center; justify-content:space-between; gap:10px;
@@ -445,7 +419,7 @@
   .batch-actions #btn-batch-cancel{background:rgba(255,255,255,.1); color:rgba(255,255,255,.7);}
 
   .upload-fab{
-    position:fixed; bottom:26px; right:calc(50% - 206px);
+    position:fixed; bottom:96px; right:calc(50% - 206px);
     width:64px; height:64px; border-radius:50%;
     background:var(--grad); color:#fff;
     font-size:30px; font-weight:300; border:none; box-shadow:0 16px 30px -10px rgba(201,122,60,.85);
@@ -455,7 +429,7 @@
   #file-input, #cover-file-input{display:none;}
 
   .upload-progress{
-    position:fixed; left:16px; right:16px; bottom:26px;
+    position:fixed; left:16px; right:16px; bottom:96px;
     max-width:428px; margin:0 auto;
     background:var(--text); border-radius:20px; padding:16px 18px;
     box-shadow:0 18px 34px -16px rgba(67,48,30,.7); z-index:40; display:none;
@@ -466,6 +440,22 @@
   .upload-progress .row span:last-child{font:600 12px/1 ui-monospace,monospace; color:rgba(255,255,255,.6);}
   .upload-progress .bar-bg{height:6px; border-radius:3px; background:rgba(255,255,255,.2); overflow:hidden;}
   .upload-progress .bar-fill{height:100%; border-radius:3px; background:linear-gradient(90deg,var(--amber),#F6D19B); transition:width .2s ease;}
+
+  /* bottom nav */
+  .bottom-nav{
+    position:fixed; left:0; right:0; bottom:0; margin:0 auto; max-width:460px;
+    display:none; background:#fff; box-shadow:0 -8px 24px -12px rgba(67,48,30,.18);
+    padding:8px 4px calc(6px + env(safe-area-inset-bottom)); z-index:45;
+  }
+  .bottom-nav-item{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:6px 2px; border:none; background:transparent; cursor:pointer;
+    color:var(--text-faint); font-size:10.5px; font-weight:600; font-family:inherit;
+  }
+  .bottom-nav-item .icon{font-size:20px; line-height:1;}
+  .bottom-nav-item.active{color:var(--amber-dark);}
+  #screen-home.active, #screen-gallery.active, #screen-wishlist.active,
+  #screen-calendar.active, #screen-timeline.active{ padding-bottom:96px; }
 
   /* viewer modal */
   .modal-overlay{
@@ -647,24 +637,10 @@
     <input type="file" id="cover-file-input" accept="image/*">
 
     <div class="home-topbar">
-      <div class="hi">Hi，我們</div>
+      <div class="anniv-edit-link" id="btn-edit-anniv">編輯紀念日</div>
       <div style="display:flex; align-items:center; gap:10px;">
         <button class="theme-btn" id="btn-open-theme">🎨</button>
         <div class="dots"><span></span><span></span></div>
-      </div>
-    </div>
-    <div class="home-actions">
-      <button class="btn" id="btn-goto-gallery">查看相簿</button>
-      <div class="home-actions-row">
-        <button class="btn secondary" id="btn-goto-wishlist">願望清單</button>
-        <button class="btn secondary" id="btn-goto-mood">心情日記</button>
-      </div>
-      <div class="home-actions-row">
-        <button class="btn secondary" id="btn-goto-calendar">行事曆</button>
-        <button class="btn secondary" id="btn-goto-timeline">回憶時間軸</button>
-      </div>
-      <div class="home-actions-row">
-        <button class="btn secondary" id="btn-edit-anniv">編輯紀念日</button>
       </div>
     </div>
     <div class="stat-grid">
@@ -712,25 +688,6 @@
     <div id="foodmap-container" style="display:none;"></div>
   </div>
   <button class="upload-fab" id="btn-wishlist-add" style="display:none;">＋</button>
-
-  <!-- MOOD DIARY -->
-  <div class="screen" id="screen-mood">
-    <div class="gallery-header">
-      <button class="icon-btn" id="btn-mood-back">‹</button>
-      <div class="gtitle">心情日記</div>
-      <div class="header-actions">
-        <button class="icon-btn" id="btn-mood-refresh">⟳</button>
-      </div>
-    </div>
-    <div class="mood-compose">
-      <div class="mood-emoji-row" id="mood-emoji-row"></div>
-      <div class="mood-compose-input-row">
-        <input type="text" id="mood-text-input" placeholder="想說的話(非必填)..." maxlength="60">
-        <button id="btn-mood-send">記錄</button>
-      </div>
-    </div>
-    <div id="mood-list-container"></div>
-  </div>
 
   <!-- CALENDAR -->
   <div class="screen" id="screen-calendar">
@@ -1014,6 +971,15 @@
   </div>
 </div>
 
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bottom-nav-item" id="nav-home" data-screen="screen-home"><span class="icon">🏠</span>首頁</button>
+  <button class="bottom-nav-item" id="nav-gallery" data-screen="screen-gallery"><span class="icon">📷</span>相簿</button>
+  <button class="bottom-nav-item" id="nav-wishlist" data-screen="screen-wishlist"><span class="icon">💌</span>願望清單</button>
+  <button class="bottom-nav-item" id="nav-calendar" data-screen="screen-calendar"><span class="icon">📅</span>行事曆</button>
+  <button class="bottom-nav-item" id="nav-timeline" data-screen="screen-timeline"><span class="icon">🕰️</span>時間軸</button>
+</nav>
+
 <script>
 (function(){
   "use strict";
@@ -1043,8 +1009,6 @@
   const MILESTONES = [100,200,300,500,750,1000,1500,2000,2500,3000,4000,5000,7500,10000,15000,20000];
   const COMMENTS_FILENAME = "comments.json";
   const WISHLIST_FILENAME = "wishlist.json";
-  const MOODS_FILENAME = "moods.json";
-  const MOOD_EMOJIS = ["😊","😍","🥰","😴","😢","😡","😐","🥳","😰","🤒"];
   const CALENDAR_FILENAME = "calendar.json";
   const AUTO_LOGIN_KEY = "album_has_signed_in_before";
   const TOKEN_BRIDGE_KEY = "album_bridged_access_token";
@@ -1077,9 +1041,6 @@
   const SLIDESHOW_INTERVAL = 3500;
   let wishlistFileId = null;
   let wishlistData = [];
-  let moodsFileId = null;
-  let moodsData = [];
-  let selectedMoodEmoji = "";
   let calendarFileId = null;
   let calendarData = [];
   let calendarViewYear = 0;
@@ -1104,10 +1065,22 @@
   let geminiKeyFileId = null;
 
   /* ---------------- SCREEN NAV ---------------- */
+  const BOTTOM_NAV_SCREENS = ["screen-home","screen-gallery","screen-wishlist","screen-calendar","screen-timeline"];
+
   function show(id){
     document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
     document.getElementById(id).classList.add("active");
     window.scrollTo(0,0);
+    updateBottomNav(id);
+  }
+
+  function updateBottomNav(id){
+    const nav = document.getElementById("bottom-nav");
+    const isNavScreen = BOTTOM_NAV_SCREENS.indexOf(id) !== -1;
+    nav.style.display = isNavScreen ? "flex" : "none";
+    nav.querySelectorAll(".bottom-nav-item").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.screen === id);
+    });
   }
 
   function isStandalone(){
@@ -1181,8 +1154,11 @@
     document.getElementById("btn-google-signin").addEventListener("click", onSignInClick);
     document.getElementById("btn-invite-submit").addEventListener("click", onInviteSubmit);
     document.getElementById("btn-invite-skip").addEventListener("click", onInviteSkip);
-    document.getElementById("btn-goto-gallery").addEventListener("click", openGallery);
-    document.getElementById("btn-goto-wishlist").addEventListener("click", openWishlist);
+    document.getElementById("nav-home").addEventListener("click", ()=> show("screen-home"));
+    document.getElementById("nav-gallery").addEventListener("click", openGallery);
+    document.getElementById("nav-wishlist").addEventListener("click", openWishlist);
+    document.getElementById("nav-calendar").addEventListener("click", openCalendar);
+    document.getElementById("nav-timeline").addEventListener("click", openTimeline);
     document.getElementById("btn-wishlist-back").addEventListener("click", ()=>{
       document.getElementById("btn-wishlist-add").style.display = "none";
       show("screen-home");
@@ -1197,14 +1173,6 @@
     document.getElementById("wishlist-add-input").addEventListener("keydown", (e)=>{
       if(e.key === "Enter") onWishlistAddSave();
     });
-    document.getElementById("btn-goto-mood").addEventListener("click", openMoodDiary);
-    document.getElementById("btn-mood-back").addEventListener("click", ()=> show("screen-home"));
-    document.getElementById("btn-mood-refresh").addEventListener("click", loadMoods);
-    document.getElementById("btn-mood-send").addEventListener("click", onMoodSend);
-    document.getElementById("mood-text-input").addEventListener("keydown", (e)=>{
-      if(e.key === "Enter") onMoodSend();
-    });
-    document.getElementById("btn-goto-calendar").addEventListener("click", openCalendar);
     document.getElementById("btn-calendar-back").addEventListener("click", ()=>{
       document.getElementById("calendar-day-overlay").classList.remove("active");
       document.getElementById("calendar-add-overlay").classList.remove("active");
@@ -1222,7 +1190,6 @@
       document.getElementById("calendar-day-overlay").classList.add("active");
     });
     document.getElementById("btn-calendar-add-save").addEventListener("click", onAddEventSave);
-    document.getElementById("btn-goto-timeline").addEventListener("click", openTimeline);
     document.getElementById("btn-timeline-back").addEventListener("click", ()=> show("screen-home"));
     document.getElementById("btn-timeline-refresh").addEventListener("click", loadTimelineData);
     document.getElementById("btn-wishlist-tab-list").addEventListener("click", ()=> switchWishlistTab("list"));
@@ -1491,9 +1458,6 @@
     commentsData = {};
     wishlistFileId = null;
     wishlistData = [];
-    moodsFileId = null;
-    moodsData = [];
-    selectedMoodEmoji = "";
     calendarFileId = null;
     calendarData = [];
     calendarSelectedDate = null;
@@ -2257,68 +2221,7 @@
     }
   }
 
-  /* ---------------- MOOD DIARY ---------------- */
-  function openMoodDiary(){
-    show("screen-mood");
-    selectedMoodEmoji = "";
-    document.getElementById("mood-text-input").value = "";
-    renderMoodEmojiRow();
-    loadMoods();
-  }
-
-  function renderMoodEmojiRow(){
-    const row = document.getElementById("mood-emoji-row");
-    row.innerHTML = "";
-    MOOD_EMOJIS.forEach(emo=>{
-      const chip = document.createElement("div");
-      chip.className = "mood-emoji-chip" + (selectedMoodEmoji === emo ? " selected" : "");
-      chip.textContent = emo;
-      chip.addEventListener("click", ()=>{
-        selectedMoodEmoji = (selectedMoodEmoji === emo) ? "" : emo;
-        renderMoodEmojiRow();
-      });
-      row.appendChild(chip);
-    });
-  }
-
-  async function findMoodsFile(){
-    const q = encodeURIComponent("name='"+MOODS_FILENAME+"' and '"+folderId+"' in parents and trashed=false");
-    const res = await driveFetch("files?q="+q+"&fields=files(id,name)&spaces=drive");
-    const data = await res.json();
-    return (data.files && data.files[0]) ? data.files[0].id : null;
-  }
-
-  async function loadMoods(){
-    const container = document.getElementById("mood-list-container");
-    container.innerHTML = '<div class="mood-empty">載入中...</div>';
-    try{
-      moodsFileId = await findMoodsFile();
-      if(moodsFileId){
-        const res = await driveFetch("files/"+moodsFileId+"?alt=media");
-        try{ moodsData = await res.json(); }catch(e){ moodsData = []; }
-      } else {
-        moodsData = [];
-      }
-      renderMoodList();
-    }catch(err){
-      container.innerHTML = '<div class="mood-empty">載入失敗，點右上角 ⟳ 重新整理再試一次。</div>';
-    }
-  }
-
-  async function saveMoods(){
-    const content = JSON.stringify(moodsData);
-    if(moodsFileId){
-      await fetch("https://www.googleapis.com/upload/drive/v3/files/"+moodsFileId+"?uploadType=media", {
-        method:"PATCH",
-        headers:{ "Authorization":"Bearer "+accessToken, "Content-Type":"application/json" },
-        body: content
-      });
-    } else {
-      moodsFileId = await createFileMultipart(MOODS_FILENAME, "application/json", content, folderId);
-    }
-  }
-
-  function formatMoodDateLabel(dateStr){
+  function formatDayLabel(dateStr){
     if(!dateStr) return "";
     const today = new Date();
     const pad = n => String(n).padStart(2,"0");
@@ -2329,90 +2232,6 @@
     if(dateStr === yStr) return "昨天";
     const d = new Date(dateStr+"T00:00:00");
     return (d.getMonth()+1)+"/"+d.getDate();
-  }
-
-  function renderMoodList(){
-    const container = document.getElementById("mood-list-container");
-    if(!moodsData || moodsData.length === 0){
-      container.innerHTML = '<div class="mood-empty">還沒有心情紀錄～<br>選個表情記下今天的心情吧！</div>';
-      return;
-    }
-    const sorted = moodsData.slice().sort((a,b)=> (b.time||"").localeCompare(a.time||""));
-    const groups = [];
-    let lastDate = null, curGroup = null;
-    sorted.forEach(m=>{
-      const d = m.date || (m.time ? m.time.slice(0,10) : "");
-      if(d !== lastDate){
-        curGroup = { date: d, items: [] };
-        groups.push(curGroup);
-        lastDate = d;
-      }
-      curGroup.items.push(m);
-    });
-    container.innerHTML = "";
-    groups.forEach(g=>{
-      const wrap = document.createElement("div");
-      wrap.className = "mood-day-group";
-      const label = document.createElement("div");
-      label.className = "mood-day-label";
-      label.textContent = formatMoodDateLabel(g.date);
-      wrap.appendChild(label);
-      g.items.forEach(m=>{
-        const entry = document.createElement("div");
-        entry.className = "mood-entry";
-        const emoji = document.createElement("div");
-        emoji.className = "mood-entry-emoji";
-        emoji.textContent = m.mood || "💬";
-        entry.appendChild(emoji);
-        const body = document.createElement("div");
-        body.className = "mood-entry-body";
-        if(m.text){
-          const txt = document.createElement("div");
-          txt.className = "mood-entry-text";
-          txt.textContent = m.text;
-          body.appendChild(txt);
-        }
-        const meta = document.createElement("div");
-        meta.className = "mood-entry-meta";
-        const who = (m.author || "").split("@")[0] || "某人";
-        let timeStr = "";
-        if(m.time){
-          const t = new Date(m.time);
-          timeStr = String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0");
-        }
-        meta.textContent = who + (timeStr ? (" · "+timeStr) : "");
-        body.appendChild(meta);
-        entry.appendChild(body);
-        wrap.appendChild(entry);
-      });
-      container.appendChild(wrap);
-    });
-  }
-
-  async function onMoodSend(){
-    if(!selectedMoodEmoji){ alert("先選一個心情表情吧～"); return; }
-    const textInput = document.getElementById("mood-text-input");
-    const text = textInput.value.trim();
-    const now = new Date();
-    const pad = n => String(n).padStart(2,"0");
-    const entry = {
-      id: "m_"+Date.now()+"_"+Math.random().toString(16).slice(2),
-      mood: selectedMoodEmoji,
-      text: text,
-      date: now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate()),
-      time: now.toISOString(),
-      author: currentUserEmail || ""
-    };
-    moodsData.push(entry);
-    selectedMoodEmoji = "";
-    textInput.value = "";
-    renderMoodEmojiRow();
-    renderMoodList();
-    try{
-      await saveMoods();
-    }catch(err){
-      alert("記錄失敗，請再試一次。");
-    }
   }
 
   /* ---------------- SHARED CALENDAR ---------------- */
@@ -2644,14 +2463,6 @@
     try{ return await res.json(); }catch(e){ return []; }
   }
 
-  async function loadMoodsRaw(){
-    const fid = await findMoodsFile();
-    moodsFileId = fid;
-    if(!fid) return [];
-    const res = await driveFetch("files/"+fid+"?alt=media");
-    try{ return await res.json(); }catch(e){ return []; }
-  }
-
   async function loadCalendarRaw(){
     const fid = await findCalendarFile();
     calendarFileId = fid;
@@ -2680,7 +2491,7 @@
     return events;
   }
 
-  function buildTimelineEvents(photos, msgs, moods, cal){
+  function buildTimelineEvents(photos, msgs, cal){
     const events = [];
     (photos||[]).forEach(f=>{
       events.push({
@@ -2693,11 +2504,6 @@
     (msgs||[]).forEach(m=>{
       if(!m.time) return;
       events.push({ type:"message", date: m.time.slice(0,10), time: m.time, text: m.text || "" });
-    });
-    (moods||[]).forEach(m=>{
-      const d = m.date || (m.time ? m.time.slice(0,10) : "");
-      if(!d) return;
-      events.push({ type:"mood", date: d, time: m.time || (d+"T00:00:00"), mood: m.mood || "", text: m.text || "" });
     });
     const today = new Date();
     const todayStr = today.getFullYear()+"-"+pad2(today.getMonth()+1)+"-"+pad2(today.getDate());
@@ -2739,15 +2545,6 @@
       txt.className = "timeline-text";
       txt.textContent = "「"+e.text+"」";
       wrap.appendChild(txt);
-    } else if(e.type === "mood"){
-      const icon = document.createElement("span");
-      icon.className = "timeline-icon";
-      icon.textContent = e.mood || "💭";
-      wrap.appendChild(icon);
-      const txt = document.createElement("span");
-      txt.className = "timeline-text";
-      txt.textContent = "心情紀錄" + (e.text ? (" · "+e.text) : "");
-      wrap.appendChild(txt);
     } else if(e.type === "calendar"){
       const icon = document.createElement("span");
       icon.className = "timeline-icon";
@@ -2773,7 +2570,7 @@
   function renderTimeline(events){
     const container = document.getElementById("timeline-container");
     if(!events || events.length === 0){
-      container.innerHTML = '<div class="timeline-empty">還沒有任何回憶紀錄～<br>去上傳照片、留言或記錄心情吧！</div>';
+      container.innerHTML = '<div class="timeline-empty">還沒有任何回憶紀錄～<br>去上傳照片或留言吧！</div>';
       return;
     }
     const groups = [];
@@ -2791,8 +2588,8 @@
       const dayWrap = document.createElement("div");
       dayWrap.className = "timeline-day-group";
       const label = document.createElement("div");
-      label.className = "mood-day-label";
-      label.textContent = formatMoodDateLabel(g.date);
+      label.className = "timeline-day-label";
+      label.textContent = formatDayLabel(g.date);
       dayWrap.appendChild(label);
 
       const spine = document.createElement("div");
@@ -2830,10 +2627,9 @@
       const results = await Promise.all([
         listPhotos(),
         loadMessagesRaw(),
-        loadMoodsRaw(),
         loadCalendarRaw()
       ]);
-      const events = buildTimelineEvents(results[0], results[1], results[2], results[3]);
+      const events = buildTimelineEvents(results[0], results[1], results[2]);
       renderTimeline(events);
     }catch(err){
       container.innerHTML = '<div class="timeline-empty">載入失敗，請點右上角 ⟳ 重新整理再試一次。</div>';
