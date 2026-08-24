@@ -125,27 +125,37 @@
   .center-msg{text-align:center; font-size:15px; font-weight:500; color:var(--text-soft);}
 
   /* home */
-  .home-bg-wrap{
+  .home-hero{
     position:relative;
     margin:-22px -24px 18px;
-    height:34vh;
-    min-height:200px;
-    max-height:300px;
+  }
+  .home-bg-wrap{
+    position:relative;
+    height:42vh;
+    min-height:260px;
+    max-height:420px;
     overflow:hidden;
     display:none;
+    background:var(--viewer-bg);
     touch-action: pan-y;
   }
-  .home-bg-wrap img{width:100%; height:100%; object-fit:cover; display:block; transition:opacity .35s ease;}
-  .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(180deg, rgba(253,244,232,0), var(--cream));}
+  .home-bg-wrap img{width:100%; height:100%; object-fit:contain; object-position:center; display:block; transition:opacity .35s ease;}
+  .home-bg-fade{position:absolute; left:0; right:0; bottom:0; height:150px; background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.55));}
   .bg-edit-btn{
     position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%;
     background:rgba(0,0,0,.35); color:#fff; border:none; font-size:16px;
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
   .home-bg-empty{
-    margin:-22px -24px 18px; height:110px; display:flex; align-items:center; justify-content:center;
+    height:42vh; min-height:260px; max-height:420px;
+    display:flex; align-items:center; justify-content:center;
     background:repeating-linear-gradient(135deg,rgba(201,122,60,.10) 0 8px,rgba(201,122,60,.03) 8px 16px);
     color:var(--text-faint); font-size:13.5px; font-weight:600; cursor:pointer;
+  }
+  .anniv-overlay{
+    position:absolute; left:0; right:0; bottom:0; padding:18px 24px 20px;
+    display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center;
+    pointer-events:none;
   }
 
   .home-topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
@@ -159,23 +169,12 @@
     display:flex; align-items:center; justify-content:center;
   }
 
-  .anniv-card{
-    border-radius:34px; padding:44px 28px 34px;
-    background:linear-gradient(155deg,var(--amber) 0%,var(--amber-dark) 55%,var(--terracotta) 100%);
-    box-shadow:0 26px 46px -22px rgba(158,78,34,.85);
-    position:relative;
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    margin-bottom:16px;
-  }
-  .anniv-card-decor{position:absolute; inset:0; border-radius:34px; overflow:hidden; pointer-events:none;}
-  .anniv-card-decor::before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.09);right:-70px;top:-80px;}
-  .anniv-card-decor::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);left:-60px;bottom:-70px;}
-  .anniv-card .lbl{font-size:14px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.85); position:relative;}
-  .anniv-card .days-row{display:flex;align-items:baseline;gap:8px;color:#fff; position:relative;}
-  .anniv-card .days-row .n{font-size:76px;font-weight:800;line-height:1;letter-spacing:-.03em;}
-  .anniv-card .days-row .n.small{font-size:30px;font-weight:700;}
-  .anniv-card .days-row .u{font-size:20px;font-weight:600;}
-  .anniv-card .pill{margin-top:4px;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.18);font-size:13px;font-weight:500;color:#fff; position:relative;}
+  .anniv-overlay .lbl{font-size:13px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.9); text-shadow:0 2px 10px rgba(0,0,0,.45);}
+  .anniv-overlay .days-row{display:flex;align-items:baseline;gap:8px;color:#fff; text-shadow:0 2px 14px rgba(0,0,0,.5);}
+  .anniv-overlay .days-row .n{font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;}
+  .anniv-overlay .days-row .n.small{font-size:26px;font-weight:700;}
+  .anniv-overlay .days-row .u{font-size:18px;font-weight:600;}
+  .anniv-overlay .pill{margin-top:4px;padding:7px 16px;border-radius:999px;background:rgba(0,0,0,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:12.5px;font-weight:500;color:#fff;}
 
   .home-actions{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
   .home-actions-row{display:flex; gap:10px;}
@@ -629,12 +628,19 @@
 
   <!-- HOME -->
   <div class="screen" id="screen-home">
-    <div class="home-bg-wrap" id="home-bg-wrap">
-      <img id="home-bg-img" src="" alt="">
-      <div class="home-bg-fade"></div>
-      <button class="bg-edit-btn" id="btn-edit-cover">🖼️</button>
+    <div class="home-hero" id="home-hero">
+      <div class="home-bg-wrap" id="home-bg-wrap">
+        <img id="home-bg-img" src="" alt="">
+        <div class="home-bg-fade"></div>
+        <button class="bg-edit-btn" id="btn-edit-cover">🖼️</button>
+      </div>
+      <div class="home-bg-empty" id="home-bg-empty">＋ 設定一張背景照片</div>
+      <div class="anniv-overlay">
+        <div class="lbl">在一起</div>
+        <div class="days-row"><span class="n" id="home-days">--</span><span class="u" id="home-days-unit">天</span></div>
+        <div class="pill" id="home-date-sub">--</div>
+      </div>
     </div>
-    <div class="home-bg-empty" id="home-bg-empty">＋ 設定一張背景照片</div>
     <input type="file" id="cover-file-input" accept="image/*">
 
     <div class="home-topbar">
@@ -643,12 +649,6 @@
         <button class="theme-btn" id="btn-open-theme">🎨</button>
         <div class="dots"><span></span><span></span></div>
       </div>
-    </div>
-    <div class="anniv-card">
-      <div class="anniv-card-decor"></div>
-      <div class="lbl">在一起</div>
-      <div class="days-row"><span class="n" id="home-days">--</span><span class="u" id="home-days-unit">天</span></div>
-      <div class="pill" id="home-date-sub">--</div>
     </div>
     <div class="home-actions">
       <button class="btn" id="btn-goto-gallery">查看相簿</button>
